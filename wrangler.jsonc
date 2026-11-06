@@ -1,0 +1,28 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "jarg-ai",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-10-28",
+  "assets": {
+    "directory": "./out",
+    "binding": "ASSETS",
+    "not_found_handling": "404-page",
+    "run_worker_first": ["/api/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "jarg-ai-waitlist",
+      "database_id": "519a99a3-31b0-46cb-83fe-675c0125e335",
+      "migrations_dir": "./migrations"
+    }
+  ],
+  "send_email": [
+    { "name": "NOTIFY", "destination_address": "jaronclinton88@gmail.com" }
+  ],
+  "observability": { "enabled": true },
+  "routes": [
+    { "pattern": "jarg.ai", "custom_domain": true },
+    { "pattern": "www.jarg.ai", "custom_domain": true }
+  ]
+}

@@ -1,0 +1,32 @@
+# jargAI
+
+> jargAI is a research company that models how online crowds behave around US stocks and tests what holds up on data the models never saw. It does not manage outside money, sell signals, or give advice.
+
+## About
+
+- [Home](https://jarg.ai/): Overview of jargAI
+- [What we do](https://jarg.ai/#what): US-listed stocks over short horizons; crowd behavior alongside price, news and insider filings; models tested only on data from after the period they learned from
+- [Research](https://jarg.ai/research): Backtest ranking scores for three nested models, a forward log of live calls, an investment tool that replays the trading rules over 22 months with and without hindsight (on data the models never saw, the long books show no edge over the S&P 500 that can be told apart from zero; nothing was traded and costs are not deducted), the limits of all of it, and the method (target definitions, validation, error bars and data sources)
+- [Case studies](https://jarg.ai/case-studies): Four real events, named by stock and month, from the held-out stretch the model never trained on (January 2025 to October 2026), each told as a story and then shown beside how that kind of flag does overall
+- [Try to be unpredictable](https://jarg.ai/#oracle): An in-browser game in which a "Ghost" guesses which square a visitor will tap next. Nothing is sent anywhere
+- [FAQ](https://jarg.ai/#faq): Plain answers to common questions
+- [About](https://jarg.ai/#about): Jaron Clinton, founder. Business school and its finance club, a startup that went well, then Discount Tire, the world's largest independent tire dealer. Years in retail showed how predictable a large enough group of people can be. jargAI is his own project, built on his own time with public data
+- [Contact](https://jarg.ai/#contact): contact@jarg.ai, for funds and trading firms, data providers, and people who want to work on this
+
+## Case studies
+
+Three landed, one missed. Each names the stock and the month; posters are described by profile, never by account.
+
+- [Put: the campfire that became a wildfire](https://jarg.ai/case-studies/put): Opendoor Technologies (OPEN), July 2025. Landed. A downside warning that fired when a small conversation spread to 18 people, days before the run gave back a quarter of its value. Of all top-3% drop warnings, 63% were followed by a 10-point drop
+- [Call: color in the pan](https://jarg.ai/case-studies/call): BigBear.ai (BBAI), February 2025. Landed. A gold-rush story. Four people on one stock put the upside score in the top 0.5%, and the stock beat the S&P 500 by 17 points. The upside flag is the weakest signal: 64 of 250 top-3% flags rose 10 points or more
+- [Exotic: the barometer doesn't point](https://jarg.ai/case-studies/exotic): Nuburu (BURU), October 2025. Landed, a 30-point fall. A storm-front story about a two-sided flag (drop and rise scores both in the top 1%), the shape a straddle is built for. 44 of 53 such flags moved 10 points or more either way
+- [Failed: the boy who cried wolf was right](https://jarg.ai/case-studies/failed): Beyond Meat (BYND), October 2025. Missed three times, then right. A drop warning that fired three times while the stock soared (+494, +251, +23 points), then once more before it fell 65 points. 37% of top-3% drop warnings are not followed by a drop
+
+## Legal
+
+- [Privacy Policy](https://jarg.ai/privacy): What is collected when you visit the site or email us, and what is done with it
+- [Terms of Use](https://jarg.ai/terms): The terms for using the site and the limits of what it can be relied on for
+
+## Optional
+
+- [Full text for language models](https://jarg.ai/llms-full.txt): The complete site content in one plain-text file

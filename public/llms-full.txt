@@ -1,0 +1,129 @@
+# jargAI
+
+> jargAI is a research company that models how online crowds behave around US stocks and tests what holds up on data the models never saw. It does not manage outside money, sell signals, or give advice.
+
+## What we do
+
+A small research company with one question: does crowd behavior around a stock tell you something the price doesn't? jargAI is working that out in the open. Research comes first; what it could grow into depends on what holds up. It does not manage money for anyone else.
+
+- What we study: US-listed stocks, over short horizons of a few trading sessions. Markets come first because they are the hardest place to predict a crowd and they keep an objective score. If crowd behavior is predictable there, it should be predictable almost anywhere; that broader claim is a thesis, not yet a result.
+- What we model: how online crowds behave around a stock, alongside price, news and insider filings. Behavior can be staged, so coordinated activity counts as a reason for caution, not a signal.
+- How we work: models are tested only on data from after the period they learned from. A live record of calls made before the outcome has been running since October 2026.
+
+Where the evidence stands: on years of data the models never trained on, they rank sharp short-term drops well, but most of that comes from price and volatility. Crowd signals add a small amount on top. The live record is too young to judge yet.
+
+## About
+
+Jaron Clinton, founder. He went to business school and spent much of it in the finance club, then joined a startup that went well, then Discount Tire, the world's largest independent tire dealer. Years in retail showed him how predictable a large enough group of people can be. Public posts about stocks are a much harder problem. jargAI is his own project, built on his own time with his own equipment and public data, to find out how much of that predictability survives in markets, and what could be built on whatever does.
+
+## Research (https://jarg.ai/research)
+
+The full evidence page. Everything below comes from one evaluation run of the production model code.
+
+- Data: 25,244 examples across 444 US tickers, January 2021 to October 2026.
+- Models: gradient-boosted trees over a three-session horizon. Three nested versions: price and market only (13 features: returns, volatility, volume, VIX, calendar); plus news and insider filings (35 features: news volume and tone, SEC Form 4); plus crowd signals (53 features: mentions, bursts, coordination, author track records).
+- Main target, "big drop": the stock underperforms the S&P 500 (SPY) by 10 percentage points or more over three sessions, measured from the next open. A second target, "volatility-adjusted drop", is underperforming SPY by at least one standard deviation of the stock's own 20-day volatility.
+- Validation: walk-forward with five expanding folds and a 9-day purge gap, plus a locked holdout (trained on data through 31 December 2024, tested on everything after). 95% ranges resample blocks of five consecutive entry days (2,000 resamples).
+- Metric: AUC, the chance the model ranks a real big drop above a non-drop. 0.50 is a coin flip.
+
+Big-drop ranking score (AUC, with 95% range):
+
+- Holdout, January 2025 to October 2026 (8,330 examples, 1,443 big drops, 17.3% base rate): price and market only 0.7931 (0.7770 to 0.8095); plus news and insider filings 0.7968 (0.7825 to 0.8124); plus crowd signals 0.7997 (0.7848 to 0.8149).
+- Walk-forward, December 2021 to October 2026 (21,037 examples, 3,818 big drops, 18.2% base rate): price and market only 0.7564 (0.7431 to 0.7694); plus news and insider filings 0.7677 (0.7552 to 0.7794); plus crowd signals 0.7673 (0.7548 to 0.7791).
+
+What crowd signals add to the big-drop score (change in AUC, 95% range):
+
+- Versus price and market only, walk-forward: +0.0109 (+0.0063 to +0.0156). A clear lift.
+- Versus price and market only, holdout: +0.0066 (+0.0010 to +0.0120). Holds on the holdout.
+- Versus price plus news and insider data, walk-forward: -0.0003 (-0.0025 to +0.0018). No measurable difference.
+- Versus price plus news and insider data, holdout: +0.0029 (+0.0004 to +0.0053). A small extra lift.
+
+Text mood (how positive or negative posts read) added nothing measurable. Most of the ranking power comes from price and volatility.
+
+Forward log: calls recorded before the outcome, started 15 October 2026. At the time of writing: 49 calls, 34 resolved, 2 big drops. That is too few drops to publish a ranking score, so none is given. Scores filled in after the fact are excluded.
+
+Investment tool: a simulation, not a track record. Nothing was traded and no money was at risk. The page replays the paper trading rules over 447 trading days from January 2025 to October 2026 and lets the reader switch between two settings that share the same code and the same window. In the honest setting the models were fit on data through December 2024, then frozen; in the other they were fit on the whole stretch including the days they then traded, which is the look-ahead mistake that flatters a backtest. Frozen, the long book with the crash filter averaged +0.71% per trade over the S&P 500 across 368 trades, with a 95% range of -0.28% to +1.73%, so the edge cannot be told apart from zero; the looser long book averaged +0.68% (-0.21% to +1.50%) across 722 trades, also indistinguishable from zero. Neither range excluded zero on any of ten resampling seeds. Allowed to peek, every book's range excluded zero and the same crash-filtered book averaged +2.84% per trade, which is the measure of the bias rather than of any skill. Over the full window the crash-filtered long book returned +29.8% against the S&P 500's +34.2%, underperforming the index despite a positive average per trade, because it holds at most nine names for three days and is out of the market the rest of the time. A short book on the flagged drops did clear zero on all ten seeds (+6.11% per trade, 356 trades), but it requires borrow a cash account does not have, and no figure anywhere deducts commission, slippage, borrow cost or market impact. Twenty-two months of a rising market is a single sample.
+
+## Case studies (https://jarg.ai/case-studies)
+
+Four real events from the locked holdout (January 2025 to October 2026, 8,333 stock-days), scored by a model trained only on data through 31 December 2024. Each names the stock and the month; posters are described by profile (engagement on their earlier posts, how often the stocks they discussed beat the market, champion or fade), never by account. Each is told through a metaphor, then shown with the plain numbers and how that kind of flag does overall. They are illustrations, not evidence, and none is a trade jargAI made. "Points" means the stock's return minus the S&P 500's over the three sessions after the flag. "Top 3%" means the 250 highest-scoring stock-days in the holdout.
+
+Every warning, not just four: ranking all 8,333 holdout stock-days by the drop warning and cutting them into ten equal groups, 422 of the 833 highest-scored (51%) were followed by a 10-point drop, against 8 of the 834 lowest-scored (1%). The base rate is 17.3% (1,443 of 8,333). Most of that ranking comes from price and volatility; crowd signals add a small measured lift.
+
+1. Put: "The campfire that became a wildfire" (https://jarg.ai/case-studies/put), Opendoor Technologies (OPEN), July 2025. One person posted on day 1. On day 2, 18 people across three communities were talking, and the drop warning jumped into the top 3%. Chatter peaked at 51 people as the run more than doubled; the warning held. On days 6 and 7 the run gave back more than a quarter of its value, and the warning cooled as the crowd thinned. Overall, 63% of top-3% drop warnings (158 of 250) were followed by a 10-point drop, against 17% across all stocks. Hand-picked.
+
+2. Call: "Color in the pan" (https://jarg.ai/case-studies/call), BigBear.ai (BBAI), February 2025, a gold-rush prospector story. One post put the upside score in the top 7%, below the flag line; the stock then rose 84 points, and the model missed it. Two quiet sessions later, four people across two communities put the upside score in the top 0.5%, and the stock beat the S&P 500 by 17 points over three sessions. Overall the upside flag is the weakest signal: 64 of 250 top-3% upside flags (26%) rose 10 points or more, against 11% across all stocks, and 158 of 250 still finished behind the market. Picked by rule: the highest-scoring upside flag that rose 10+ points with at least 3 people talking.
+
+3. Exotic: "The barometer doesn't point" (https://jarg.ai/case-studies/exotic), Nuburu (BURU), October 2025, a storm-front story about a two-sided flag and the straddle (a put and a call held together, which pays on the size of a move, not its direction). The crowd went 8, 12, 1, then 7 people, while the stock rose 65, 144 and 41 points over successive windows. On the session with 7 people both scores were in the top 1% (drop 99.1st percentile, rise 99.6th), and the stock then fell 30 points. Overall, 44 of the 53 stock-days with both scores in the top 3% (83%) moved 10 points or more either way, against 28% across all stocks; 32 fell and 12 rose. Caveats: the two-sided definition was chosen after looking at the holdout, there are only 53 cases, and it measures the stock's move, not options profit after the premium. Picked by rule.
+
+4. Failed: "The boy who cried wolf was right" (https://jarg.ai/case-studies/failed), Beyond Meat (BYND), October 2025. The drop warning fired in the top 2% on three sessions in a row while the stock rose 494, 251 and 23 points over the following windows. On the fourth session, with 36 people in three communities, the warning hit its highest level, and the stock then fell 65 points, then 41 and 42 on the next windows. Anyone acting on the first three alarms would have been wiped out before the warning came true. Overall, 37% of top-3% drop warnings (92 of 250) were not followed by a 10-point drop, and 21% (53) rose 10 points or more. Hand-picked; the three-session windows overlap, so these are not six independent calls.
+
+Who was posting, by case. Engagement compares a poster's own earlier posts (each at least 7 days old) with the typical post over the prior 180 days. A call "beat the market" when the stock outran the S&P 500 over the next three sessions. Champions have 8+ earlier calls with at least 60% beating the market; fades have 40% or fewer. Post types are the tag the poster chose.
+- Opendoor (OPEN), July 2025: the first post was research-style, from a poster at about 6× typical engagement with 7 of 14 earlier calls beating the market. A squeeze post came from a poster at about 10× engagement but 1 of 8 calls right (a fade). At the 51-person peak there were two fades and no champions; half the flagged session's posts were gains-or-losses posts.
+- BigBear.ai (BBAI), February 2025: four posters, two with no settled history, one at about 10× engagement with 3 of 7 calls right. No champions or fades.
+- Nuburu (BURU), October 2025: a fade with 183 earlier calls (38% right), a poster at about 19× engagement with 1 of 3 right, and a first-timer with three gains-or-losses posts. 40% gains-or-losses posts; discussed on 12 of the prior 20 sessions.
+- Beyond Meat (BYND), October 2025: on session 2 a champion (23 of 36 calls right, about 8× engagement) made five squeeze posts and the stock more than tripled. By session 4, with 36 people, no champions remained, one fade was present, and 45% of posts were squeeze posts; the stock then fell 65 points.
+
+## Frequently asked questions
+
+Q: What is jargAI?
+A: jargAI is a research company that predicts crowd behavior. Instead of modeling what something is worth or how people feel about it, we model what people are likely to do next, based on the patterns in what they have already done.
+
+Q: Is jargAI a fund?
+A: No. jargAI is a research company. It does not take outside money, sell signals, or give advice. Where the research leads next depends on what holds up.
+
+Q: What does jargAI actually make predictions about?
+A: Publicly traded US stocks that online investing communities are talking about. We look at how people talk and act around a stock, add price, news, and insider context, and estimate how likely it is to underperform the S&P 500 by 10 percentage points or more over the next three trading sessions (the "big drop" call). These are research outputs, not recommendations.
+
+Q: How is behavior prediction different from sentiment analysis?
+A: Sentiment analysis measures how people feel or what they say. We start with who showed up, when, how coordinated it looks, and who has been right before, then add news, insiders, and price context. In our own test, text mood added nothing measurable, so it isn't what drives the ranking. Outputs are probabilities tested on future data, not headlines.
+
+Q: How is it different from fundamental analysis?
+A: Fundamental analysis asks what something is worth. That information is slow, public, and already known to everyone looking. jargAI asks a different question: what will the crowd do next, and who will move first?
+
+Q: Where does jargAI's data come from?
+A: Scheduled collection from public archives and APIs: crowd posts, news volume and tone, insider filings, and market context. Coordination and bot-like bursts are scored as risk signals, not deleted. Everything lands in jargAI's own warehouse. The full source list has not been published yet. Questions about platform terms, licensing, and privacy are welcome at contact@jarg.ai.
+
+Q: How does jargAI decide what to flag, and when to let go?
+A: Regression models assign every candidate a probability; AUC measures how well that ranking separates what happened from what didn't on data the model never trained on. Only the top of the ranking is flagged, with a separate filter for downside risk. Each call has a planned horizon.
+
+Q: What kinds of patterns does jargAI model?
+A: In production today: mention bursts and share-of-attention, author track records (who was early), coordination and bot-like activity, weekday and month seasonality, plus news, insiders, and price context. In research: full cascades, account-level lead-lag, and cross-platform spread timing.
+
+Q: Is there a live track record?
+A: A forward log started on 15 October 2026. It counts only calls recorded before the outcome. See the Research section above for the current count.
+
+Q: How do you know the predictions are real and not luck?
+A: Models are only ever tested on data from after the period they learned from, with a locked holdout period that is never used for training. Every data source has to beat a simple baseline, confidence ranges resample whole days, and results that turn out to be noise are reported as misses. Text mood added nothing measurable; crowd signals improved the big-drop ranking over price and market data alone, and added nothing measurable in the walk-forward test on top of price plus news and insider filings.
+
+Q: What does game theory have to do with it?
+A: A crowd works like a Keynesian beauty contest: winning is about anticipating what everyone else will do. jargAI separates the early (worth following), the echo (late and loud, worth ignoring), and coordinated rings (worth discounting).
+
+Q: Does the prediction demo on this site collect my data?
+A: No. The "Try to be unpredictable" demo runs entirely in your browser. Your moves are never sent anywhere.
+
+Q: How do I get in touch?
+A: Email contact@jarg.ai.
+
+## Glossary
+
+- Behavior prediction: Forecasting what people will do next from the patterns in what they have already done, rather than from what something is worth or how people feel.
+- Information cascade: A chain reaction in which one person acts, a few copy, and then many follow, often regardless of their own information.
+- Lead-lag relationship: A pattern in which one account's actions reliably show up in others' actions after a delay. The account that moves first is the leader.
+- Keynesian beauty contest: A game in which winning depends on anticipating what everyone else will choose, rather than on being right.
+- Walk-forward validation: Testing a model only on data from after the period it learned from, repeated across many periods, so it never sees the future.
+- Holdout period: A locked stretch of time that is never used for training and is only used to check whether a result holds up.
+
+## Legal
+
+- Privacy Policy: https://jarg.ai/privacy
+- Terms of Use: https://jarg.ai/terms
+- Operator: jargAI is a brand operated by Jargai Labs LLC, a Colorado limited liability company.
+
+## Contact
+
+contact@jarg.ai. jargAI is open to conversations with funds and trading firms, data providers, and people who want to work on this. Results and methods are shared privately, not on the site.
+
+## Not advice
+
+jargAI is a research company. It does not manage money for others, sell signals, or give investment advice. Nothing on jarg.ai is financial, legal, tax, or other professional advice, or an offer or solicitation of any kind.
