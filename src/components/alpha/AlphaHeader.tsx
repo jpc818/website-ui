@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
 import { MobileMenu } from "@/components/alpha/MobileMenu";
+import { productUrl } from "@/app/site";
 
 const links = [
   { href: "/#what", label: "What we do" },
@@ -36,11 +37,17 @@ export function AlphaHeader() {
         <div className="flex items-center gap-3">
           <Link
             href="/#contact"
-            className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-background transition-opacity hover:opacity-90 sm:px-5"
+            className="hidden rounded-full border border-white/20 px-4 py-2 text-sm font-medium transition-colors hover:bg-surface sm:inline-flex sm:px-5"
           >
             Contact
           </Link>
-          <MobileMenu links={links} />
+          <a
+            href={productUrl}
+            className="rounded-full bg-accent px-4 py-2 text-sm font-semibold text-background transition-opacity hover:opacity-90 sm:px-5"
+          >
+            Try the product
+          </a>
+          <MobileMenu links={[...links, { href: "/#contact", label: "Contact" }]} />
         </div>
       </div>
     </header>

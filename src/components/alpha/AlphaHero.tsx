@@ -1,3 +1,4 @@
+import { productUrl } from "@/app/site";
 import { Murmuration } from "@/components/alpha/Murmuration";
 
 const notThis = ["Not fundamentals alone", "Not mood alone", "Behavior + context"];
@@ -40,16 +41,16 @@ export function AlphaHero() {
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
           <a
-            href="#what"
+            href={productUrl}
             className="inline-flex h-12 items-center justify-center rounded-full bg-accent px-8 text-base font-semibold text-background transition-opacity hover:opacity-90"
           >
-            What we do
+            Try the product
           </a>
           <a
-            href="#contact"
+            href="#what"
             className="inline-flex h-12 items-center justify-center rounded-full border border-white/20 bg-background/80 px-8 text-base font-medium transition-colors hover:bg-surface"
           >
-            Contact
+            What we do
           </a>
           <a
             href="#oracle"
@@ -58,6 +59,9 @@ export function AlphaHero() {
             Or try the Ghost game
           </a>
         </div>
+        <p className="mt-3 text-sm text-muted">
+          Private beta, open to invited Charles Schwab customers. Sign in with Google.
+        </p>
 
         <ul className="mt-12 flex flex-wrap gap-2 sm:gap-3">
           {notThis.map((item, i) => {
