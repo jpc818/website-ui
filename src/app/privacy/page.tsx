@@ -38,8 +38,9 @@ export default function Privacy() {
         </li>
         <li>
           <strong className="text-foreground">Your Replay score</strong>, if you finish the day&apos;s run. We store the
-          day, your final score and the time, with nothing that identifies you, to show how you did against other
-          players. Your browser keeps its own copy of that day&apos;s result so it only counts once.
+          day, your calls for each session, your final score and the time, with nothing that identifies you, to show
+          how you did against other players and how everyone called each session. Your browser keeps its own copy of
+          that day&apos;s result so it only counts once.
         </li>
         {activeGoogleAnalyticsId() ? (
           <li>

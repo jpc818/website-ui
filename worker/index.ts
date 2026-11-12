@@ -131,7 +131,9 @@ async function handleReplay(request: Request, env: Env): Promise<Response> {
   }
 
   const score = Math.round(bankroll);
-  await env.DB.prepare("INSERT INTO replay_scores (day, bankroll) VALUES (?, ?)").bind(day, score).run();
+  await env.DB.prepare("INSERT INTO replay_scores (day, bankroll, picks) VALUES (?, ?, ?)")
+    .bind(day, score, picks.join(","))
+    .run();
   const row = await env.DB.prepare(
     "SELECT COUNT(*) AS players, COALESCE(SUM(bankroll < ?), 0) AS below FROM replay_scores WHERE day = ?",
   )
@@ -154,12 +156,33 @@ async function weekly(env: Env, day: number) {
   return { weekBest: row?.best ?? null, weekPlayers: row?.players ?? 0 };
 }
 
+const MAX_SPLIT_ROWS = 5000;
+
+// How the day's players called each session. null for a session nobody bet on, or one with nothing to play.
+async function splits(env: Env, day: number) {
+  const sessions = replayRuns[dailyRunIndex(day)].sessions.length;
+  const counts = Array.from({ length: sessions }, () => ({ rise: 0, drop: 0, out: 0 }));
+  const { results } = await env.DB.prepare(
+    "SELECT picks FROM replay_scores WHERE day = ? AND picks IS NOT NULL ORDER BY id DESC LIMIT ?",
+  )
+    .bind(day, MAX_SPLIT_ROWS)
+    .all<{ picks: string }>();
+  for (const row of results) {
+    row.picks.split(",").forEach((code, i) => {
+      const side = code[0] === "r" ? "rise" : code[0] === "d" ? "drop" : code[0] === "o" ? "out" : null;
+      if (side && i < sessions) counts[i][side]++;
+    });
+  }
+  return counts.map((c) => (c.rise + c.drop + c.out ? c : null));
+}
+
 async function handleWeekly(request: Request, env: Env): Promise<Response> {
   const day = Number(new URL(request.url).searchParams.get("day"));
   if (!openDay(day)) {
     return json({ ok: false, error: "Invalid request" }, 400);
   }
-  return json({ ok: true, ...(await weekly(env, day)) }, 200, { "Cache-Control": "public, max-age=60" });
+  const [week, split] = await Promise.all([weekly(env, day), splits(env, day)]);
+  return json({ ok: true, ...week, splits: split }, 200, { "Cache-Control": "public, max-age=60" });
 }
 
 export default {

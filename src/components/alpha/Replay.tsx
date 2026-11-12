@@ -29,6 +29,7 @@ import {
   clueCount,
   cluesOn,
   dailyRunIndex,
+  direction,
   encodePick,
   localDay,
   modelPath,
@@ -36,6 +37,22 @@ import {
   type Clue,
   type Size,
 } from "@/components/alpha/replayScore";
+import { replayStories, type Mood } from "@/components/alpha/replayStory";
+import {
+  CrowdDoodle,
+  GuessStrip,
+  HistorySays,
+  PlayersSplit,
+  Stamps,
+  StoryChart,
+  Wobble,
+  guessPoints,
+  moodFace,
+  peopleIn,
+  type Guess,
+  type Split,
+  type Stamp,
+} from "@/components/alpha/ReplayExtras";
 import { track } from "@/components/analytics";
 
 const money = (n: number) => `$${Math.round(n).toLocaleString("en-US")}`;
@@ -60,6 +77,7 @@ type State = {
   // Clues bought this session, as a mask over CLUES.
   bought: number;
   resolved: boolean;
+  guess: Guess | null;
   board: Board;
 };
 
@@ -79,6 +97,7 @@ const dealt = (state: State, mode: Mode, runIndex: number): State => ({
   played: [],
   bought: 0,
   resolved: false,
+  guess: null,
 });
 
 type Action =
@@ -90,6 +109,7 @@ type Action =
   | { type: "size"; size: Size }
   | { type: "buy"; clue: Clue }
   | { type: "commit"; position: Position }
+  | { type: "guess"; pick: string }
   | { type: "next" };
 
 function reducer(state: State, action: Action): State {
@@ -106,6 +126,11 @@ function reducer(state: State, action: Action): State {
       return dealt(state, state.mode, state.runIndex);
     case "size":
       return { ...state, size: action.size };
+    case "guess": {
+      const sessions = replayRuns[state.runIndex].sessions;
+      if (state.guess || state.bankroll <= 0 || state.index >= sessions.length) return state;
+      return { ...state, guess: { pick: action.pick, at: state.index } };
+    }
     case "next": {
       // A quiet session has nothing to resolve, so it advances without a bet.
       const session = replayRuns[state.runIndex].sessions[state.index];
@@ -325,15 +350,6 @@ function TheRoom({ room }: { room: Room }) {
   );
 }
 
-function Wobble({ id }: { id: string }) {
-  return (
-    <filter id={id} x="-5%" y="-20%" width="110%" height="140%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="4" />
-      <feDisplacementMap in="SourceGraphic" scale="3" />
-    </filter>
-  );
-}
-
 const zones = [
   { label: "Quiet", from: 0, to: 50, fill: "bg-stone-200", tone: "text-stone-500" },
   { label: "Typical", from: 50, to: 90, fill: "bg-cyan-100", tone: "text-cyan-700" },
@@ -392,10 +408,13 @@ const clueNames: Record<Clue, string> = {
   gap: "Opening gap",
   volume: "Volume",
   room: "Who's posting",
+  mood: "Mood & news",
 };
 
-function clueFace(clue: Clue, session: ReplaySession, context: Context) {
+function clueFace(clue: Clue, session: ReplaySession, context: Context, mood: Mood | null) {
   switch (clue) {
+    case "mood":
+      return mood ? moodFace(mood) : { value: "n/a", detail: "no mood read", tone: "text-stone-500" };
     case "runUp":
       return {
         value: signedPct(context.runUp),
@@ -426,6 +445,7 @@ function clueFace(clue: Clue, session: ReplaySession, context: Context) {
 function ClueCards({
   session,
   context,
+  mood,
   bought,
   revealed,
   canBuy,
@@ -433,6 +453,7 @@ function ClueCards({
 }: {
   session: ReplaySession;
   context: Context;
+  mood: Mood | null;
   bought: number;
   revealed: boolean;
   canBuy: boolean;
@@ -450,12 +471,12 @@ function ClueCards({
         </p>
         {spent > 0 && <p className="text-xs text-stone-600">Spent {money(spent)} on clues this session</p>}
       </div>
-      <ul className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <ul className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-5">
         {clues.map((clue, i) => {
           const own = Boolean(bought & clueBit(clue));
           const box = i % 2 ? "pencil-box-alt" : "pencil-box";
           if (own || revealed) {
-            const face = clueFace(clue, session, context);
+            const face = clueFace(clue, session, context, mood);
             return (
               <li key={clue} className={`${box} fade-up flex min-h-24 flex-col bg-white/80 p-3`}>
                 <span className="text-[11px] font-semibold uppercase tracking-wider text-stone-500">{clueNames[clue]}</span>
@@ -870,6 +891,7 @@ const initialState: State = {
   size: "small",
   bought: 0,
   resolved: false,
+  guess: null,
   board: { status: "idle" },
 };
 
@@ -890,15 +912,26 @@ export function Replay() {
   const board = state.board;
   const setBoard = (next: Board) => dispatch({ type: "board", board: next });
   const [week, setWeek] = useState<Week | null>(null);
+  const [splits, setSplits] = useState<(Split | null)[] | null>(null);
 
   // Dealt after hydration: today's run depends on the player's own calendar.
   useEffect(() => {
     const day = localDay();
     dispatch({ type: "init", day, board: savedBoard(day) });
     fetch(`/api/replay?day=${day}`)
-      .then((response) => response.json() as Promise<{ ok?: boolean; weekBest: number | null; weekPlayers: number }>)
+      .then(
+        (response) =>
+          response.json() as Promise<{
+            ok?: boolean;
+            weekBest: number | null;
+            weekPlayers: number;
+            splits?: (Split | null)[];
+          }>,
+      )
       .then((result) => {
-        if (result.ok) setWeek({ best: result.weekBest, players: result.weekPlayers });
+        if (!result.ok) return;
+        setWeek({ best: result.weekBest, players: result.weekPlayers });
+        setSplits(result.splits ?? null);
       })
       .catch(() => {
         // The high score is a nicety; the game plays the same without it.
@@ -932,6 +965,34 @@ export function Replay() {
 
   const canBet = state.ready && !over && !state.resolved && session.move !== null && !busted;
   const won = !busted && state.bankroll > START;
+  const story = replayStories[state.runIndex][Math.min(state.index, sessions.length - 1)];
+  // Every clue is shown once a session resolves, so the free context can use them too.
+  const seen = state.resolved ? ~0 : state.bought;
+  const cluesBought = state.played.reduce((sum, play) => sum + clueCount(play.mask), 0);
+  const wins = state.played.filter((play) => play.pnl > 0).length;
+  const detective = guessPoints(state.guess, run.reveal.ticker, sessions.length);
+
+  const stamps: Stamp[] = [];
+  if (over) {
+    const bets = state.played.filter((play) => play.position !== "out");
+    let low = START;
+    for (const value of yours) low = Math.min(low, value);
+    const modelMissed = (i: number) => {
+      const s = sessions[i];
+      return s.move !== null && s.flag !== "out" && direction(s.flag) * s.move < 0;
+    };
+    if (state.bankroll > modelEnd) stamps.push({ id: "model", label: "Beat the model", emoji: "🤖", tone: "border-cyan-700 text-cyan-800" });
+    if (state.played.some((play) => modelMissed(play.index) && play.pnl >= 0))
+      stamps.push({ id: "dodge", label: "Dodged its miss", emoji: "🛡️", tone: "border-emerald-700 text-emerald-800" });
+    if (state.played.some((play) => play.size === "big" && play.pnl > 0 && Math.abs(sessions[play.index].move ?? 0) >= 50))
+      stamps.push({ id: "big", label: "Big game hunter", emoji: "🐘", tone: "border-amber-700 text-amber-800" });
+    if (bets.length >= 3 && bets.every((play) => play.pnl >= 0))
+      stamps.push({ id: "clean", label: "Clean sheet", emoji: "🧼", tone: "border-sky-700 text-sky-800" });
+    if (detective > 0) stamps.push({ id: "named", label: "Named it", emoji: "🕵️", tone: "border-violet-700 text-violet-800" });
+    if (cluesBought === 0 && won)
+      stamps.push({ id: "bare", label: "No clues needed", emoji: "✋", tone: "border-stone-700 text-stone-800" });
+    if (low <= START * 0.6 && won) stamps.push({ id: "comeback", label: "Comeback", emoji: "🧟", tone: "border-rose-700 text-rose-700" });
+  }
 
   // A clue is paid for on the spot; a bet's result waits for the reveal to draw.
   const youShown = useCountUp(state.bankroll, { delay: state.resolved ? 700 : 0, duration: state.resolved ? 900 : 350 });
@@ -995,7 +1056,6 @@ export function Replay() {
   };
 
   const label = state.mode === "daily" ? `Replay #${state.day}` : "Replay (practice)";
-  const cluesBought = state.played.reduce((sum, play) => sum + clueCount(play.mask), 0);
   const shareText = [
     `jargAI ${label}`,
     cells
@@ -1004,6 +1064,8 @@ export function Replay() {
       .join(""),
     `Me ${money(state.bankroll)} · Model ${money(modelEnd)}`,
     cluesBought ? `🔎 ${cluesBought} ${cluesBought === 1 ? "clue" : "clues"} bought` : "🔎 no clues bought",
+    ...(detective > 0 ? [`🕵️ named the stock in session ${(state.guess?.at ?? 0) + 1} (+${detective})`] : []),
+    ...(stamps.length ? [stamps.map((stamp) => stamp.emoji).join("") + ` ${stamps.length} ${stamps.length === 1 ? "stamp" : "stamps"}`] : []),
     "jarg.ai/#replay",
   ].join("\n");
 
@@ -1041,10 +1103,11 @@ export function Replay() {
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <SectionHeading id="replay-title" eyebrow="The replay" title="Could you have called it?">
           Real runs from the held-out stretch the model was scored on, replayed one session at a time. Each session you
-          see how unusual the crowd is and get one clue free, never the ticker. Buy more clues if you think they&apos;re
-          worth it, then bet on a rise, a drop, or sit it out, and race the model&apos;s own calls to the finish.
-          Everyone gets the same run each day, and the week&apos;s best finish goes up as the high score. Finish ahead and you
-          find out which stock it was.
+          see the crowd, the story so far and what history says about setups like it, plus one clue free, never the
+          ticker. Buy more clues if you think they&apos;re worth it, then bet on a rise, a drop, or sit it out, and race
+          the model&apos;s own calls to the finish. Winning bets turn the ticker&apos;s letters over: name the stock early
+          for detective points. Everyone gets the same run each day, you see how other players called it, and the
+          week&apos;s best finish goes up as the high score.
         </SectionHeading>
 
         <div className="paper relative mt-10 rounded-md p-4 shadow-[0_30px_80px_rgba(0,0,0,0.5)] sm:p-6 md:p-8">
@@ -1118,6 +1181,18 @@ export function Replay() {
                       />
                     </div>
                   )}
+
+                  <div className="pencil-box mt-5 bg-white/60 p-5">
+                    <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">Your stamps</p>
+                    <Stamps stamps={stamps} />
+                    <p className="mt-3 text-sm text-stone-700">
+                      {detective > 0
+                        ? `Detective points: ${detective}. You named it in session ${(state.guess?.at ?? 0) + 1}.`
+                        : state.guess
+                          ? "Your guess at the stock missed, so no detective points this run."
+                          : "You never guessed the stock. Next time, take a shot: the earlier you name it, the more it's worth."}
+                    </p>
+                  </div>
 
                   <div className="pencil-box-alt mt-5 bg-white/60 p-5">
                     <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">Your card</p>
@@ -1194,8 +1269,32 @@ export function Replay() {
                     ) : (
                       <p className="text-lg font-semibold">{session.crowd}</p>
                     )}
+                    <CrowdDoodle people={peopleIn(session)} />
                   </div>
                   {state.index === 0 && <p className="mt-2 text-sm leading-relaxed text-stone-600">{run.setup}</p>}
+
+                  <div className={`mt-4 grid gap-3 ${session.context ? "sm:grid-cols-[1.4fr_1fr]" : ""}`}>
+                    <StoryChart story={story} showOpen={Boolean(seen & clueBit("gap"))} />
+                    {session.context && (
+                      <HistorySays context={session.context} withRunUp={Boolean(seen & clueBit("runUp"))} />
+                    )}
+                  </div>
+
+                  <div className="mt-4">
+                    <GuessStrip
+                      runId={run.id}
+                      ticker={run.reveal.ticker}
+                      wins={wins}
+                      index={state.index}
+                      sessions={sessions.length}
+                      guess={state.guess}
+                      canGuess={!busted}
+                      onGuess={(pick) => {
+                        dispatch({ type: "guess", pick });
+                        track("replay_guess");
+                      }}
+                    />
+                  </div>
 
                   <div className="mt-4">
                     <SwipeCard enabled={canBet} onSwipe={commit}>
@@ -1210,6 +1309,7 @@ export function Replay() {
                     <ClueCards
                       session={session}
                       context={session.context}
+                      mood={story.mood}
                       bought={state.bought}
                       revealed={false}
                       canBuy={canBet && state.bankroll - CLUE_COST > 0}
@@ -1227,10 +1327,14 @@ export function Replay() {
                         The model{" "}
                         {session.flag === "out" ? "took no direction here" : `was ${session.flag === "drop" ? "short" : "long"}`}.
                       </p>
+                      {state.mode === "daily" && splits && (
+                        <PlayersSplit split={splits[state.index] ?? null} mine={last.position} />
+                      )}
                       {session.context && (
                         <ClueCards
                           session={session}
                           context={session.context}
+                          mood={story.mood}
                           bought={last.mask}
                           revealed
                           canBuy={false}
@@ -1352,8 +1456,10 @@ export function Replay() {
             return minus the S&amp;P 500&apos;s over the three sessions after the open, so the three-session windows
             overlap and consecutive sessions are not independent calls. The crowd meter and the clues use only what was
             known at the open: price, run-up and volume figures come from the close before each session, and the gap
-            compares that session&apos;s open with that close. A replay of real runs is an illustration, not a track
-            record, and nothing here is advice.
+            compares that session&apos;s open with that close. The story chart ends at that close. History says counts
+            every session the research scored, these included. Mood is the share of the session&apos;s posts the
+            research read as bullish or bearish, and news counts the stories it tied to that session. A replay of real
+            runs is an illustration, not a track record, and nothing here is advice.
           </p>
         </div>
       </div>

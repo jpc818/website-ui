@@ -10,7 +10,7 @@ export type Size = keyof typeof SIZES;
 export const MODEL_STAKE = 0.25;
 
 // Extra clues a player can buy before betting. Bits in a mask, in this order.
-export const CLUES = ["runUp", "gap", "volume", "room"] as const;
+export const CLUES = ["runUp", "gap", "volume", "room", "mood"] as const;
 export type Clue = (typeof CLUES)[number];
 export const CLUE_COST = 10;
 export const clueBit = (clue: Clue) => 1 << CLUES.indexOf(clue);
@@ -39,7 +39,7 @@ export function modelPath(sessions: ReplaySession[]) {
 }
 
 // One code per session: "-" for a session with nothing to play, "o" to stay out, otherwise the side (r or d)
-// followed by the size (s or b). A hex digit for the clues bought follows when any were.
+// followed by the size (s or b). The clues bought follow in hex when any were.
 export function encodePick(pick: Pick | null) {
   if (!pick) return "-";
   const clues = pick.mask ? pick.mask.toString(16) : "";
@@ -48,7 +48,7 @@ export function encodePick(pick: Pick | null) {
 }
 
 function decodePick(code: string): Pick | null {
-  const match = /^(o|[rd][sb])([0-9a-f])?$/.exec(code);
+  const match = /^(o|[rd][sb])([1-9a-f][0-9a-f]?)?$/.exec(code);
   if (!match) return null;
   const [, move, clues] = match;
   const mask = clues ? parseInt(clues, 16) : 0;
