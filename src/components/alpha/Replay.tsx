@@ -1052,6 +1052,23 @@ export function Replay() {
     dispatch({ type: "commit", position });
   };
 
+  // The finished session's reveal is far taller than the next one, so the page shrinks under the reader.
+  // Bring the top of the game back once the shorter session has rendered.
+  const playRef = useRef<HTMLDivElement>(null);
+  const scrollPending = useRef(false);
+  const advance = () => {
+    scrollPending.current = true;
+    dispatch({ type: "next" });
+  };
+  useEffect(() => {
+    if (!scrollPending.current) return;
+    scrollPending.current = false;
+    const play = playRef.current;
+    if (!play || play.getBoundingClientRect().top >= 64) return;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    play.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  }, [state.index, over]);
+
   const practiceAnother = () => {
     const others = replayRuns.map((_, i) => i).filter((i) => i !== state.runIndex);
     dispatch({ type: "practice", runIndex: others[Math.floor(Math.random() * others.length)] });
@@ -1144,7 +1161,7 @@ export function Replay() {
           {state.mode === "daily" && <WeekBest week={week} />}
 
           <div className="mt-6 grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:gap-8">
-            <div className="min-w-0">
+            <div ref={playRef} className="min-w-0 scroll-mt-20">
               {!state.ready ? (
                 <p className="font-pencil text-3xl text-stone-700">Dealing today&apos;s run…</p>
               ) : over ? (
@@ -1345,7 +1362,7 @@ export function Replay() {
                       )}
                       <button
                         type="button"
-                        onClick={() => dispatch({ type: "next" })}
+                        onClick={advance}
                         className="pencil-box sticker mt-5 min-h-11 bg-amber-300 px-6 text-base font-bold"
                       >
                         {busted || state.index === sessions.length - 1 ? "See how you did →" : "Next session →"}
@@ -1356,7 +1373,7 @@ export function Replay() {
                       <p className="text-sm leading-relaxed text-stone-600">{session.outcome}</p>
                       <button
                         type="button"
-                        onClick={() => dispatch({ type: "next" })}
+                        onClick={advance}
                         className="pencil-box sticker mt-4 min-h-11 bg-amber-300 px-6 text-base font-bold"
                       >
                         Next session →
