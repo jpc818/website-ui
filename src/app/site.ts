@@ -2,6 +2,9 @@ export const siteUrl = "https://jarg.ai";
 
 // Private beta: Google sign-in, then the app's own allowlist; everyone else sees a "private beta" page.
 export const productUrl = "https://social-alpha-dashboard-686349754225.us-central1.run.app";
+// Every link to the product goes through this page first, so nobody meets Google sign-in without knowing who it's for.
+export const betaPath = "/beta";
+export const betaLabel = "Sign in · Schwab beta";
 
 // Public Google tags. Both are visible in the page source.
 // Measurement ID looks like G-XXXXXXXXXX. Search Console can be the meta-tag token, or the DNS value with the google-site-verification= prefix.

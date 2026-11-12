@@ -76,7 +76,9 @@ export function Newsletter() {
                 maxLength={254}
                 autoComplete="email"
                 placeholder="you@company.com"
-                className="h-12 min-w-0 flex-1 rounded-full border border-white/20 bg-background px-5 text-base outline-none placeholder:text-muted/70 focus:border-accent/60"
+                aria-invalid={status === "error" || undefined}
+                aria-describedby={status === "error" ? "notes-email-error" : undefined}
+                className="h-12 min-w-0 flex-1 rounded-full border border-white/20 bg-background px-5 text-base placeholder:text-muted/70 focus:border-accent/60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent aria-invalid:border-red-400"
               />
               <input
                 name="website"
@@ -95,7 +97,7 @@ export function Newsletter() {
               </button>
             </form>
           )}
-          <p role="alert" className="mt-3 min-h-5 text-sm text-red-400">
+          <p id="notes-email-error" role="alert" className="mt-3 min-h-5 text-sm text-red-400">
             {status === "error" ? error : ""}
           </p>
           {status !== "joined" && (

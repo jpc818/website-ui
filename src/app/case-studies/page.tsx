@@ -18,7 +18,7 @@ export default function CaseStudies() {
     <>
       <JsonLd data={caseIndexJsonLd(title, description)} />
       <AlphaHeader />
-      <main>
+      <main id="main">
         <section aria-labelledby="cases-title" className="pt-28 pb-16 md:pt-36 md:pb-20">
           <div className="mx-auto max-w-6xl px-5 sm:px-6">
             <p className="text-sm font-semibold uppercase tracking-wider text-cyan">Case studies</p>

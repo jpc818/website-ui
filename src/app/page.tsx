@@ -180,7 +180,7 @@ export default function Home() {
         }}
       />
       <AlphaHeader />
-      <main>
+      <main id="main">
         <AlphaHero />
         <CrowdFlag linkToResearch />
         <WhatWeDo />

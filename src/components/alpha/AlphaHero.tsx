@@ -1,4 +1,5 @@
-import { productUrl } from "@/app/site";
+import Link from "next/link";
+import { betaLabel, betaPath } from "@/app/site";
 import { Murmuration } from "@/components/alpha/Murmuration";
 
 const notThis = ["Not fundamentals alone", "Not mood alone", "Behavior + context"];
@@ -40,27 +41,21 @@ export function AlphaHero() {
         </p>
 
         <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-          <a
-            href={productUrl}
+          <Link
+            href="/research"
             className="inline-flex h-12 items-center justify-center rounded-full bg-accent px-8 text-base font-semibold text-background transition-opacity hover:opacity-90"
           >
-            Try the product
-          </a>
-          <a
-            href="#what"
+            Read the research
+          </Link>
+          <Link
+            href={betaPath}
             className="inline-flex h-12 items-center justify-center rounded-full border border-white/20 bg-background/80 px-8 text-base font-medium transition-colors hover:bg-surface"
           >
-            What we do
-          </a>
-          <a
-            href="#oracle"
-            className="px-2 text-base font-medium text-muted underline decoration-white/30 underline-offset-4 transition-colors hover:text-foreground"
-          >
-            Or try the Ghost game
-          </a>
+            {betaLabel}
+          </Link>
         </div>
         <p className="mt-3 text-sm text-muted">
-          Private beta, open to invited Charles Schwab customers. Sign in with Google.
+          The product is a private beta for invited Charles Schwab customers.
         </p>
 
         <ul className="mt-12 flex flex-wrap gap-2 sm:gap-3">

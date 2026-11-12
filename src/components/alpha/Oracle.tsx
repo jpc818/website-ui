@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useReducer, useState, type KeyboardEvent } from "react";
 import { AccuracyChart } from "@/components/alpha/AccuracyChart";
 import { GhostGame } from "@/components/alpha/GhostGame";
 import { SectionHeading } from "@/components/alpha/SectionHeading";
@@ -58,41 +58,16 @@ type Mode = "ghost" | "tap";
 export function Oracle() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [mode, setMode] = useState<Mode>("ghost");
-  const modeRef = useRef<Mode>(mode);
-  const sectionRef = useRef<HTMLElement>(null);
-  const inView = useRef(false);
 
-  useEffect(() => {
-    modeRef.current = mode;
-  }, [mode]);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        inView.current = entry.isIntersecting;
-      },
-      { threshold: 0.4 },
-    );
-    observer.observe(section);
-
-    const onKey = (event: KeyboardEvent) => {
-      if (!inView.current || modeRef.current !== "tap" || event.metaKey || event.ctrlKey || event.altKey) return;
-      const target = event.target as HTMLElement | null;
-      if (target?.closest("input, textarea, select, [contenteditable]")) return;
-      const key = event.key.toLowerCase();
-      const move = key === "arrowleft" || key === "f" ? 0 : key === "arrowright" || key === "j" ? 1 : null;
-      if (move === null) return;
-      event.preventDefault();
-      dispatch({ type: "press", move });
-    };
-    window.addEventListener("keydown", onKey);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("keydown", onKey);
-    };
-  }, []);
+  // Only while focus is on the two buttons, so arrow keys still scroll the page everywhere else.
+  const onPadKey = (event: KeyboardEvent) => {
+    if (event.metaKey || event.ctrlKey || event.altKey) return;
+    const key = event.key.toLowerCase();
+    const move = key === "arrowleft" || key === "f" ? 0 : key === "arrowright" || key === "j" ? 1 : null;
+    if (move === null) return;
+    event.preventDefault();
+    dispatch({ type: "press", move });
+  };
 
   const total = state.hits.length;
   const correct = state.hits.filter(Boolean).length;
@@ -112,7 +87,6 @@ export function Oracle() {
 
   return (
     <section
-      ref={sectionRef}
       id="oracle"
       aria-labelledby="oracle-title"
       className="border-t border-white/8 py-20 md:py-28"
@@ -150,7 +124,7 @@ export function Oracle() {
         ) : (
         <div className="mt-8 grid gap-5 lg:grid-cols-[1fr_1.1fr]">
           <div className="flex flex-col rounded-3xl border border-white/8 bg-surface p-6 md:p-8">
-            <div className="grid grid-cols-2 gap-3">
+            <div role="group" aria-label="Left or right" onKeyDown={onPadKey} className="grid grid-cols-2 gap-3">
               {([0, 1] as Move[]).map((move) => (
                 <button
                   key={move}
@@ -166,7 +140,7 @@ export function Oracle() {
               ))}
             </div>
             <p className="mt-3 hidden text-center text-sm text-muted md:block">
-              Or use the arrow keys, or F and J.
+              Or tab onto a button, then use the arrow keys, or F and J.
             </p>
 
             <div aria-live="polite" className="mt-6 min-h-16 rounded-2xl bg-white/[0.04] px-5 py-4">

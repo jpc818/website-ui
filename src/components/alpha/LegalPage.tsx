@@ -16,7 +16,7 @@ export function LegalPage({ title, updated, children }: { title: string; updated
           </Link>
         </div>
       </header>
-      <main className="mx-auto w-full max-w-3xl px-5 py-14 sm:px-6 md:py-20">
+      <main id="main" className="mx-auto w-full max-w-3xl px-5 py-14 sm:px-6 md:py-20">
         <h1 className="font-[family-name:var(--font-heading)] text-[clamp(2rem,6vw,3rem)] font-bold leading-[1.1] tracking-tight">
           {title}
         </h1>

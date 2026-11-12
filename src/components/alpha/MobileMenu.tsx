@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function MobileMenu({
   links,
@@ -9,11 +9,31 @@ export function MobileMenu({
   links: { href: string; label: string }[];
 }) {
   const ref = useRef<HTMLDetailsElement>(null);
+  const summaryRef = useRef<HTMLElement>(null);
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      ref.current?.removeAttribute("open");
+      summaryRef.current?.focus();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
 
   return (
-    <details ref={ref} className="group relative lg:hidden">
-      <summary className="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-full border border-white/15 [&::-webkit-details-marker]:hidden">
-        <span className="sr-only">Open menu</span>
+    <details
+      ref={ref}
+      onToggle={(event) => setOpen(event.currentTarget.open)}
+      className="group relative lg:hidden"
+    >
+      <summary
+        ref={summaryRef}
+        className="flex h-10 w-10 cursor-pointer list-none items-center justify-center rounded-full border border-white/15 [&::-webkit-details-marker]:hidden"
+      >
+        <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
         <svg
           viewBox="0 0 20 20"
           aria-hidden="true"

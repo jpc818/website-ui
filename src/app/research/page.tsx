@@ -30,7 +30,7 @@ export default function Research() {
     <>
       <JsonLd data={pageJsonLd({ path: "/research", name: title, description })} />
       <AlphaHeader />
-      <main>
+      <main id="main">
         <section aria-labelledby="research-title" className="pt-32 pb-4 md:pt-40">
           <div className="mx-auto max-w-6xl px-5 sm:px-6">
             <p className="text-sm font-semibold uppercase tracking-wider text-cyan">Research</p>

@@ -25,7 +25,7 @@ const MAX_FIGURES = 40;
 export function CrowdDoodle({ people }: { people: number }) {
   if (people === 0) {
     return (
-      <div className="mt-3 flex items-center gap-3 text-stone-500">
+      <div className="mt-3 flex items-center gap-3 text-stone-700">
         <svg viewBox="0 0 120 40" aria-hidden="true" className="h-10 w-28">
           <path d="M8 24 h100 M14 24 v12 M102 24 v12 M8 18 h100" fill="none" stroke="#a8a29e" strokeWidth="3" strokeLinecap="round" />
           <circle cx="96" cy="33" r="5" fill="none" stroke="#d6d3d1" strokeWidth="1.5" strokeDasharray="3 2" />
@@ -80,8 +80,8 @@ export function StoryChart({ story, showOpen }: { story: Story; showOpen: boolea
   return (
     <figure className="pencil-box-alt bg-white/70 p-3">
       <figcaption className="flex items-baseline justify-between gap-2">
-        <span className="text-[11px] font-semibold uppercase tracking-wider text-stone-500">The story so far</span>
-        <span className="text-[11px] text-stone-500">last 20 sessions</span>
+        <span className="text-[11px] font-semibold uppercase tracking-wider text-stone-700">The story so far</span>
+        <span className="text-[11px] text-stone-700">last 20 sessions</span>
       </figcaption>
       <svg
         viewBox={`0 0 ${W} 128`}
@@ -311,7 +311,7 @@ export function PlayersSplit({ split, mine }: { split: Split | null; mine: Posit
 
   return (
     <div className="mt-4">
-      <p className="text-[11px] font-semibold uppercase tracking-wider text-stone-500">
+      <p className="text-[11px] font-semibold uppercase tracking-wider text-stone-700">
         What today&apos;s other players did here · {total.toLocaleString("en-US")}
       </p>
       <div aria-hidden="true" className="pencil-box mt-1 flex h-6 overflow-hidden">

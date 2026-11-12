@@ -38,7 +38,7 @@ export function CaseStoryPage({ id }: { id: keyof typeof stories }) {
   return (
     <>
       <AlphaHeader />
-      <main>
+      <main id="main">
         <section aria-labelledby="case-title" className="relative pt-28 md:pt-36" style={{ background: theme.heroGlow }}>
           <div className="mx-auto max-w-6xl px-5 sm:px-6">
             <nav aria-label="Breadcrumb" className="text-sm text-muted">

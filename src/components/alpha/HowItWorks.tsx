@@ -391,6 +391,16 @@ export function HowItWorks() {
     return () => stepObserver.disconnect();
   }, [desktop]);
 
+  // Lands each step where the observer above would mark it active.
+  const goToStep = (i: number) => {
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    stepRefs.current[i]?.scrollIntoView({
+      behavior: reduceMotion ? "auto" : "smooth",
+      block: desktop ? "center" : "end",
+    });
+    setActive(i);
+  };
+
   useEffect(() => {
     const svg = svgRef.current;
     const section = sectionRef.current;
@@ -443,7 +453,6 @@ export function HowItWorks() {
         <div className="relative mt-10 lg:grid lg:grid-cols-[1.5fr_1fr] lg:gap-12">
           <div className="sticky top-16 z-0 -mx-5 h-[calc(100svh-4rem)] sm:-mx-6 lg:top-[max(6rem,calc(50vh-19rem))] lg:mx-0 lg:h-[min(calc(100vh-8rem),38rem)]">
             <div
-              aria-hidden="true"
               className="flex h-full flex-col border-y border-white/8 bg-surface px-3 py-4 sm:px-6 lg:rounded-3xl lg:border lg:p-6"
               style={{
                 backgroundImage:
@@ -451,7 +460,7 @@ export function HowItWorks() {
                 backgroundSize: "100% 100%, 22px 22px",
               }}
             >
-              <div className="flex items-center justify-between px-2 lg:px-0">
+              <div aria-hidden="true" className="flex items-center justify-between px-2 lg:px-0">
                 <p className="font-mono text-sm text-accent">
                   {String(active + 1).padStart(2, "0")} / {String(steps.length).padStart(2, "0")}
                 </p>
@@ -459,15 +468,23 @@ export function HowItWorks() {
                   {steps[active].label}
                 </p>
               </div>
-              <div className="mt-3 grid grid-cols-7 gap-1.5 px-2 lg:order-last lg:px-0">
+              <nav aria-label="Jump to a step" className="mt-1 grid grid-cols-7 gap-1.5 px-2 lg:order-last lg:mt-2 lg:px-0">
                 {steps.map((step, i) => (
-                  <span
+                  <button
                     key={step.label}
-                    className={`h-1 rounded-full transition-colors duration-500 ${i <= active ? "bg-accent" : "bg-white/10"}`}
-                  />
+                    type="button"
+                    aria-label={`Step ${i + 1}: ${step.label}`}
+                    aria-current={i === active ? "step" : undefined}
+                    onClick={() => goToStep(i)}
+                    className="group/pip cursor-pointer py-2"
+                  >
+                    <span
+                      className={`block h-1 rounded-full transition-colors duration-500 group-hover/pip:bg-accent/70 ${i <= active ? "bg-accent" : "bg-white/10"}`}
+                    />
+                  </button>
                 ))}
-              </div>
-              <div className="mt-3 min-h-0 flex-1">
+              </nav>
+              <div aria-hidden="true" className="mt-1 min-h-0 flex-1 lg:mt-3">
                 <svg ref={svgRef} width="400" height={viewHeight} viewBox={`0 0 400 ${viewHeight}`} className="block h-full w-full">
                   {scenes.map((SceneComponent, i) => (
                     <SceneComponent key={i} on={i === active} tall={tall} sy={sy} />
@@ -477,7 +494,7 @@ export function HowItWorks() {
             </div>
           </div>
 
-          <ol className="relative z-10 -mt-[calc(100svh-4rem)] pb-[40svh] lg:mt-0 lg:pb-[35vh]">
+          <ol className="pointer-events-none relative z-10 -mt-[calc(100svh-4rem)] pb-[40svh] lg:mt-0 lg:pb-[35vh]">
             {steps.map((step, i) => (
               <li
                 key={step.label}
@@ -485,14 +502,14 @@ export function HowItWorks() {
                   stepRefs.current[i] = el;
                 }}
                 data-step={i}
-                className="flex min-h-[150svh] items-end pb-[6svh] lg:min-h-[85vh] lg:items-center lg:pb-0"
+                className="flex min-h-[105svh] items-end pb-[6svh] lg:min-h-[85vh] lg:items-center lg:pb-0"
               >
                 <div
                   ref={(el) => {
                     cardRefs.current[i] = el;
                   }}
                   data-step={i}
-                  className={`rounded-3xl border p-6 shadow-[0_20px_60px_rgba(0,0,0,0.55)] transition-colors duration-500 md:p-7 lg:shadow-none ${
+                  className={`pointer-events-auto rounded-3xl border p-6 shadow-[0_20px_60px_rgba(0,0,0,0.55)] transition-colors duration-500 md:p-7 lg:shadow-none ${
                     i === active ? "border-accent/40 bg-surface/95" : "border-white/8 bg-surface/90 lg:bg-surface/60"
                   }`}
                 >

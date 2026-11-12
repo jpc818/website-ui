@@ -295,7 +295,7 @@ function TheRoom({ room }: { room: Room }) {
     <div className="fade-up mt-3 space-y-4">
       <div>
         <div className="flex items-baseline justify-between gap-3">
-          <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">What they posted</p>
+          <p className="text-xs font-semibold uppercase tracking-wider text-stone-700">What they posted</p>
           <p className="text-sm text-stone-600 tabular-nums">
             {room.posts} {room.posts === 1 ? "post" : "posts"}
           </p>
@@ -328,7 +328,7 @@ function TheRoom({ room }: { room: Room }) {
       </p>
 
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">Who stood out</p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-stone-700">Who stood out</p>
         <ul className="mt-2 space-y-2">
           {room.posters.map((poster, i) => {
             const label = posterLabel(poster);
@@ -351,7 +351,7 @@ function TheRoom({ room }: { room: Room }) {
 }
 
 const zones = [
-  { label: "Quiet", from: 0, to: 50, fill: "bg-stone-200", tone: "text-stone-500" },
+  { label: "Quiet", from: 0, to: 50, fill: "bg-stone-200", tone: "text-stone-700" },
   { label: "Typical", from: 50, to: 90, fill: "bg-cyan-100", tone: "text-cyan-700" },
   { label: "Busy", from: 90, to: 99, fill: "bg-amber-200", tone: "text-amber-600" },
   { label: "Frenzy", from: 99, to: 100, fill: "bg-rose-300", tone: "text-rose-600" },
@@ -389,7 +389,7 @@ function CrowdMeter({ session, context }: { session: ReplaySession; context: Con
           style={{ left: `${position}%` }}
         />
       </div>
-      <div aria-hidden="true" className="mt-1 grid grid-cols-4 text-center text-[11px] text-stone-500">
+      <div aria-hidden="true" className="mt-1 grid grid-cols-4 text-center text-[11px] text-stone-700">
         {zones.map((z) => (
           <span key={z.label}>{z.label}</span>
         ))}
@@ -414,7 +414,7 @@ const clueNames: Record<Clue, string> = {
 function clueFace(clue: Clue, session: ReplaySession, context: Context, mood: Mood | null) {
   switch (clue) {
     case "mood":
-      return mood ? moodFace(mood) : { value: "n/a", detail: "no mood read", tone: "text-stone-500" };
+      return mood ? moodFace(mood) : { value: "n/a", detail: "no mood read", tone: "text-stone-700" };
     case "runUp":
       return {
         value: signedPct(context.runUp),
@@ -466,7 +466,7 @@ function ClueCards({
   return (
     <div className="mt-5">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">
+        <p className="text-xs font-semibold uppercase tracking-wider text-stone-700">
           {revealed ? "All the clues" : `More clues · ${money(CLUE_COST)} each`}
         </p>
         {spent > 0 && <p className="text-xs text-stone-600">Spent {money(spent)} on clues this session</p>}
@@ -479,10 +479,10 @@ function ClueCards({
             const face = clueFace(clue, session, context, mood);
             return (
               <li key={clue} className={`${box} fade-up flex min-h-24 flex-col bg-white/80 p-3`}>
-                <span className="text-[11px] font-semibold uppercase tracking-wider text-stone-500">{clueNames[clue]}</span>
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-stone-700">{clueNames[clue]}</span>
                 <span className={`font-pencil text-3xl font-bold leading-tight ${face.tone}`}>{face.value}</span>
                 <span className="text-[11px] leading-snug text-stone-600">{face.detail}</span>
-                {!own && <span className="mt-auto pt-1 text-[10px] italic text-stone-500">skipped</span>}
+                {!own && <span className="mt-auto pt-1 text-[10px] italic text-stone-700">skipped</span>}
               </li>
             );
           }
@@ -770,7 +770,9 @@ function NotesOptIn() {
           maxLength={254}
           autoComplete="email"
           placeholder="you@company.com"
-          className="pencil-box h-11 min-w-0 flex-1 bg-white px-4 text-base text-stone-900 outline-none placeholder:text-stone-400 focus:bg-amber-50"
+          aria-invalid={status === "error" || undefined}
+          aria-describedby={status === "error" ? "replay-email-error" : undefined}
+          className="pencil-box h-11 min-w-0 flex-1 bg-white px-4 text-base text-stone-900 placeholder:text-stone-400 focus:bg-amber-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-900"
         />
         <input
           name="website"
@@ -788,7 +790,7 @@ function NotesOptIn() {
           {status === "sending" ? "Sending…" : "Send me the notes"}
         </button>
       </form>
-      <p role="alert" className="mt-2 min-h-5 text-sm text-rose-700">
+      <p id="replay-email-error" role="alert" className="mt-2 min-h-5 text-sm text-rose-700">
         {status === "error" ? error : ""}
       </p>
       <p className="text-sm leading-relaxed text-stone-600">
@@ -810,7 +812,7 @@ function WeekBest({ week }: { week: Week | null }) {
   if (!week) return null;
   return (
     <p className="mt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1 border-y-2 border-dashed border-stone-300 py-2">
-      <span className="text-xs font-semibold uppercase tracking-wider text-stone-500">This week&apos;s high score</span>
+      <span className="text-xs font-semibold uppercase tracking-wider text-stone-700">This week&apos;s high score</span>
       {week.best === null ? (
         <span className="font-pencil text-2xl font-bold text-stone-700">Nobody yet. Finish today&apos;s run to set it.</span>
       ) : (
@@ -1134,7 +1136,7 @@ export function Replay() {
               </button>
             </div>
             <p className="font-pencil text-2xl font-bold lg:hidden">
-              <span className="text-amber-600">You {money(youShown)}</span>
+              <span className="text-stone-900">You {money(youShown)}</span>
               <span className="text-stone-400"> · </span>
               <span className="text-cyan-700">Model {money(modelShown)}</span>
             </p>
@@ -1144,11 +1146,11 @@ export function Replay() {
           <div className="mt-6 grid gap-6 lg:grid-cols-[1.3fr_1fr] lg:gap-8">
             <div className="min-w-0">
               {!state.ready ? (
-                <p className="font-pencil text-3xl text-stone-500">Dealing today&apos;s run…</p>
+                <p className="font-pencil text-3xl text-stone-700">Dealing today&apos;s run…</p>
               ) : over ? (
                 <div key={`over-${state.deal}`} className="fade-up relative">
                   {won && <ScribbleBurst />}
-                  <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">{label} · run over</p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-stone-700">{label} · run over</p>
                   <p
                     className={`mt-1 font-pencil text-5xl font-bold leading-none sm:text-6xl ${
                       busted ? "text-rose-600" : won ? "text-emerald-700" : ""
@@ -1183,7 +1185,7 @@ export function Replay() {
                   )}
 
                   <div className="pencil-box mt-5 bg-white/60 p-5">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">Your stamps</p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-stone-700">Your stamps</p>
                     <Stamps stamps={stamps} />
                     <p className="mt-3 text-sm text-stone-700">
                       {detective > 0
@@ -1195,7 +1197,7 @@ export function Replay() {
                   </div>
 
                   <div className="pencil-box-alt mt-5 bg-white/60 p-5">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">Your card</p>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-stone-700">Your card</p>
                     <div className="mt-2">
                       <Squares cells={cells} />
                     </div>
@@ -1257,7 +1259,7 @@ export function Replay() {
                   <div className="flex items-center justify-between gap-4">
                     <p className="font-pencil text-4xl font-bold leading-none">{session.label}</p>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-stone-500 tabular-nums">
+                      <span className="text-xs text-stone-700 tabular-nums">
                         {state.index + 1} of {sessions.length}
                       </span>
                       <Squares cells={cells} size="sm" />
@@ -1298,7 +1300,7 @@ export function Replay() {
 
                   <div className="mt-4">
                     <SwipeCard enabled={canBet} onSwipe={commit}>
-                      <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">The clue</p>
+                      <p className="text-xs font-semibold uppercase tracking-wider text-stone-700">The clue</p>
                       <p className="mt-1 font-pencil text-3xl font-bold leading-tight sm:text-[2rem]">
                         {clueFor(sessions, state.index)}
                       </p>
@@ -1385,6 +1387,7 @@ export function Replay() {
                         >
                           <span className="whitespace-nowrap font-pencil text-[1.7rem] font-bold leading-none sm:text-3xl">▼ Drop</span>
                           <span className="mt-1 text-[11px] leading-tight text-stone-700 sm:text-xs">falls behind the market</span>
+                          <span className="mt-0.5 text-[11px] font-semibold leading-tight text-rose-800 sm:text-xs">can end the run</span>
                         </button>
                         <button
                           type="button"
@@ -1419,13 +1422,13 @@ export function Replay() {
             <aside aria-label="You against the model" className="pencil-box-alt h-fit bg-white/55 p-5 lg:sticky lg:top-24">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">You</p>
-                  <p className="font-pencil text-4xl font-bold leading-tight text-amber-600 tabular-nums sm:text-5xl">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-stone-700">You</p>
+                  <p className="font-pencil text-4xl font-bold leading-tight text-stone-900 tabular-nums sm:text-5xl">
                     {money(youShown)}
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs font-semibold uppercase tracking-wider text-stone-500">The model</p>
+                  <p className="text-xs font-semibold uppercase tracking-wider text-stone-700">The model</p>
                   <p className="font-pencil text-4xl font-bold leading-tight text-cyan-700 tabular-nums sm:text-5xl">
                     {money(modelShown)}
                   </p>

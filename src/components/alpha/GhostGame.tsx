@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useReducer, useRef, useState } from "react";
+import { useEffect, useReducer, useRef, useState, type KeyboardEvent } from "react";
 import { AccuracyChart } from "@/components/alpha/AccuracyChart";
 import { drawShareCard } from "@/components/alpha/shareCard";
 
@@ -20,16 +20,17 @@ const SCORING_WINDOW = 60;
 const MAX_PAUSE_MS = 10_000;
 const COLOUR_ARM_MS = 700;
 // `popularity` is the rough share of people naming it as their favourite in large international surveys.
+// `ink` is the label colour that stays readable on that swatch.
 const colours = [
-  { name: "red", fill: "#ef4444", popularity: 0.12 },
-  { name: "yellow", fill: "#facc15", popularity: 0.05 },
-  { name: "blue", fill: "#3b82f6", popularity: 0.35 },
-  { name: "green", fill: "#22c55e", popularity: 0.15 },
-  { name: "white", fill: "#f8fafc", popularity: 0.04 },
-  { name: "orange", fill: "#f97316", popularity: 0.05 },
-  { name: "purple", fill: "#a855f7", popularity: 0.12 },
-  { name: "black", fill: "#0b0d12", popularity: 0.07 },
-  { name: "pink", fill: "#ec4899", popularity: 0.05 },
+  { name: "red", fill: "#ef4444", ink: "dark", popularity: 0.12 },
+  { name: "yellow", fill: "#facc15", ink: "dark", popularity: 0.05 },
+  { name: "blue", fill: "#3b82f6", ink: "dark", popularity: 0.35 },
+  { name: "green", fill: "#22c55e", ink: "dark", popularity: 0.15 },
+  { name: "white", fill: "#f8fafc", ink: "dark", popularity: 0.04 },
+  { name: "orange", fill: "#f97316", ink: "dark", popularity: 0.05 },
+  { name: "purple", fill: "#a855f7", ink: "dark", popularity: 0.12 },
+  { name: "black", fill: "#0b0d12", ink: "light", popularity: 0.07 },
+  { name: "pink", fill: "#ec4899", ink: "dark", popularity: 0.05 },
 ];
 
 const spots = [
@@ -354,8 +355,6 @@ export function GhostGame() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const [shareNote, setShareNote] = useState("");
   const [sharing, setSharing] = useState(false);
-  const rootRef = useRef<HTMLDivElement>(null);
-  const inViewRef = useRef(false);
   const lastTapRef = useRef<number | null>(null);
   const boardRef = useRef<HTMLDivElement>(null);
   const colourOpenRef = useRef(false);
@@ -372,31 +371,13 @@ export function GhostGame() {
     boardRef.current?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "center" });
   }, [colourOpen]);
 
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        inViewRef.current = entry.isIntersecting;
-      },
-      { threshold: 0.25 },
-    );
-    observer.observe(root);
-    const onKey = (event: KeyboardEvent) => {
-      if (!inViewRef.current || event.metaKey || event.ctrlKey || event.altKey) return;
-      const target = event.target as HTMLElement | null;
-      if (target?.closest("input, textarea, select, [contenteditable]")) return;
-      if (!/^[1-9]$/.test(event.key)) return;
-      event.preventDefault();
-      if (colourOpenRef.current && performance.now() - colourShownAtRef.current <= COLOUR_ARM_MS) return;
-      dispatch({ type: "tap", cell: Number(event.key) - 1, ms: sinceLastTap(lastTapRef) });
-    };
-    window.addEventListener("keydown", onKey);
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("keydown", onKey);
-    };
-  }, []);
+  // Only while focus is on the board: screen readers use number keys to jump between headings.
+  const onBoardKey = (event: KeyboardEvent) => {
+    if (event.metaKey || event.ctrlKey || event.altKey || !/^[1-9]$/.test(event.key)) return;
+    event.preventDefault();
+    if (colourOpenRef.current && performance.now() - colourShownAtRef.current <= COLOUR_ARM_MS) return;
+    dispatch({ type: "tap", cell: Number(event.key) - 1, ms: sinceLastTap(lastTapRef) });
+  };
 
   // After the reveal, seal the next guess again.
   useEffect(() => {
@@ -471,7 +452,7 @@ export function GhostGame() {
   };
 
   return (
-    <div ref={rootRef} className="mt-8 grid gap-5 lg:grid-cols-[1fr_1.1fr]">
+    <div className="mt-8 grid gap-5 lg:grid-cols-[1fr_1.1fr]">
       <div className="rounded-3xl border border-white/8 bg-surface px-6 py-4 lg:col-span-2">
         <div className="flex items-baseline justify-between gap-4 text-sm">
           <p className="font-semibold">{progressLabel}</p>
@@ -507,26 +488,37 @@ export function GhostGame() {
 
       <div className="flex flex-col rounded-3xl border border-white/8 bg-surface p-6 md:p-8">
         <div ref={boardRef} className="mx-auto w-full max-w-sm">
-          <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
+          <div
+            role="group"
+            aria-label={colour ? "Colour board" : "Ghost board"}
+            onKeyDown={onBoardKey}
+            className="grid grid-cols-3 gap-2.5 sm:gap-3"
+          >
             {colour
-              ? colours.map(({ name, fill }, cell) => {
+              ? colours.map(({ name, fill, ink }, cell) => {
                   const isGhost = colourPicked && colour.guess === cell;
                   const isPick = colourPicked && colour.pick === cell;
                   return (
                     <button
-                      key={name}
+                      key={cell}
                       type="button"
-                      aria-label={name}
                       disabled={colourPicked}
                       onClick={() => colourArmed() && dispatch({ type: "tap", cell, ms: null })}
                       style={{ backgroundColor: fill }}
                       className={`relative grid aspect-square touch-manipulation select-none place-items-center rounded-2xl border-2 transition-[transform,opacity] active:scale-[0.96] ${
-                        isPick ? "border-cyan" : "border-white/15"
+                        isPick ? "border-cyan" : name === "black" ? "border-white/50" : "border-white/15"
                       } ${colourPicked && !isPick && !isGhost ? "opacity-30" : ""}`}
                     >
                       {isGhost && (
                         <GhostIcon className="ghost-mark h-1/2 w-1/2 text-white drop-shadow-[0_0_6px_rgba(0,0,0,0.8)]" />
                       )}
+                      <span
+                        className={`absolute inset-x-0 bottom-1.5 text-center text-sm font-semibold sm:bottom-2 ${
+                          ink === "dark" ? "text-black" : "text-white"
+                        }`}
+                      >
+                        {name}
+                      </span>
                     </button>
                   );
                 })
@@ -575,7 +567,9 @@ export function GhostGame() {
                 : "The Ghost has sealed its guess. It stays hidden until you tap."}
           </span>
         </div>
-        <p className="mt-2 hidden text-center text-xs text-muted md:block">Press 1 to 9 on your keyboard if you like.</p>
+        <p className="mt-2 hidden text-center text-xs text-muted md:block">
+          Tab onto the board, then press 1 to 9 if you like.
+        </p>
 
         <div aria-live="polite" className="mt-5 min-h-16 rounded-2xl bg-white/[0.04] px-5 py-4 text-base">
           {colour ? (

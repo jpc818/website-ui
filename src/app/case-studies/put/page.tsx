@@ -18,7 +18,7 @@ export default function PutCase() {
     <>
       <JsonLd data={caseStudyJsonLd("put", title, description)} />
       <AlphaHeader />
-      <main>
+      <main id="main">
         <CaseStudy standalone />
         <section aria-labelledby="more-title" className="border-t border-white/8 py-16 md:py-20">
           <div className="mx-auto max-w-6xl px-5 sm:px-6">
