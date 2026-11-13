@@ -9,7 +9,7 @@ const links = [
   { href: "/research", label: "Research" },
   { href: "/#how", label: "How it works" },
   { href: "/case-studies", label: "Case studies" },
-  { href: "/#about", label: "About" },
+  { href: "/about", label: "About" },
 ];
 
 export function AlphaHeader() {

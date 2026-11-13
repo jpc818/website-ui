@@ -1,4 +1,3 @@
-import { About } from "@/components/alpha/About";
 import { AlphaFooter } from "@/components/alpha/AlphaFooter";
 import { AlphaHeader } from "@/components/alpha/AlphaHeader";
 import { AlphaHero } from "@/components/alpha/AlphaHero";
@@ -13,6 +12,7 @@ import { howSteps } from "@/components/alpha/howSteps";
 import { LabTeaser } from "@/components/alpha/LabTeaser";
 import { MovedAnchors } from "@/components/alpha/MovedAnchors";
 import { Newsletter } from "@/components/alpha/Newsletter";
+import { ResearchProcess } from "@/components/alpha/ResearchProcess";
 import { TheGame } from "@/components/alpha/TheGame";
 import { WhatWeDo } from "@/components/alpha/WhatWeDo";
 import { siteDescription, siteTitle, siteUrl } from "@/app/site";
@@ -57,7 +57,7 @@ const jsonLd = {
       "@type": "Person",
       "@id": `${siteUrl}/#jaron-clinton`,
       name: "Jaron Clinton",
-      url: `${siteUrl}/#about`,
+      url: `${siteUrl}/about`,
       description:
         "Jaron Clinton, founder of jargAI, went from business school and its finance club, to a startup that went well, to Discount Tire, the world's largest independent tire dealer. Years in retail showed him how predictable a large enough group of people can be. jargAI is his own project, built on his own time with public data.",
     },
@@ -166,7 +166,7 @@ export default function Home() {
         <LabTeaser />
         <TheGame />
         <Faq />
-        <About />
+        <ResearchProcess />
         <Newsletter />
         <Contact />
       </main>

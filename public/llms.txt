@@ -10,7 +10,7 @@
 - [Case studies](https://jarg.ai/case-studies): Four real events, named by stock and month, from the held-out stretch the model never trained on (January 2025 to October 2026), each told as a story and then shown beside how that kind of flag does overall
 - [Lab](https://jarg.ai/lab): Two interactive demos. "Try to be unpredictable", an in-browser game in which a "Ghost" guesses which square a visitor will tap next (nothing is sent anywhere), and "Could you have called it?", a daily replay of real held-out runs. Illustrations, not a track record, and not advice
 - [FAQ](https://jarg.ai/#faq): Plain answers to common questions
-- [About](https://jarg.ai/#about): Jaron Clinton, founder. Business school and its finance club, a startup that went well, then Discount Tire, the world's largest independent tire dealer. Years in retail showed how predictable a large enough group of people can be. jargAI is his own project, built on his own time with public data
+- [About](https://jarg.ai/about): Jaron Clinton, founder. Business school and its finance club, a startup that went well, then Discount Tire, the world's largest independent tire dealer. Years in retail showed how predictable a large enough group of people can be. jargAI is his own project, built on his own time with public data
 - [Contact](https://jarg.ai/#contact): contact@jarg.ai, for funds and trading firms, data providers, and people who want to work on this
 
 ## Case studies

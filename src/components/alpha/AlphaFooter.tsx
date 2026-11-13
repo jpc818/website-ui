@@ -16,7 +16,7 @@ export function AlphaFooter() {
           {[
             { href: "/research", label: "Research" },
             { href: "/case-studies", label: "Case studies" },
-            { href: "/#about", label: "About" },
+            { href: "/about", label: "About" },
             { href: "/lab", label: "Lab" },
           ].map((link) => (
             <a key={link.href} href={link.href} className="underline underline-offset-2 hover:text-foreground">

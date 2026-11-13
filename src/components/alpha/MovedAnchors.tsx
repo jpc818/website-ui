@@ -6,6 +6,7 @@ import { useEffect } from "react";
 const moved: Record<string, string> = {
   "#oracle": "/lab#oracle",
   "#replay": "/lab#replay",
+  "#about": "/about",
 };
 
 export function MovedAnchors() {

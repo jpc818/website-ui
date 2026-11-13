@@ -76,7 +76,7 @@ function FamilySketch() {
 
 export function About() {
   return (
-    <section id="about" aria-labelledby="about-title" className="border-t border-white/8 py-20 md:py-28">
+    <section id="about" aria-labelledby="about-title" className="pt-28 pb-20 md:pt-36 md:pb-28">
       <div className="mx-auto grid max-w-6xl items-center gap-12 px-5 sm:px-6 lg:grid-cols-[18rem_1fr] lg:gap-16">
         <div className="mx-auto w-full max-w-xs space-y-5 lg:max-w-none">
           {founder.photo && (
@@ -95,7 +95,7 @@ export function About() {
           </figure>
         </div>
         <div>
-          <SectionHeading id="about-title" eyebrow="About" title="Hi, I&apos;m Jaron Clinton.">
+          <SectionHeading id="about-title" level="h1" eyebrow="About" title="Hi, I&apos;m Jaron Clinton.">
             The idea showed up years before jargAI did.
           </SectionHeading>
           <div className="mt-6 max-w-2xl space-y-4 text-base leading-relaxed text-muted md:text-lg">
