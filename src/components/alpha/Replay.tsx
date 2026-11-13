@@ -1085,7 +1085,7 @@ export function Replay() {
     cluesBought ? `🔎 ${cluesBought} ${cluesBought === 1 ? "clue" : "clues"} bought` : "🔎 no clues bought",
     ...(detective > 0 ? [`🕵️ named the stock in session ${(state.guess?.at ?? 0) + 1} (+${detective})`] : []),
     ...(stamps.length ? [stamps.map((stamp) => stamp.emoji).join("") + ` ${stamps.length} ${stamps.length === 1 ? "stamp" : "stamps"}`] : []),
-    "jarg.ai/#replay",
+    "jarg.ai/lab#replay",
   ].join("\n");
 
   const share = async () => {

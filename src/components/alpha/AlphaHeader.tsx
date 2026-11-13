@@ -5,12 +5,9 @@ import { NavLinks } from "@/components/alpha/NavLinks";
 import { betaPath, betaLabel } from "@/app/site";
 
 const links = [
-  { href: "/#what", label: "What we do" },
   { href: "/research", label: "Research" },
-  { href: "/case-studies", label: "Case studies" },
   { href: "/#how", label: "How it works" },
-  { href: "/#oracle", label: "Try it" },
-  { href: "/#replay", label: "Replay" },
+  { href: "/case-studies", label: "Case studies" },
   { href: "/#about", label: "About" },
 ];
 

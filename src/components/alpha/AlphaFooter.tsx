@@ -12,7 +12,19 @@ export function AlphaFooter() {
             &copy; {new Date().getFullYear()} jargAI &middot; Jargai Labs LLC
           </p>
         </div>
-        <nav aria-label="Legal" className="mt-6 flex justify-center gap-6 text-sm md:justify-start">
+        <nav aria-label="Site" className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm md:justify-start">
+          {[
+            { href: "/research", label: "Research" },
+            { href: "/case-studies", label: "Case studies" },
+            { href: "/#about", label: "About" },
+            { href: "/lab", label: "Lab" },
+          ].map((link) => (
+            <a key={link.href} href={link.href} className="underline underline-offset-2 hover:text-foreground">
+              {link.label}
+            </a>
+          ))}
+        </nav>
+        <nav aria-label="Legal" className="mt-3 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm md:justify-start">
           <a href="/privacy" className="underline underline-offset-2 hover:text-foreground">
             Privacy
           </a>

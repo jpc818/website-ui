@@ -430,7 +430,7 @@ export function GhostGame() {
     try {
       const blob = await drawShareCard({ percent: Math.round(share * 100), called, total, chancePercent, taps });
       const file = new File([blob], "jargai-ghost.png", { type: "image/png" });
-      const url = "https://jarg.ai/#oracle";
+      const url = "https://jarg.ai/lab#oracle";
       const withImage = { files: [file], text: `${shareText} ${url}`, title: "jargAI Ghost" };
       if (typeof navigator.canShare === "function" && navigator.canShare(withImage)) {
         await navigator.share(withImage);

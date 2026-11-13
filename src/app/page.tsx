@@ -10,9 +10,9 @@ import { CrowdMath } from "@/components/alpha/CrowdMath";
 import { Faq, faqs } from "@/components/alpha/Faq";
 import { HowItWorks } from "@/components/alpha/HowItWorks";
 import { howSteps } from "@/components/alpha/howSteps";
+import { LabTeaser } from "@/components/alpha/LabTeaser";
+import { MovedAnchors } from "@/components/alpha/MovedAnchors";
 import { Newsletter } from "@/components/alpha/Newsletter";
-import { Oracle } from "@/components/alpha/Oracle";
-import { Replay } from "@/components/alpha/Replay";
 import { TheGame } from "@/components/alpha/TheGame";
 import { WhatWeDo } from "@/components/alpha/WhatWeDo";
 import { siteDescription, siteTitle, siteUrl } from "@/app/site";
@@ -141,32 +141,6 @@ const jsonLd = {
         inDefinedTermSet: { "@id": `${siteUrl}/#glossary` },
       })),
     },
-    {
-      "@type": "WebApplication",
-      "@id": `${siteUrl}/#oracle`,
-      name: "Try to be unpredictable",
-      url: `${siteUrl}/#oracle`,
-      applicationCategory: "EducationalApplication",
-      operatingSystem: "Any",
-      browserRequirements: "Requires JavaScript",
-      isAccessibleForFree: true,
-      description:
-        "An in-browser game: tap squares on a grid as randomly as you can while a Ghost seals a guess about your next square, based on your earlier taps, and reveals it after you tap. Chance is one in nine. Nothing is sent anywhere.",
-      provider: { "@id": `${siteUrl}/#organization` },
-    },
-    {
-      "@type": "WebApplication",
-      "@id": `${siteUrl}/#replay`,
-      name: "Could you have called it?",
-      url: `${siteUrl}/#replay`,
-      applicationCategory: "EducationalApplication",
-      operatingSystem: "Any",
-      browserRequirements: "Requires JavaScript",
-      isAccessibleForFree: true,
-      description:
-        "A daily game that replays real held-out runs session by session. Each session gives one clue from the crowd, with the mix of post types and anonymous profiles of who was posting a tap away. Bet on a rise or a drop, or sit out, and race the model's own calls; finish ahead to reveal which stock it was, and share your card. An illustration, not a track record, and not advice.",
-      provider: { "@id": `${siteUrl}/#organization` },
-    },
   ],
 };
 
@@ -179,17 +153,17 @@ export default function Home() {
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
+      <MovedAnchors />
       <AlphaHeader />
       <main id="main">
         <AlphaHero />
         <CrowdFlag linkToResearch />
         <WhatWeDo />
-        <Oracle />
         <Approach />
         <HowItWorks />
-        <Replay />
         <CaseStudiesTeaser />
         <CrowdMath />
+        <LabTeaser />
         <TheGame />
         <Faq />
         <About />
