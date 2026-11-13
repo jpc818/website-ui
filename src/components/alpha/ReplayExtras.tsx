@@ -60,7 +60,7 @@ export function CrowdDoodle({ people }: { people: number }) {
   );
 }
 
-// The 20 sessions before this one: price shape and chatter. Today's open stays a question mark until the gap
+// The 20 trading days before this one: price shape and chatter. Today's open stays a question mark until the gap
 // clue is open, so the chart never gives a paid clue away.
 export function StoryChart({ story, showOpen }: { story: Story; showOpen: boolean }) {
   const id = useId().replace(/[^a-zA-Z0-9]/g, "");
@@ -81,12 +81,12 @@ export function StoryChart({ story, showOpen }: { story: Story; showOpen: boolea
     <figure className="pencil-box-alt bg-white/70 p-3">
       <figcaption className="flex items-baseline justify-between gap-2">
         <span className="text-[11px] font-semibold uppercase tracking-wider text-stone-700">The story so far</span>
-        <span className="text-[11px] text-stone-700">last 20 sessions</span>
+        <span className="text-[11px] text-stone-700">last 20 trading days</span>
       </figcaption>
       <svg
         viewBox={`0 0 ${W} 128`}
         role="img"
-        aria-label={`Price over the last 20 sessions and posts each session, peaking at ${most} posts.`}
+        aria-label={`Price over the last 20 trading days and posts each day, peaking at ${most} posts.`}
         className="mt-1 h-auto w-full"
       >
         <defs>
@@ -126,7 +126,7 @@ export function StoryChart({ story, showOpen }: { story: Story; showOpen: boolea
       </svg>
       <p className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-[11px] text-stone-600">
         <span>line: price, shape only</span>
-        <span>bars: posts each session{quiet ? " (none at all)" : ""}</span>
+        <span>bars: posts per day{quiet ? " (none at all)" : ""}</span>
         <span>
           <span className="font-semibold text-amber-600">amber</span>: today
         </span>
@@ -137,11 +137,11 @@ export function StoryChart({ story, showOpen }: { story: Story; showOpen: boolea
 }
 
 const zoneOf = (busier: number) => (busier < 50 ? 0 : busier < 90 ? 1 : busier < 99 ? 2 : 3);
-const zoneWords = ["this quiet", "this ordinary", "this busy", "in a frenzy like this"];
+const zoneWords = ["as quiet as this", "with ordinary chatter", "this busy", "in a frenzy like this"];
 const runUpBucket = (runUp: number) => (runUp < -20 ? 0 : runUp < 20 ? 1 : runUp < 100 ? 2 : 3);
 const MIN_CELL = 40;
 
-// Base rates from every session the research scored. The run-up sharpens them only once that clue is open.
+// Base rates from every stock-day the research scored. The run-up sharpens them only once that clue is open.
 export function HistorySays({ context, withRunUp }: { context: Context; withRunUp: boolean }) {
   const zone = zoneOf(context.busier);
   const cell = ODDS_BY_SETUP[zone][runUpBucket(context.runUp)];
@@ -149,9 +149,9 @@ export function HistorySays({ context, withRunUp }: { context: Context; withRunU
   const odds: Odds = sharp ? cell : ODDS_BY_ZONE[zone];
   const typical =
     odds.median < 0
-      ? `lagged it by ${Math.abs(odds.median)} ${Math.abs(odds.median) === 1 ? "point" : "points"}`
+      ? `trailed it by ${Math.abs(odds.median)}%`
       : odds.median > 0
-        ? `beat it by ${odds.median} ${odds.median === 1 ? "point" : "points"}`
+        ? `beat it by ${odds.median}%`
         : "roughly matched it";
 
   return (
@@ -160,13 +160,13 @@ export function HistorySays({ context, withRunUp }: { context: Context; withRunU
       <div className="mt-1 flex items-center gap-3">
         <p className="font-pencil text-5xl font-bold leading-none text-cyan-800">{odds.beat}%</p>
         <p className="text-sm leading-snug text-stone-700">
-          of {odds.n.toLocaleString("en-US")} sessions {zoneWords[zone]}
-          {sharp ? ", with a run-up like this one," : ""} beat the market over the next three.
+          of {odds.n.toLocaleString("en-US")} stock-days {zoneWords[zone]}
+          {sharp ? ", with a run-up like this one," : ""} beat the S&amp;P 500 over the next 3 trading days.
         </p>
       </div>
       <p className="mt-2 text-xs leading-relaxed text-stone-600">
         The typical one {typical}
-        {odds.swing >= 5 ? `, but ${odds.swing}% swung 50 points or more either way` : ""}.
+        {odds.swing >= 5 ? `, but ${odds.swing}% of them moved 50% or more either way` : ""}.
         {!sharp && !withRunUp && " The run-up clue sharpens this."}
       </p>
     </div>
@@ -282,7 +282,7 @@ export function GuessStrip({
       {!guess && (
         <p className="mt-2 text-xs text-stone-600">
           Each winning bet turns a letter over. Guess right now for {worth} detective points; they drop by{" "}
-          {DETECTIVE_POINTS} every session you wait.
+          {DETECTIVE_POINTS} every day you wait.
         </p>
       )}
     </div>

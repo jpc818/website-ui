@@ -234,11 +234,12 @@ const tagColours: Record<PostTag, string> = {
 
 const headcount = (session: ReplaySession) => (session.move === null ? 0 : parseInt(session.crowd, 10) || 0);
 const people = (n: number) => (n === 1 ? "one person is" : `${n} people are`);
+const dayBefore = (before: number, now: number) => `${before} the day before, ${now} today.`;
 
 // The single clue shown up front. It only uses what was knowable at the open.
 function clueFor(sessions: ReplaySession[], i: number) {
   const session = sessions[i];
-  if (session.move === null) return "Nobody's talking about it. Nothing to play here.";
+  if (session.move === null) return "Nobody posted about it today. Nothing to play.";
   const now = headcount(session);
   const room = session.room;
   let quietBefore = 0;
@@ -248,23 +249,23 @@ function clueFor(sessions: ReplaySession[], i: number) {
   const fade = room?.posters.find((p) => p.role === "fade");
 
   if (champion) {
-    return `A champion showed up: ${champion.hits} of their ${champion.calls} earlier calls beat the market.`;
+    return `A poster with a strong record showed up: ${champion.hits} of their ${champion.calls} earlier stock calls beat the market.`;
   }
   if (quietBefore > 0) {
-    return `After ${quietBefore === 1 ? "a quiet session" : `${quietBefore} quiet sessions`}, ${people(now)} talking about it.`;
+    return `After ${quietBefore === 1 ? "a day" : `${quietBefore} days`} with no posts, ${people(now)} posting about it.`;
   }
-  if (before !== null && now >= before * 3) return `The crowd jumped from ${before} to ${now} since the last session.`;
-  if (before !== null && now * 3 <= before) return `The crowd collapsed from ${before} to ${now}.`;
-  if (fade) return `A fade is in the room: only ${fade.hits} of their ${fade.calls} earlier calls beat the market.`;
-  if (before !== null && now >= before * 2) return `The crowd grew from ${before} to ${now}.`;
-  if (before !== null && now * 2 <= before) return `The crowd shrank from ${before} to ${now}.`;
+  if (before !== null && now >= before * 3) return `People posting more than tripled: ${dayBefore(before, now)}`;
+  if (before !== null && now * 3 <= before) return `People posting collapsed: ${dayBefore(before, now)}`;
+  if (fade) return `A poster with a poor record is here: only ${fade.hits} of their ${fade.calls} earlier stock calls beat the market.`;
+  if (before !== null && now >= before * 2) return `More people posting: ${dayBefore(before, now)}`;
+  if (before !== null && now * 2 <= before) return `Fewer people posting: ${dayBefore(before, now)}`;
   if (room) {
     const top = tagOrder.reduce((a, b) => (room.mix[b] > room.mix[a] ? b : a));
     const share = room.mix[top];
-    if (share >= 40) return `${share === 50 ? "Half" : `${share}%`} of the posts were ${tagNames[top]} posts.`;
-    return `It came up on ${room.discussed} of the previous 20 sessions.`;
+    if (share >= 40) return `${share === 50 ? "Half" : `${share}%`} of today's posts were ${tagNames[top]} posts.`;
+    return `It came up in posts on ${room.discussed} of the last 20 trading days.`;
   }
-  return `${now === 1 ? "One person" : `${now} people`} talking. That's all this replay knows about them.`;
+  return `${now === 1 ? "One person" : `${now} people`} posting. That's all this replay knows about them.`;
 }
 
 const times = (n: number) => `${n >= 10 ? Math.round(n) : Number(n.toFixed(1))}×`;
@@ -324,7 +325,7 @@ function TheRoom({ room }: { room: Room }) {
       <p className="text-sm leading-relaxed text-stone-700">
         {room.newcomers > 0 &&
           `${room.newcomers} ${room.newcomers === 1 ? "person had" : "people had"} no track record. `}
-        The stock came up on {room.discussed} of the previous 20 sessions.
+        The stock came up in posts on {room.discussed} of the last 20 trading days.
       </p>
 
       <div>
@@ -341,9 +342,10 @@ function TheRoom({ room }: { room: Room }) {
           })}
         </ul>
         <p className="mt-2 text-xs leading-relaxed text-stone-600">
-          A call is an earlier post about a stock that has since resolved; it counts if that stock beat the S&amp;P 500
-          over the next three sessions.
-          {hasRoles && " A champion has 8 or more calls with at least 60% right; a fade has 8 or more with 40% or fewer."}
+          A call is an earlier post of theirs about some stock; it counts as right if that stock beat the S&amp;P 500
+          over the next three trading days.
+          {hasRoles &&
+            " A champion has 8 or more calls with at least 60% right; a fade has 8 or more with 40% or fewer."}
         </p>
       </div>
     </div>
@@ -360,7 +362,17 @@ const zones = [
 const pct = (n: number) => `${Math.abs(n) >= 10 ? Math.round(Math.abs(n)) : Number(Math.abs(n).toFixed(1))}%`;
 const signedPct = (n: number) => (Math.abs(n) < 0.05 ? "flat" : `${n < 0 ? "−" : "+"}${pct(n)}`);
 
-// How the crowd compares with every session the research scored, and with this stock's own normal.
+const plural = (n: number, one: string, many: string) => `${n.toLocaleString("en-US")} ${n === 1 ? one : many}`;
+
+// "18 people · 3 communities" in the run data becomes a full sentence with the post count.
+function crowdLine(session: ReplaySession, posts: number) {
+  const who = /^(\d+) (?:people|person)(?: · (\d+) communit)?/.exec(session.crowd);
+  if (!who) return session.crowd;
+  const places = Number(who[2] ?? 1);
+  return `${plural(posts, "post", "posts")} from ${plural(Number(who[1]), "person", "people")} in ${plural(places, "online community", "online communities")}`;
+}
+
+// How today's chatter compares with every stock-day the research scored, and with this stock's own normal.
 function CrowdMeter({ session, context }: { session: ReplaySession; context: Context }) {
   const zoneIndex = Math.max(0, zones.findIndex((zone) => context.busier < zone.to));
   const zone = zones[context.busier >= 100 ? zones.length - 1 : zoneIndex];
@@ -374,7 +386,7 @@ function CrowdMeter({ session, context }: { session: ReplaySession; context: Con
   return (
     <div>
       <div className="flex items-baseline justify-between gap-3">
-        <p className="text-lg font-semibold">{session.crowd}</p>
+        <p className="text-lg font-semibold leading-snug">{crowdLine(session, posts)}</p>
         <p className={`font-pencil text-3xl font-bold leading-none ${zone.tone}`}>{zone.label}</p>
       </div>
       <div className="relative mt-3">
@@ -395,8 +407,8 @@ function CrowdMeter({ session, context }: { session: ReplaySession; context: Con
         ))}
       </div>
       <p className="mt-2 text-sm leading-relaxed text-stone-700">
-        Busier than <strong className="text-stone-900">{busier}</strong> of the 25,247 sessions the research scored. It
-        usually gets {usual} a session; this one had {posts}
+        More chatter than <strong className="text-stone-900">{busier}</strong> of the 25,247 stock-days the research
+        scored. This stock usually gets {usual} a day; today it got {posts}
         {ratio >= 2 ? `, ${Math.round(ratio)}× its normal` : ratio <= 0.5 ? ", well below its normal" : ""}.
       </p>
     </div>
@@ -418,19 +430,19 @@ function clueFace(clue: Clue, session: ReplaySession, context: Context, mood: Mo
     case "runUp":
       return {
         value: signedPct(context.runUp),
-        detail: `last five sessions · market ${signedPct(context.market)}`,
+        detail: `stock's change over the last 5 trading days · S&P 500 ${signedPct(context.market)}`,
         tone: context.runUp > 0 ? "text-emerald-700" : "text-rose-600",
       };
     case "gap":
       return {
         value: signedPct(context.gap),
-        detail: "opened vs yesterday's close",
+        detail: "today's opening price vs yesterday's close",
         tone: context.gap > 0 ? "text-emerald-700" : "text-rose-600",
       };
     case "volume":
       return {
         value: `${Number(context.volume.toFixed(1))}×`,
-        detail: "yesterday's volume vs its recent average",
+        detail: "shares traded yesterday vs its recent average",
         tone: context.volume >= 3 ? "text-amber-600" : "text-stone-800",
       };
     case "room":
@@ -469,7 +481,7 @@ function ClueCards({
         <p className="text-xs font-semibold uppercase tracking-wider text-stone-700">
           {revealed ? "All the clues" : `More clues · ${money(CLUE_COST)} each`}
         </p>
-        {spent > 0 && <p className="text-xs text-stone-600">Spent {money(spent)} on clues this session</p>}
+        {spent > 0 && <p className="text-xs text-stone-600">Spent {money(spent)} on clues today</p>}
       </div>
       <ul className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-5">
         {clues.map((clue, i) => {
@@ -507,7 +519,7 @@ function ClueCards({
       </ul>
       {!session.room && (
         <p className="mt-2 text-xs text-stone-600">
-          Who was posting isn&apos;t in this replay for this session, only the headcount.
+          Who was posting isn&apos;t in this replay for this day, only the headcount.
         </p>
       )}
       {roomOpen && session.room ? <TheRoom room={session.room} /> : null}
@@ -602,13 +614,13 @@ function Reveal({ session, play }: { session: ReplaySession; play: Played }) {
 
   return (
     <div className="relative max-w-md">
-      <svg viewBox="0 0 320 128" role="img" aria-label={`The stock moved ${move} points against the market`} className="h-auto w-full">
+      <svg viewBox="0 0 320 128" role="img" aria-label={`Over the next 3 trading days the stock did ${Math.abs(move)}% ${move >= 0 ? "better" : "worse"} than the S&P 500`} className="h-auto w-full">
         <defs>
           <Wobble id={`w${id}`} />
         </defs>
         <line x1="10" x2="310" y1="64" y2="64" stroke="#78716c" strokeWidth="1.5" strokeDasharray="5 6" />
         <text x="12" y="80" fontSize="11" fill="#78716c">
-          the market
+          the S&amp;P 500
         </text>
         <g filter={`url(#w${id})`}>
           <path
@@ -626,7 +638,8 @@ function Reveal({ session, play }: { session: ReplaySession; play: Played }) {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="font-pencil text-3xl font-bold tabular-nums">
           {shown < 0 ? "−" : "+"}
-          {Math.abs(Math.round(shown))} points <span className="text-xl font-semibold text-stone-600">vs the market</span>
+          {Math.abs(Math.round(shown))}% <span className="text-xl font-semibold text-stone-600">vs the S&amp;P 500</span>
+          <span className="block font-sans text-xs font-normal text-stone-600">over the next 3 trading days</span>
         </p>
         <span
           className={`stamp-in rounded-lg border-[3px] bg-white/80 px-3 py-0.5 text-center font-pencil font-bold leading-none ${tone}`}
@@ -647,11 +660,11 @@ function Squares({ cells, size = "md" }: { cells: Cell[]; size?: "sm" | "md" }) 
       {cells.map((cell, i) => (
         <li
           key={i}
-          title={`Session ${i + 1}: ${cellName[cell]}`}
+          title={`Day ${i + 1}: ${cellName[cell]}`}
           className={`${i % 2 ? "pencil-box-alt" : "pencil-box"} ${size === "sm" ? "h-3.5 w-3.5 border-[1.5px]" : "h-9 w-9"} ${cellFill[cell]}`}
         >
           <span className="sr-only">
-            Session {i + 1}: {cellName[cell]}
+            Day {i + 1}: {cellName[cell]}
           </span>
         </li>
       ))}
@@ -677,7 +690,7 @@ function RaceChart({ yours, model, total }: { yours: number[]; model: number[]; 
   const line = (series: number[]) => [START, ...series].map((v, i) => `${i ? "L" : "M"}${x(i).toFixed(1)} ${y(v).toFixed(1)}`).join("");
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Your money and the model's money after each session" className="mt-3 h-auto w-full">
+    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Your money and the model's money after each day" className="mt-3 h-auto w-full">
       <defs>
         <Wobble id={`c${id}`} />
       </defs>
@@ -1083,7 +1096,7 @@ export function Replay() {
       .join(""),
     `Me ${money(state.bankroll)} · Model ${money(modelEnd)}`,
     cluesBought ? `🔎 ${cluesBought} ${cluesBought === 1 ? "clue" : "clues"} bought` : "🔎 no clues bought",
-    ...(detective > 0 ? [`🕵️ named the stock in session ${(state.guess?.at ?? 0) + 1} (+${detective})`] : []),
+    ...(detective > 0 ? [`🕵️ named the stock on day ${(state.guess?.at ?? 0) + 1} (+${detective})`] : []),
     ...(stamps.length ? [stamps.map((stamp) => stamp.emoji).join("") + ` ${stamps.length} ${stamps.length === 1 ? "stamp" : "stamps"}`] : []),
     "jarg.ai/lab#replay",
   ].join("\n");
@@ -1121,9 +1134,9 @@ export function Replay() {
     <section id="replay" aria-labelledby="replay-title" className="scroll-mt-16 border-t border-white/8 py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <SectionHeading id="replay-title" eyebrow="The replay" title="Could you have called it?">
-          Real runs from the held-out stretch the model was scored on, replayed one session at a time. Each session you
-          see the crowd, the story so far and what history says about setups like it, plus one clue free, never the
-          ticker. Buy more clues if you think they&apos;re worth it, then bet on a rise, a drop, or sit it out, and race
+          Real runs from the held-out stretch the model was scored on, replayed one trading day at a time. Each day you
+          see how many people posted about the stock and where, the price and chatter so far, and what history says
+          about days like it, plus one clue free, never the ticker. Buy more clues if you think they&apos;re worth it, then bet on a rise, a drop, or sit it out, and race
           the model&apos;s own calls to the finish. Winning bets turn the ticker&apos;s letters over: name the stock early
           for detective points. Everyone gets the same run each day, you see how other players called it, and the
           week&apos;s best finish goes up as the high score.
@@ -1206,7 +1219,7 @@ export function Replay() {
                     <Stamps stamps={stamps} />
                     <p className="mt-3 text-sm text-stone-700">
                       {detective > 0
-                        ? `Detective points: ${detective}. You named it in session ${(state.guess?.at ?? 0) + 1}.`
+                        ? `Detective points: ${detective}. You named it on day ${(state.guess?.at ?? 0) + 1}.`
                         : state.guess
                           ? "Your guess at the stock missed, so no detective points this run."
                           : "You never guessed the stock. Next time, take a shot: the earlier you name it, the more it's worth."}
@@ -1286,7 +1299,7 @@ export function Replay() {
                     {session.context ? (
                       <CrowdMeter session={session} context={session.context} />
                     ) : (
-                      <p className="text-lg font-semibold">{session.crowd}</p>
+                      <p className="text-lg font-semibold">No posts about it today.</p>
                     )}
                     <CrowdDoodle people={peopleIn(session)} />
                   </div>
@@ -1365,7 +1378,7 @@ export function Replay() {
                         onClick={advance}
                         className="pencil-box sticker mt-5 min-h-11 bg-amber-300 px-6 text-base font-bold"
                       >
-                        {busted || state.index === sessions.length - 1 ? "See how you did →" : "Next session →"}
+                        {busted || state.index === sessions.length - 1 ? "See how you did →" : "Next day →"}
                       </button>
                     </div>
                   ) : session.move === null ? (
@@ -1376,7 +1389,7 @@ export function Replay() {
                         onClick={advance}
                         className="pencil-box sticker mt-4 min-h-11 bg-amber-300 px-6 text-base font-bold"
                       >
-                        Next session →
+                        Next day →
                       </button>
                     </div>
                   ) : (
@@ -1466,19 +1479,20 @@ export function Replay() {
               </div>
               <p className="mt-4 text-xs leading-relaxed text-stone-600">
                 The model bets {Math.round(MODEL_STAKE * 100)}% of what it has every time it flags a direction and sits
-                out everything else. Its moves show up as each session resolves.
+                out everything else. Its results show up as each day plays out.
               </p>
             </aside>
           </div>
 
           <p className="mt-8 border-t-2 border-dashed border-stone-400/60 pt-4 text-xs leading-relaxed text-stone-600">
-            Every number comes from one scoring run on data the model never trained on. Points are the stock&apos;s
-            return minus the S&amp;P 500&apos;s over the three sessions after the open, so the three-session windows
-            overlap and consecutive sessions are not independent calls. The crowd meter and the clues use only what was
-            known at the open: price, run-up and volume figures come from the close before each session, and the gap
-            compares that session&apos;s open with that close. The story chart ends at that close. History says counts
-            every session the research scored, these included. Mood is the share of the session&apos;s posts the
-            research read as bullish or bearish, and news counts the stories it tied to that session. A replay of real
+            Every number comes from one scoring run on data the model never trained on. A move is the
+            stock&apos;s % change minus the S&amp;P 500&apos;s over the 3 trading days after the open, so the 3-day
+            windows overlap and back-to-back days are not independent calls. Posts, people and communities count public
+            posts that named the stock that day. The crowd meter and the clues use only what was known at the open:
+            price, run-up and volume figures come from the close before each day, and the gap compares that day&apos;s
+            open with that close. The story chart ends at that close. History says counts every stock-day the research
+            scored, these included. Mood is the share of the day&apos;s posts the research read as bullish or bearish,
+            and news counts the stories it tied to that day. A replay of real
             runs is an illustration, not a track record, and nothing here is advice.
           </p>
         </div>

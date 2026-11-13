@@ -99,7 +99,7 @@ const quiet = (label: string): ReplaySession => ({
   riseRank: null,
   flag: "out",
   move: null,
-  outcome: "The model only scores a stock when someone is talking about it, so this session was never scored.",
+  outcome: "The model only scores a stock on days someone is talking about it, so this day was never scored.",
 });
 
 const ctx = (
@@ -123,10 +123,10 @@ export const replayRuns: ReplayRun[] = [
   {
     id: "put",
     setup:
-      "Six sessions on one stock, starting with a single post. The crowd builds fast, and every session was scored.",
+      "Six trading days on one stock, starting with a single post. The crowd builds fast, and every day was scored.",
     sessions: [
       {
-        label: "Session 1",
+        label: "Day 1",
         crowd: "1 person · 1 community",
         context: ctx(3.9, 1, 0.55, 42, 0.3, 14.9, 1.4),
         room: {
@@ -141,10 +141,10 @@ export const replayRuns: ReplayRun[] = [
         flag: "out",
         move: 88,
         outcome:
-          "One research post. The model took note and stayed below its alarm line. The stock beat the S&P 500 by 88 points over the next three sessions.",
+          "One research post. The model took note and stayed below its alarm line. The stock beat the S&P 500 by 88% over the next three trading days.",
       },
       {
-        label: "Session 2",
+        label: "Day 2",
         crowd: "18 people · 3 communities",
         context: ctx(99.7, 24, 0.6, 102, 0, 28.2, 2.7),
         room: {
@@ -163,10 +163,10 @@ export const replayRuns: ReplayRun[] = [
         flag: "drop",
         move: 67,
         outcome:
-          "Overnight the crowd went from one person to eighteen, and the drop warning jumped into the top 3%. The run kept going: up 67 points against the market.",
+          "Overnight the crowd went from one person to eighteen, and the drop warning jumped into the top 3%. The run kept going: up 67% against the market.",
       },
       {
-        label: "Session 3",
+        label: "Day 3",
         crowd: "10 people · 3 communities",
         context: ctx(98.8, 14, 1.8, 87, 0.4, 11.8, 4.9),
         room: {
@@ -183,10 +183,10 @@ export const replayRuns: ReplayRun[] = [
         riseRank: null,
         flag: "drop",
         move: 56,
-        outcome: "The warning didn't budge, and neither did the run: up another 56 points.",
+        outcome: "The warning didn't budge, and neither did the run: up another 56%.",
       },
       {
-        label: "Session 4",
+        label: "Day 4",
         crowd: "51 people · 3 communities",
         context: ctx(100, 56, 2.5, 189, 0.6, 23.6, 4.3),
         room: {
@@ -205,10 +205,10 @@ export const replayRuns: ReplayRun[] = [
         flag: "drop",
         move: -19,
         outcome:
-          "The peak of the crowd, with two fades in the room and the warning still holding. This time the crowd turned: the stock fell 19 points behind the market.",
+          "The peak of the crowd, with two fades in the room and the warning still holding. This time the crowd turned: the stock fell 19% behind the market.",
       },
       {
-        label: "Session 5",
+        label: "Day 5",
         crowd: "27 people · 3 communities",
         context: ctx(99.9, 28, 5.3, 256, 0.6, 21.2, 11.7),
         room: {
@@ -226,10 +226,10 @@ export const replayRuns: ReplayRun[] = [
         flag: "drop",
         move: -39,
         outcome:
-          "Half the posts were still gains-or-losses posts while the stock gave back 39 points against the market.",
+          "Half the posts were still gains-or-losses posts while the stock gave back 39% against the market.",
       },
       {
-        label: "Session 6",
+        label: "Day 6",
         crowd: "10 people · 3 communities",
         context: ctx(98.8, 11, 6.7, 177, 1.1, -11.8, 4.3),
         room: {
@@ -248,7 +248,7 @@ export const replayRuns: ReplayRun[] = [
         flag: "out",
         move: -1,
         outcome:
-          "As the crowd thinned, the warning cooled below the flag line on its own. The next three sessions were roughly flat against the market.",
+          "As the crowd thinned, the warning cooled below the flag line on its own. The next three trading days were roughly flat against the market.",
       },
     ],
     reveal: {
@@ -256,20 +256,20 @@ export const replayRuns: ReplayRun[] = [
       ticker: "OPEN",
       month: "July 2025",
       href: "/case-studies/put",
-      verdict: "The warning fired on the smoke, three sessions before the crowd turned. Right, and early enough to hurt.",
+      verdict: "The warning fired on the smoke, three trading days before the crowd turned. Right, and early enough to hurt.",
       moral:
-        "Of the 250 top-3% drop warnings in the held-out data, 158 were followed by a 10-point drop within three sessions and 92 were not. A warning on the smoke is a warning about the crowd, not about the calendar.",
+        "Of the 250 top-3% drop warnings in the held-out data, 158 were followed by a 10% drop within three trading days and 92 were not. A warning on the smoke is a warning about the crowd, not about the calendar.",
     },
   },
   {
     id: "call",
     setup:
-      "Six sessions on one stock, in order. Most of them, nobody is working the creek. Twice, somebody is.",
+      "Six trading days on one stock, in order. Most of them, nobody is working the creek. Twice, somebody is.",
     sessions: [
-      quiet("Session 1"),
-      quiet("Session 2"),
+      quiet("Day 1"),
+      quiet("Day 2"),
       {
-        label: "Session 3",
+        label: "Day 3",
         crowd: "1 person · 1 community",
         context: ctx(3.9, 1, 0.45, 3, -1, -9.8, 1.1),
         room: null,
@@ -278,12 +278,12 @@ export const replayRuns: ReplayRun[] = [
         flag: "out",
         move: 84,
         outcome:
-          "The upside score saw color at top 7%, but the flag line is the top 3%, so the model passed. The fleck was real: the stock beat the S&P 500 by 84 points over the next three sessions.",
+          "The upside score saw color at top 7%, but the flag line is the top 3%, so the model passed. The fleck was real: the stock beat the S&P 500 by 84% over the next three trading days.",
       },
-      quiet("Session 4"),
-      quiet("Session 5"),
+      quiet("Day 4"),
+      quiet("Day 5"),
       {
-        label: "Session 6",
+        label: "Day 6",
         crowd: "4 people · 2 communities",
         context: ctx(94.2, 5, 0.35, 95, 0.4, 5.2, 7.8),
         room: {
@@ -301,7 +301,7 @@ export const replayRuns: ReplayRun[] = [
         flag: "rise",
         move: 17,
         outcome:
-          "Four people on the same creek in one session put the upside score in the top 0.5% of everything scored, and the flag went up. The stock beat the market by 17 points.",
+          "Four people on the same creek in one day put the upside score in the top 0.5% of everything scored, and the flag went up. The stock beat the market by 17%.",
       },
     ],
     reveal: {
@@ -311,18 +311,18 @@ export const replayRuns: ReplayRun[] = [
       href: "/case-studies/call",
       verdict: "The flag landed, and the one it passed on would have paid five times better.",
       moral:
-        "This is the weakest signal we have. Of the 250 top-3% upside flags in the held-out data, 64 rose 10 points or more: about one in four, against 11% by chance. 158 of the 250 still finished behind the market.",
+        "This is the weakest signal we have. Of the 250 top-3% upside flags in the held-out data, 64 rose 10% or more: about one in four, against 11% by chance. 158 of the 250 still finished behind the market.",
     },
   },
   {
     id: "exotic",
     setup:
-      "Six sessions on one stock. The crowd arrives all at once and never quite leaves. Four scored sessions, and the model has an opinion on every one of them.",
+      "Six trading days on one stock. The crowd arrives all at once and never quite leaves. Four of those days were scored, and the model has an opinion on every one of them.",
     sessions: [
-      quiet("Session 1"),
-      quiet("Session 2"),
+      quiet("Day 1"),
+      quiet("Day 2"),
       {
-        label: "Session 3",
+        label: "Day 3",
         crowd: "8 people · 2 communities",
         context: ctx(98.3, 8, 1.05, 60, 1.7, 30.3, 8.1),
         room: null,
@@ -331,10 +331,10 @@ export const replayRuns: ReplayRun[] = [
         flag: "drop",
         move: 65,
         outcome:
-          "Both scores climbed at once, but only the drop score cleared the top 3%, so a direction-taking reader was short. The next three sessions went up 65 points against the market.",
+          "Both scores climbed at once, but only the drop score cleared the top 3%, so a direction-taking reader was short. The next three trading days went up 65% against the market.",
       },
       {
-        label: "Session 4",
+        label: "Day 4",
         crowd: "12 people · 3 communities",
         context: ctx(99.3, 13, 1.45, 80, 1.1, 20.2, 11.6),
         room: null,
@@ -342,10 +342,10 @@ export const replayRuns: ReplayRun[] = [
         riseRank: "top 6.4%",
         flag: "drop",
         move: 144,
-        outcome: "Up again, harder: 144 points over the next three sessions. Anyone short was now badly underwater.",
+        outcome: "Up again, harder: 144% over the next three trading days. Anyone short was now badly underwater.",
       },
       {
-        label: "Session 5",
+        label: "Day 5",
         crowd: "1 person",
         context: ctx(3.9, 1, 2.05, 96, 1.2, 28.6, 3.4),
         room: null,
@@ -354,10 +354,10 @@ export const replayRuns: ReplayRun[] = [
         flag: "drop",
         move: 41,
         outcome:
-          "The talk almost stopped, the way the air goes still in the eye of a hurricane, and both scores stayed high. Up another 41 points.",
+          "The talk almost stopped, the way the air goes still in the eye of a hurricane, and both scores stayed high. Up another 41%.",
       },
       {
-        label: "Session 6",
+        label: "Day 6",
         crowd: "7 people · 2 communities",
         context: ctx(97.7, 10, 2.1, 219, 0.4, 47.8, 8.9),
         room: {
@@ -376,7 +376,7 @@ export const replayRuns: ReplayRun[] = [
         flag: "out",
         move: -30,
         outcome:
-          "Both scores landed in the top 1% on the same session. That's the two-sided flag, and it isn't a direction: it says a big move is coming without picking a side, so there was no directional bet to take. The stock fell 30 points.",
+          "Both scores landed in the top 1% on the same day. That's the two-sided flag, and it isn't a direction: it says a big move is coming without picking a side, so there was no directional bet to take. The stock fell 30%.",
       },
     ],
     reveal: {
@@ -386,16 +386,16 @@ export const replayRuns: ReplayRun[] = [
       href: "/case-studies/exotic",
       verdict: "Three wrong-footed shorts, then a flag that refused to pick a side and was right about the size.",
       moral:
-        "Of the 53 stock-days with both scores in the top 3%, 44 moved 10 points or more either way, against 28% across all stocks. We defined that flag after looking at the held-out data, and it measures the stock's move, not an options profit, so treat it as a lead rather than a result.",
+        "Of the 53 stock-days with both scores in the top 3%, 44 moved 10% or more either way, against 28% across all stocks. We defined that flag after looking at the held-out data, and it measures the stock's move, not an options profit, so treat it as a lead rather than a result.",
     },
   },
   {
     id: "failed",
     setup:
-      "Six scored sessions in a row on one stock, starting the first time its drop warning reached the top 2%. The crowd grows the whole way. Every session is yours to play.",
+      "Six trading days in a row on one stock, starting the first time its drop warning reached the top 2%. The crowd grows the whole way. Every day is yours to play.",
     sessions: [
       {
-        label: "Session 1",
+        label: "Day 1",
         crowd: "2 people · 2 communities",
         context: ctx(77.5, 3, 0.75, -74, -1.6, 16.9, 6.3),
         room: {
@@ -410,10 +410,10 @@ export const replayRuns: ReplayRun[] = [
         flag: "drop",
         move: 494,
         outcome:
-          "The drop warning fired on two people talking. There was no wolf: the stock rose almost six-fold, 494 points against the market, over the next three sessions.",
+          "The drop warning fired on two people talking. There was no wolf: the stock rose almost six-fold, 494% against the market, over the next three trading days.",
       },
       {
-        label: "Session 2",
+        label: "Day 2",
         crowd: "20 people · 3 communities",
         context: ctx(99.8, 27, 0.9, -68, 1.7, 57.9, 12.3),
         room: {
@@ -435,7 +435,7 @@ export const replayRuns: ReplayRun[] = [
           "The warning held in the top 2%, and the stock more than tripled. The champion in the room was right, and the warning was early.",
       },
       {
-        label: "Session 3",
+        label: "Day 3",
         crowd: "11 people · 2 communities",
         context: ctx(99.1, 11, 2.25, 42, 1.2, 57.1, 21),
         room: {
@@ -453,10 +453,10 @@ export const replayRuns: ReplayRun[] = [
         riseRank: null,
         flag: "drop",
         move: 23,
-        outcome: "The warning climbed into the top 1%. Up another 23 points. Three alarms, three empty fields.",
+        outcome: "The warning climbed into the top 1%. Up another 23%. Three alarms, three empty fields.",
       },
       {
-        label: "Session 4",
+        label: "Day 4",
         crowd: "36 people · 3 communities",
         context: ctx(99.9, 49, 2.8, 364, 1.4, 70.4, 17.7),
         room: {
@@ -475,10 +475,10 @@ export const replayRuns: ReplayRun[] = [
         flag: "drop",
         move: -65,
         outcome:
-          "The biggest crowd of the run, no champions left, and the warning at its highest yet. This time the wolf came: the stock fell 65 points against the market.",
+          "The biggest crowd of the run, no champions left, and the warning at its highest yet. This time the wolf came: the stock fell 65% against the market.",
       },
       {
-        label: "Session 5",
+        label: "Day 5",
         crowd: "17 people · 3 communities",
         context: ctx(99.6, 20, 5.25, 434, 0.4, -17.6, 9.9),
         room: {
@@ -496,10 +496,10 @@ export const replayRuns: ReplayRun[] = [
         flag: "out",
         move: -41,
         outcome:
-          "The warning cooled to the top 6%, below the flag line, so the model wasn't calling this one. It fell 41 points anyway.",
+          "The warning cooled to the top 6%, below the flag line, so the model wasn't calling this one. It fell 41% anyway.",
       },
       {
-        label: "Session 6",
+        label: "Day 6",
         crowd: "20 people · 3 communities",
         context: ctx(99.8, 24, 6.25, 446, 1.7, 16.7, 2.4),
         room: {
@@ -516,7 +516,7 @@ export const replayRuns: ReplayRun[] = [
         riseRank: null,
         flag: "drop",
         move: -42,
-        outcome: "Back into the top 2%, and down another 42 points.",
+        outcome: "Back into the top 2%, and down another 42%.",
       },
     ],
     reveal: {
@@ -526,7 +526,7 @@ export const replayRuns: ReplayRun[] = [
       href: "/case-studies/failed",
       verdict: "Wrong three times, then right three times, and the order is what ruins you.",
       moral:
-        "Of the 250 top-3% drop warnings in the held-out data, 92 were not followed by a 10-point drop, and 53 went the other way and rose 10 points or more. Early and wrong look identical until the crowd turns.",
+        "Of the 250 top-3% drop warnings in the held-out data, 92 were not followed by a 10% drop, and 53 went the other way and rose 10% or more. Early and wrong look identical until the crowd turns.",
     },
   },
 ];
