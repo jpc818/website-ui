@@ -1,5 +1,5 @@
 import { SectionHeading } from "@/components/alpha/SectionHeading";
-import { forwardLog } from "@/components/alpha/forwardLog";
+import { forwardLog } from "@/components/alpha/forwardLogCounts";
 
 const rows = [
   {

@@ -1,4 +1,4 @@
-import { forwardLog } from "@/components/alpha/forwardLog";
+import { forwardLog } from "@/components/alpha/forwardLogCounts";
 import { SectionHeading } from "@/components/alpha/SectionHeading";
 
 export const faqs: { question: string; answer: string }[] = [
