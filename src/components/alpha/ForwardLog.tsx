@@ -29,7 +29,7 @@ export function ForwardLog() {
         <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat) => (
             <div key={stat.label} className="rounded-3xl border border-white/8 bg-surface p-6">
-              <p className="font-[family-name:var(--font-heading)] text-4xl font-bold tabular-nums">
+              <p className="font-mono text-4xl font-bold tabular-nums">
                 {stat.value}
               </p>
               <p className="mt-2 text-base font-semibold">{stat.label}</p>

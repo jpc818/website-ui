@@ -187,15 +187,17 @@ export function Oracle() {
                 <p className="text-sm font-semibold uppercase tracking-wider text-muted">
                   Moves predicted
                 </p>
-                <p className="mt-1 font-[family-name:var(--font-heading)] text-6xl font-extrabold tabular-nums md:text-7xl">
+                <p className="mt-1 font-mono text-6xl font-bold tabular-nums md:text-7xl">
                   {scored ? `${Math.round(share * 100)}%` : "—"}
                 </p>
               </div>
               <div className="text-right text-sm text-muted">
-                <p className="tabular-nums">
+                <p className="font-mono tabular-nums">
                   {correct} of {total}
                 </p>
-                <p>Chance: 50%</p>
+                <p>
+                  Chance: <span className="font-mono tabular-nums">50%</span>
+                </p>
               </div>
             </div>
             <p

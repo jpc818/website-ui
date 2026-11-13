@@ -19,24 +19,24 @@ export function CrowdFlag({ linkToResearch = false }: { linkToResearch?: boolean
         <p className="mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-muted md:text-xl">
           When most posts about a stock are tagged Squeeze or Bullish, it fell 10 points or more behind the S&amp;P
           500 within three sessions{" "}
-          <span className="font-semibold text-foreground">{pct(holdout.flagged)}</span> of the time, against{" "}
-          <span className="font-semibold text-foreground">{pct(holdout.others)}</span> for other stocks people were
+          <span className="font-mono font-semibold tabular-nums text-foreground">{pct(holdout.flagged)}</span> of the time, against{" "}
+          <span className="font-mono font-semibold tabular-nums text-foreground">{pct(holdout.others)}</span> for other stocks people were
           discussing.
         </p>
 
         <div className="mt-10 grid gap-4 sm:grid-cols-2">
           <div className="rounded-3xl border border-accent/30 bg-accent/5 p-6 md:p-8">
             <p className="text-sm font-semibold text-muted">Squeeze or Bullish posts</p>
-            <p className="mt-2 font-[family-name:var(--font-heading)] text-6xl font-extrabold tabular-nums text-accent md:text-7xl">
+            <p className="mt-2 font-mono text-6xl font-bold tabular-nums text-accent md:text-7xl">
               {pct(holdout.flagged)}
             </p>
             <p className="mt-2 text-base text-muted">
-              fell 10+ points in three sessions · {holdout.n.toLocaleString("en-US")} stock-days
+              fell 10+ points in three sessions · <span className="font-mono tabular-nums">{holdout.n.toLocaleString("en-US")}</span> stock-days
             </p>
           </div>
           <div className="rounded-3xl border border-white/8 bg-surface p-6 md:p-8">
             <p className="text-sm font-semibold text-muted">All other discussed stocks</p>
-            <p className="mt-2 font-[family-name:var(--font-heading)] text-6xl font-extrabold tabular-nums text-foreground md:text-7xl">
+            <p className="mt-2 font-mono text-6xl font-bold tabular-nums text-foreground md:text-7xl">
               {pct(holdout.others)}
             </p>
             <p className="mt-2 text-base text-muted">same drop, same three sessions</p>
@@ -85,12 +85,14 @@ export function CrowdFlag({ linkToResearch = false }: { linkToResearch?: boolean
 
         <p className="mt-6 max-w-3xl text-base leading-relaxed text-muted">
           <span className="font-semibold text-foreground">The flip side:</span> when most posts are people showing
-          their own positions and results, the drop rate was {pct(positions.flagged)}, against {pct(positions.others)}.
+          their own positions and results, the drop rate was <span className="font-mono tabular-nums">{pct(positions.flagged)}</span>, against{" "}
+          <span className="font-mono tabular-nums">{pct(positions.others)}</span>.
         </p>
         <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted">
           Tags are set by the poster when the post goes up, so nothing here uses information from after the call.
           Figures are {holdout.window}, on data no model trained on. The same pattern held from {train.window}:{" "}
-          {pct(train.flagged)} against {pct(train.others)}. It flags risk; it doesn&apos;t raise the overall ranking
+          <span className="font-mono tabular-nums">{pct(train.flagged)}</span> against{" "}
+          <span className="font-mono tabular-nums">{pct(train.others)}</span>. It flags risk; it doesn&apos;t raise the overall ranking
           score, and it says nothing yet about returns after costs.
           {linkToResearch && (
             <>

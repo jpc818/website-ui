@@ -297,8 +297,8 @@ function TheRoom({ room }: { room: Room }) {
       <div>
         <div className="flex items-baseline justify-between gap-3">
           <p className="text-xs font-semibold uppercase tracking-wider text-stone-700">What they posted</p>
-          <p className="text-sm text-stone-600 tabular-nums">
-            {room.posts} {room.posts === 1 ? "post" : "posts"}
+          <p className="text-sm text-stone-600">
+            <span className="font-mono tabular-nums">{room.posts}</span> {room.posts === 1 ? "post" : "posts"}
           </p>
         </div>
         <div aria-hidden="true" className="pencil-box mt-2 flex h-4 overflow-hidden bg-white/60">
@@ -310,13 +310,13 @@ function TheRoom({ room }: { room: Room }) {
           {tagged.map((tag) => (
             <li key={tag} className="flex items-center gap-1.5">
               <span aria-hidden="true" className={`h-2.5 w-2.5 rounded-full border border-stone-900 ${tagColours[tag]}`} />
-              <span className="font-semibold tabular-nums">{room.mix[tag]}%</span>
+              <span className="font-mono font-semibold tabular-nums">{room.mix[tag]}%</span>
               <span className="text-stone-600">{tagNames[tag]}</span>
             </li>
           ))}
           {untagged > 0 && (
             <li className="text-stone-600">
-              <span className="tabular-nums">{untagged}%</span> untagged
+              <span className="font-mono tabular-nums">{untagged}%</span> untagged
             </li>
           )}
         </ul>
@@ -1289,7 +1289,7 @@ export function Replay() {
                   <div className="flex items-center justify-between gap-4">
                     <p className="font-pencil text-4xl font-bold leading-none">{session.label}</p>
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-stone-700 tabular-nums">
+                      <span className="font-mono text-sm text-stone-700 tabular-nums">
                         {state.index + 1} of {sessions.length}
                       </span>
                       <Squares cells={cells} size="sm" />

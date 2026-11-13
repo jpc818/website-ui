@@ -50,11 +50,12 @@ export function HeadlineResult() {
                       <span className="text-base font-semibold">{target.name}</span>
                       <span className="mt-0.5 block max-w-2xl text-sm font-normal text-muted">{target.definition}</span>
                       <span className="mt-0.5 block text-sm font-normal text-muted">
-                        How often it happens: {pct(target.holdout.baseRate)} on the holdout (
-                        {target.holdout.positives.toLocaleString("en-US")} of {target.holdout.n.toLocaleString("en-US")}
-                        ), {pct(target.walkForward.baseRate)} in the walk-forward test (
-                        {target.walkForward.positives.toLocaleString("en-US")} of{" "}
-                        {target.walkForward.n.toLocaleString("en-US")}).
+                        How often it happens: <span className="font-mono tabular-nums">{pct(target.holdout.baseRate)}</span> on the holdout (
+                        <span className="font-mono tabular-nums">{target.holdout.positives.toLocaleString("en-US")}</span> of{" "}
+                        <span className="font-mono tabular-nums">{target.holdout.n.toLocaleString("en-US")}</span>
+                        ), <span className="font-mono tabular-nums">{pct(target.walkForward.baseRate)}</span> in the walk-forward test (
+                        <span className="font-mono tabular-nums">{target.walkForward.positives.toLocaleString("en-US")}</span> of{" "}
+                        <span className="font-mono tabular-nums">{target.walkForward.n.toLocaleString("en-US")}</span>).
                       </span>
                     </th>
                   </tr>
@@ -88,12 +89,12 @@ export function HeadlineResult() {
           </div>
           <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
             0.50 is a coin flip. A model with only price and market data already scores about{" "}
-            {bigDrop.holdout.scores.price_market.auc.toFixed(2)} on the holdout, and about half of its top-ranked 10%
-            had a big drop, against {pct(bigDrop.holdout.baseRate)} of all examples. Adding news, insider filings and
+            <span className="font-mono tabular-nums">{bigDrop.holdout.scores.price_market.auc.toFixed(2)}</span> on the holdout, and about half of its top-ranked 10%
+            had a big drop, against <span className="font-mono tabular-nums">{pct(bigDrop.holdout.baseRate)}</span> of all examples. Adding news, insider filings and
             crowd signals moves that by a few thousandths. Part of the score is simply knowing which stocks swing
             hard: sized against each stock&apos;s own volatility, every model falls to about 0.65–0.67. The ranges
-            resample blocks of five consecutive days. Data: {universe.examples.toLocaleString("en-US")} stock-days
-            across {universe.tickers} tickers, {universe.from} to {universe.to}.
+            resample blocks of five consecutive days. Data: <span className="font-mono tabular-nums">{universe.examples.toLocaleString("en-US")}</span> stock-days
+            across <span className="font-mono tabular-nums">{universe.tickers}</span> tickers, {universe.from} to {universe.to}.
           </p>
         </div>
 

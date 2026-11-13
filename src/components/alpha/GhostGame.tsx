@@ -456,7 +456,7 @@ export function GhostGame() {
       <div className="rounded-3xl border border-white/8 bg-surface px-6 py-4 lg:col-span-2">
         <div className="flex items-baseline justify-between gap-4 text-sm">
           <p className="font-semibold">{progressLabel}</p>
-          <p className="shrink-0 tabular-nums text-muted">
+          <p className="shrink-0 font-mono tabular-nums text-muted">
             {Math.min(total, VERDICT_AT)} / {VERDICT_AT} taps
           </p>
         </div>
@@ -598,7 +598,7 @@ export function GhostGame() {
                       <span className="h-1.5 overflow-hidden rounded-full bg-white/10">
                         <span className="block h-full rounded-full bg-cyan" style={{ width: pct(colour.why[key]) }} />
                       </span>
-                      <span className="text-right tabular-nums">{pct(colour.why[key])}</span>
+                      <span className="text-right font-mono tabular-nums">{pct(colour.why[key])}</span>
                     </div>
                   ))}
                 </div>
@@ -650,15 +650,17 @@ export function GhostGame() {
         <div className="flex items-end justify-between gap-4">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wider text-muted">You&apos;re this predictable</p>
-            <p className="mt-1 font-[family-name:var(--font-heading)] text-6xl font-extrabold tabular-nums md:text-7xl">
+            <p className="mt-1 font-mono text-6xl font-bold tabular-nums md:text-7xl">
               {metered ? pct(share) : "—"}
             </p>
           </div>
           <div className="text-right text-sm text-muted">
-            <p className="tabular-nums">
+            <p className="font-mono tabular-nums">
               {called} of {total}
             </p>
-            <p>Pure luck: {chancePercent}%</p>
+            <p>
+              Pure luck: <span className="font-mono tabular-nums">{chancePercent}%</span>
+            </p>
           </div>
         </div>
         <p className={`mt-2 min-h-6 ${verdict ? "text-lg font-semibold text-accent" : "text-base text-muted"}`}>
@@ -712,11 +714,11 @@ export function GhostGame() {
           </div>
           <div className="grid grid-cols-2 gap-3 text-center">
             <div className="rounded-2xl border border-white/5 bg-background/60 px-2 py-3">
-              <p className="font-[family-name:var(--font-heading)] text-2xl font-bold tabular-nums">{state.streak}</p>
+              <p className="font-mono text-2xl font-bold tabular-nums">{state.streak}</p>
               <p className="mt-1 text-xs text-muted">Ghost streak</p>
             </div>
             <div className="rounded-2xl border border-white/5 bg-background/60 px-2 py-3">
-              <p className="font-[family-name:var(--font-heading)] text-2xl font-bold tabular-nums">{state.bestStreak}</p>
+              <p className="font-mono text-2xl font-bold tabular-nums">{state.bestStreak}</p>
               <p className="mt-1 text-xs text-muted">Best streak</p>
             </div>
           </div>

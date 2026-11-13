@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Caveat, DM_Sans, Manrope } from "next/font/google";
+import { Caveat, DM_Sans, IBM_Plex_Mono, Manrope } from "next/font/google";
 import Script from "next/script";
 import { CookieBanner } from "@/components/CookieBanner";
 import {
@@ -25,6 +25,12 @@ const manrope = Manrope({
 const caveat = Caveat({
   variable: "--font-hand",
   subsets: ["latin"],
+});
+
+const plexMono = IBM_Plex_Mono({
+  variable: "--font-plex-mono",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -72,7 +78,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${dmSans.variable} ${manrope.variable} ${caveat.variable} h-full antialiased`}
+      className={`${dmSans.variable} ${manrope.variable} ${caveat.variable} ${plexMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col">

@@ -66,7 +66,7 @@ export function CaseChart() {
         {[0, 0.25, 0.5, 0.75, 1].map((tick) => (
           <g key={tick}>
             <line x1={PAD.left} x2={W - PAD.right} y1={y(tick)} y2={y(tick)} stroke="rgba(255,255,255,0.08)" />
-            <text x={PAD.left - 8} y={y(tick) + 3} textAnchor="end" fontSize="10" fill="#b3bac5">
+            <text x={PAD.left - 8} y={y(tick) + 3} textAnchor="end" fontSize="10" fill="#b3bac5" fontFamily="var(--font-mono)" className="tabular-nums">
               {tick.toFixed(2)}
             </text>
           </g>
@@ -89,7 +89,7 @@ export function CaseChart() {
         <path d={stepPath} fill="none" stroke="#22d3ee" strokeWidth="2.5" strokeLinejoin="round" />
 
         {Array.from({ length: DAYS }, (_, i) => i + 1).map((day) => (
-          <text key={day} x={(x(day) + x(day + 1)) / 2} y={H - 8} textAnchor="middle" fontSize="10" fill="#b3bac5">
+          <text key={day} x={(x(day) + x(day + 1)) / 2} y={H - 8} textAnchor="middle" fontSize="10" fill="#b3bac5" fontFamily="var(--font-mono)" className="tabular-nums">
             {day}
           </text>
         ))}

@@ -30,17 +30,17 @@ function StreakChart({ item }: { item: StreakCase }) {
         return (
           <g key={i}>
             <rect x={x} y={H - h} width={barW} height={h} rx="3" fill="#f97316" fillOpacity={s.rank === "top 6%" ? 0.45 : 1} />
-            <text x={cx} y={H - h - 5} textAnchor="middle" fontSize="11" fontWeight="600" fill="#fb923c">
+            <text x={cx} y={H - h - 5} textAnchor="middle" fontSize="11" fontWeight="600" fill="#fb923c" fontFamily="var(--font-mono)" className="tabular-nums">
               {s.people}
             </text>
-            <text x={cx} y={H + 13} textAnchor="middle" fontSize="8.5" fill="#b3bac5">
+            <text x={cx} y={H + 13} textAnchor="middle" fontSize="8.5" fill="#b3bac5" fontFamily="var(--font-mono)" className="tabular-nums">
               {s.rank}
             </text>
             <path
               d={right ? `M${cx - 5} ${H + 22} L${cx + 5} ${H + 22} L${cx} ${H + 30} Z` : `M${cx - 5} ${H + 30} L${cx + 5} ${H + 30} L${cx} ${H + 22} Z`}
               fill={right ? "#22d3ee" : "#f87171"}
             />
-            <text x={cx} y={H + 44} textAnchor="middle" fontSize="11" fontWeight="700" fill={right ? "#22d3ee" : "#f87171"}>
+            <text x={cx} y={H + 44} textAnchor="middle" fontSize="11" fontWeight="700" fill={right ? "#22d3ee" : "#f87171"} fontFamily="var(--font-mono)" className="tabular-nums">
               {s.moveLabel}
             </text>
           </g>
@@ -79,7 +79,7 @@ function CrowdBars({ item }: { item: SingleCase }) {
               fill={flagged ? "#f97316" : "rgba(255,255,255,0.28)"}
             />
             {count > 0 && (
-              <text x={x + barW / 2} y={H - h - 5} textAnchor="middle" fontSize="11" fontWeight="600" fill={flagged ? "#fb923c" : "#b3bac5"}>
+              <text x={x + barW / 2} y={H - h - 5} textAnchor="middle" fontSize="11" fontWeight="600" fill={flagged ? "#fb923c" : "#b3bac5"} fontFamily="var(--font-mono)" className="tabular-nums">
                 {count}
               </text>
             )}
@@ -114,7 +114,7 @@ function MoveBar({ item }: { item: SingleCase }) {
           {landed ? "Landed" : "Missed"}
         </span>
       </div>
-      <p className="mt-1 font-[family-name:var(--font-heading)] text-3xl font-bold leading-tight">{item.moveLabel}</p>
+      <p className="mt-1 font-mono text-3xl font-bold leading-tight tabular-nums">{item.moveLabel}</p>
       <div
         role="img"
         aria-label={`${item.moveLabel} against the S&P 500 over three sessions, drawn on a scale of minus 40 to plus 40 points${off ? "; this one is off the scale" : ""}.`}
@@ -128,7 +128,7 @@ function MoveBar({ item }: { item: SingleCase }) {
           style={up ? { left: "50%", width: `${half}%` } : { right: "50%", width: `${half}%` }}
         />
       </div>
-      <div className="mt-1.5 flex justify-between text-[10px] font-semibold text-muted">
+      <div className="mt-1.5 flex justify-between font-mono text-xs font-semibold tabular-nums text-muted">
         <span>−40</span>
         <span>−10</span>
         <span>0</span>
@@ -182,7 +182,7 @@ function GroupStats({ item }: { item: MoreCase }) {
         <ul className="mt-3 space-y-3">
           {item.group.map((stat) => (
             <li key={stat.value} className="flex gap-3">
-              <span className="w-14 shrink-0 font-[family-name:var(--font-heading)] text-2xl font-bold leading-none tabular-nums">
+              <span className="w-14 shrink-0 font-mono text-2xl font-bold leading-none tabular-nums">
                 {stat.label}
               </span>
               <span className="text-sm leading-relaxed text-muted">
@@ -221,9 +221,9 @@ export function DropDeciles() {
         Highest-scored tenth: half dropped. Lowest-scored tenth: one in a hundred.
       </h3>
       <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted">
-        All 8,333 stock-days from the held-out stretch, ranked by the drop warning and cut into ten equal groups. Of
-        the {top.n} highest-scored, {top.drops} were followed by a drop of 10 points or more. Of the {bottom.n}{" "}
-        lowest-scored, {bottom.drops} were.
+        All <span className="font-mono tabular-nums">8,333</span> stock-days from the held-out stretch, ranked by the drop warning and cut into ten equal groups. Of
+        the <span className="font-mono tabular-nums">{top.n}</span> highest-scored, <span className="font-mono tabular-nums">{top.drops}</span> were followed by a drop of 10 points or more. Of the <span className="font-mono tabular-nums">{bottom.n}</span>{" "}
+        lowest-scored, <span className="font-mono tabular-nums">{bottom.drops}</span> were.
       </p>
 
       <svg
@@ -237,7 +237,7 @@ export function DropDeciles() {
         {[0, 0.2, 0.4, 0.6].map((tick) => (
           <g key={tick}>
             <line x1={PAD.left} x2={W - PAD.right} y1={y(tick)} y2={y(tick)} stroke="rgba(255,255,255,0.08)" />
-            <text x={PAD.left - 8} y={y(tick) + 3} textAnchor="end" fontSize="10" fill="#b3bac5">
+            <text x={PAD.left - 8} y={y(tick) + 3} textAnchor="end" fontSize="10" fill="#b3bac5" fontFamily="var(--font-mono)" className="tabular-nums">
               {tick * 100}%
             </text>
           </g>
@@ -256,10 +256,10 @@ export function DropDeciles() {
                 fill={last ? "#f97316" : "#22d3ee"}
                 fillOpacity={last ? 1 : 0.35 + 0.5 * (i / rates.length)}
               />
-              <text x={x + barW / 2} y={y(rate) - 6} textAnchor="middle" fontSize="10.5" fontWeight="600" fill={last ? "#fb923c" : "#f4f4f5"}>
+              <text x={x + barW / 2} y={y(rate) - 6} textAnchor="middle" fontSize="10.5" fontWeight="600" fill={last ? "#fb923c" : "#f4f4f5"} fontFamily="var(--font-mono)" className="tabular-nums">
                 {Math.round(rate * 100)}%
               </text>
-              <text x={x + barW / 2} y={H - 22} textAnchor="middle" fontSize="10" fill="#b3bac5">
+              <text x={x + barW / 2} y={H - 22} textAnchor="middle" fontSize="10" fill="#b3bac5" fontFamily="var(--font-mono)" className="tabular-nums">
                 {i + 1}
               </text>
             </g>
@@ -274,7 +274,7 @@ export function DropDeciles() {
           strokeOpacity="0.6"
           strokeDasharray="5 4"
         />
-        <text x={PAD.left + 6} y={y(dropBaseRate) - 6} fontSize="10" fontWeight="600" fill="#f4f4f5" fillOpacity="0.8">
+        <text x={PAD.left + 6} y={y(dropBaseRate) - 6} fontSize="10" fontWeight="600" fill="#f4f4f5" fillOpacity="0.8" fontFamily="var(--font-mono)" className="tabular-nums">
           average: {Math.round(dropBaseRate * 100)}%
         </text>
         <text x={PAD.left} y={H - 6} fontSize="10" fill="#b3bac5">

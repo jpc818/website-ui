@@ -354,7 +354,7 @@ export function CaseStudy({ standalone = false }: { standalone?: boolean }) {
         <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-foreground md:text-lg">
           Read it as an illustration, not evidence. It&apos;s one hand-picked event, told with hindsight. It shows what
           the signal looked like, not how often it&apos;s right. How often: of the top-3% drop warnings on a held-out
-          stretch, 63% were followed by a 10-point drop, 37% were not, and 21% were followed by a rise of 10 points or
+          stretch, <span className="font-mono tabular-nums">63%</span> were followed by a 10-point drop, <span className="font-mono tabular-nums">37%</span> were not, and <span className="font-mono tabular-nums">21%</span> were followed by a rise of 10 points or
           more. <a href="/case-studies/failed" className="font-semibold text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
             See one that failed
           </a>

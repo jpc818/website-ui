@@ -173,7 +173,7 @@ export function InvestmentTool() {
                   <th scope="col" className="pb-3 pr-4 text-right font-semibold">Trades</th>
                   <th scope="col" className="pb-3 pr-4 text-right font-semibold">
                     Total return
-                    <span className="block text-xs font-normal">SPY: {signedPct(scenario.spyReturnPct)}</span>
+                    <span className="block font-mono text-xs font-normal tabular-nums">SPY: {signedPct(scenario.spyReturnPct)}</span>
                   </th>
                   <th scope="col" className="pb-3 pr-4 text-right font-semibold">
                     Beat SPY
