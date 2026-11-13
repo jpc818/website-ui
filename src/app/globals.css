@@ -354,14 +354,7 @@ html[data-consent="open"] .cookie-banner {
 
 html[data-consent="unknown"] body,
 html[data-consent="open"] body {
-  padding-bottom: 9rem;
-}
-
-@media (min-width: 640px) {
-  html[data-consent="unknown"] body,
-  html[data-consent="open"] body {
-    padding-bottom: 0;
-  }
+  padding-bottom: calc(3.5rem + env(safe-area-inset-bottom));
 }
 
 @keyframes ghost-lock {
