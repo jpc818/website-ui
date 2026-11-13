@@ -2,29 +2,47 @@ import { founder } from "@/app/site";
 import { SectionHeading } from "@/components/alpha/SectionHeading";
 
 const INK = "#1c1917";
+const HAIR = "#92400e";
+const DRESS = "#fda4af";
 
-function Adult({
-  x,
-  hair,
-  dress,
-}: {
-  x: number;
-  hair?: boolean;
-  dress?: boolean;
-}) {
+function Man({ x }: { x: number }) {
   return (
     <g stroke={INK} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" fill="none">
-      {hair && <path d={`M${x - 16} 46 Q${x} 24 ${x + 16} 46`} />}
       <circle cx={x} cy="52" r="16" fill="#f5f5f4" />
-      {dress ? (
-        <path d={`M${x} 68 L${x - 20} 124 L${x + 20} 124 Z`} fill="#f5f5f4" />
-      ) : (
-        <path d={`M${x} 68 V122`} />
-      )}
+      <path d={`M${x} 68 V122`} />
       <path d={`M${x} 84 L${x - 26} 102`} />
       <path d={`M${x} 84 L${x + 26} 102`} />
-      <path d={`M${x - (dress ? 10 : 0)} ${dress ? 124 : 122} L${x - 16} 168`} />
-      <path d={`M${x + (dress ? 10 : 0)} ${dress ? 124 : 122} L${x + 16} 168`} />
+      <path d={`M${x} 122 L${x - 16} 168`} />
+      <path d={`M${x} 122 L${x + 16} 168`} />
+    </g>
+  );
+}
+
+// `drop` lowers her head and body while her feet stay on the ground line, so she stands a little shorter.
+function Woman({ x, drop }: { x: number; drop: number }) {
+  const y = 52 + drop;
+  return (
+    <g stroke={INK} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" fill="none">
+      <path
+        d={`M${x - 14} ${y - 6} C${x - 19} ${y + 6} ${x - 19} ${y + 24} ${x - 17} ${y + 36} L${x - 12} ${y + 32} L${x - 8} ${y + 36} L${x + 8} ${y + 36} L${x + 12} ${y + 32} L${x + 17} ${y + 36} C${x + 19} ${y + 24} ${x + 19} ${y + 6} ${x + 14} ${y - 6} Z`}
+        fill={HAIR}
+        stroke="none"
+      />
+      <circle cx={x} cy={y} r="16" fill="#f5f5f4" />
+      <path
+        d={`M${x - 16} ${y + 1} A16 16 0 0 1 ${x + 16} ${y + 1} Q${x + 8} ${y - 9} ${x - 3} ${y - 6} Q${x - 10} ${y - 3} ${x - 16} ${y + 1} Z`}
+        fill={HAIR}
+      />
+      <g transform={`rotate(-35 ${x + 10} ${y - 13})`} fill={DRESS} strokeWidth="1.6">
+        <path d={`M${x + 10} ${y - 13} l-8 -5 v10 z M${x + 10} ${y - 13} l8 -5 v10 z`} />
+        <circle cx={x + 10} cy={y - 13} r="2" />
+      </g>
+      <path d={`M${x} ${y + 16} V${y + 24}`} />
+      <path d={`M${x} ${y + 22} L${x - 21} ${y + 70} H${x + 21} Z`} fill={DRESS} />
+      <path d={`M${x - 3} ${y + 32} L${x - 26} ${y + 50}`} />
+      <path d={`M${x + 3} ${y + 32} L${x + 26} ${y + 50}`} />
+      <path d={`M${x - 8} ${y + 70} L${x - 12} 168`} />
+      <path d={`M${x + 8} ${y + 70} L${x + 12} 168`} />
     </g>
   );
 }
@@ -47,8 +65,8 @@ function FamilySketch() {
   return (
     <svg viewBox="0 0 300 188" role="img" aria-label="Stick-figure drawing of Jaron, his wife, and their three boys" className="h-auto w-full">
       <path d="M18 168 H282" stroke={INK} strokeWidth="1.6" strokeLinecap="round" />
-      <Adult x={58} />
-      <Adult x={112} hair dress />
+      <Man x={58} />
+      <Woman x={112} drop={12} />
       <Boy x={176} h={78} />
       <Boy x={220} h={66} />
       <Boy x={258} h={52} />
