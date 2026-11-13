@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo } from "@/components/Logo";
+import { BriefingRequest } from "@/components/alpha/BriefingRequest";
 import { MobileMenu } from "@/components/alpha/MobileMenu";
 import { NavLinks } from "@/components/alpha/NavLinks";
 import { betaPath, betaLabel } from "@/app/site";
@@ -31,20 +32,23 @@ export function AlphaHeader() {
           >
             <NavLinks links={links} />
           </nav>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/#contact"
-              className="hidden rounded-full border border-white/20 px-4 py-2 text-sm font-medium transition-colors hover:bg-surface sm:inline-flex sm:px-5"
-            >
-              Contact
-            </Link>
+          <div className="flex items-center gap-3 lg:gap-5">
             <Link
               href={betaPath}
-              className="whitespace-nowrap rounded-full bg-accent px-4 py-2 text-sm font-semibold text-background transition-opacity hover:opacity-90 sm:px-5"
+              className="hidden whitespace-nowrap text-sm font-medium text-muted underline-offset-4 transition-colors hover:text-foreground hover:underline lg:inline"
             >
               {betaLabel}
             </Link>
-            <MobileMenu links={[...links, { href: "/#contact", label: "Contact" }]} />
+            <BriefingRequest className="cursor-pointer whitespace-nowrap rounded-full bg-accent px-4 py-2 text-sm font-semibold text-background transition-opacity hover:opacity-90 sm:px-5">
+              Request <span className="hidden sm:inline">the research </span>briefing
+            </BriefingRequest>
+            <MobileMenu
+              links={links}
+              secondary={[
+                { href: "/#contact", label: "Contact" },
+                { href: betaPath, label: betaLabel },
+              ]}
+            />
           </div>
         </div>
       </header>

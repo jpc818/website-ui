@@ -18,7 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     { url: `${siteUrl}/lab`, changeFrequency: "weekly", priority: 0.5 },
     { url: `${siteUrl}/beta`, changeFrequency: "monthly", priority: 0.4 },
-    { url: `${siteUrl}/privacy`, lastModified: "2026-11-02", changeFrequency: "yearly", priority: 0.3 },
+    { url: `${siteUrl}/privacy`, lastModified: "2026-11-12", changeFrequency: "yearly", priority: 0.3 },
     { url: `${siteUrl}/terms`, lastModified: "2026-11-02", changeFrequency: "yearly", priority: 0.3 },
     { url: `${siteUrl}/llms.txt`, changeFrequency: "weekly", priority: 0.6 },
     { url: `${siteUrl}/llms-full.txt`, changeFrequency: "weekly", priority: 0.6 },

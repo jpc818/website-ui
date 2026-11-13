@@ -11,8 +11,8 @@ export const metadata: Metadata = pageMetadata({ title, description, path: "/pri
 export default function Privacy() {
   return (
     <>
-    <JsonLd data={pageJsonLd({ path: "/privacy", name: title, description, dateModified: "2026-11-02" })} />
-    <LegalPage title={title} updated="November 2, 2026">
+    <JsonLd data={pageJsonLd({ path: "/privacy", name: title, description, dateModified: "2026-11-12" })} />
+    <LegalPage title={title} updated="November 12, 2026">
       <p>
         This page explains what we collect when you visit jarg.ai or email us, and what we do with it. It is written to
         be read, not to hide anything.
@@ -33,13 +33,17 @@ export default function Privacy() {
           to our research notes. Country is estimated from your connection by our hosting provider.
         </li>
         <li>
+          <strong className="text-foreground">Your name, email address, role, firm (if you give one), country and
+          request time</strong>, if you request the research briefing or join the beta waitlist.
+        </li>
+        <li>
           <strong className="text-foreground">Email addresses from our earlier early-access list</strong>. That list is
           no longer offered, and we keep those addresses only until you ask us to remove them.
         </li>
         <li>
           <strong className="text-foreground">Your Replay score</strong>, if you finish the day&apos;s run. We store the
-          day, your calls for each session, your final score and the time, with nothing that identifies you, to show
-          how you did against other players and how everyone called each session. Your browser keeps its own copy of
+          day, your call on each day of the run, your final score and the time, with nothing that identifies you, to
+          show how you did against other players and how everyone called each day. Your browser keeps its own copy of
           that day&apos;s result so it only counts once.
         </li>
         {activeGoogleAnalyticsId() ? (

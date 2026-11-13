@@ -1,3 +1,10 @@
+import {
+  BRIEFING_FIRM_MAX,
+  BRIEFING_NAME_MAX,
+  briefingRoles,
+  isBriefingRole,
+  type BriefingRole,
+} from "../src/components/alpha/briefing";
 import { replayRuns } from "../src/components/alpha/replayRuns";
 import { dailyRunIndex, scoreRun, utcDay, weekStart } from "../src/components/alpha/replayScore";
 
@@ -100,6 +107,93 @@ async function handleSignup(request: Request, env: Env, ctx: ExecutionContext, k
   return done();
 }
 
+const CONTROL_CHARS = /[\u0000-\u001f\u007f]/;
+
+// Name and firm reach an email subject line, so control characters (including line breaks) are refused.
+function cleanText(value: unknown, max: number): string | null {
+  if (value === undefined || value === null) return "";
+  if (typeof value !== "string") return null;
+  const text = value.trim();
+  return text.length > max || CONTROL_CHARS.test(text) ? null : text;
+}
+
+type Briefing = { role: BriefingRole; name: string; email: string; firm: string };
+
+async function notifyBriefing(env: Env, briefing: Briefing, country: string | null) {
+  const role = briefingRoles.find((r) => r.id === briefing.role)?.label ?? briefing.role;
+  const waitlist = briefing.role === "individual";
+  const kind = waitlist ? "Beta waitlist" : "Research briefing request";
+  const rows: [string, string][] = [
+    ["Role", role],
+    ["Name", briefing.name],
+    ["Email", briefing.email],
+    ...(briefing.firm ? ([["Firm", briefing.firm]] as [string, string][]) : []),
+    ["Country", country ?? "unknown"],
+  ];
+  try {
+    await env.NOTIFY.send({
+      from: { email: "waitlist@jarg.ai", name: "jargAI website" },
+      to: "jaronclinton88@gmail.com",
+      replyTo: briefing.email,
+      subject: `${kind}: ${briefing.name} (${role})`,
+      text: `${kind}.\n\n${rows.map(([k, v]) => `${k}: ${v}`).join("\n")}\nTime: ${new Date().toISOString()}\n\nReply to this email to contact them directly.`,
+      html: `<p>${escapeHtml(kind)}.</p><table>${rows.map(([k, v]) => `<tr><td style="color:#666;padding-right:12px">${k}</td><td><strong>${escapeHtml(v)}</strong></td></tr>`).join("")}</table><p style="color:#666">Reply to this email to contact them directly.</p>`,
+    });
+  } catch (error) {
+    const code = (error as { code?: string }).code;
+    console.error("briefing notification failed", code, error);
+  }
+}
+
+async function handleBriefing(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+  const url = new URL(request.url);
+  const origin = request.headers.get("Origin");
+  if (origin && origin !== url.origin) {
+    return json({ ok: false, error: "Forbidden" }, 403);
+  }
+  if (Number(request.headers.get("Content-Length") ?? 0) > MAX_BODY_BYTES) {
+    return json({ ok: false, error: "Request too large" }, 413);
+  }
+
+  let body: Record<string, unknown>;
+  try {
+    body = (await request.json()) as Record<string, unknown>;
+  } catch {
+    return json({ ok: false, error: "Invalid request" }, 400);
+  }
+
+  // Bots fill the hidden "website" field; pretend it worked.
+  if (typeof body.website === "string" && body.website !== "") return json({ ok: true });
+
+  const role = body.role;
+  if (!isBriefingRole(role)) {
+    return json({ ok: false, error: "Please choose the option that describes you." }, 400);
+  }
+  const name = cleanText(body.name, BRIEFING_NAME_MAX);
+  if (!name) {
+    return json({ ok: false, error: "Please enter your name." }, 400);
+  }
+  const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+  if (email.length > MAX_EMAIL_LENGTH || !EMAIL_PATTERN.test(email)) {
+    return json({ ok: false, error: "Please enter a valid email address." }, 400);
+  }
+  const firm = role === "individual" ? "" : cleanText(body.firm, BRIEFING_FIRM_MAX);
+  if (firm === null) {
+    return json({ ok: false, error: "Please shorten the firm name." }, 400);
+  }
+
+  const country = typeof request.cf?.country === "string" ? request.cf.country : null;
+  const result = await env.DB.prepare(
+    "INSERT INTO briefing_requests (email, role, name, firm, country) VALUES (?, ?, ?, ?, ?) ON CONFLICT(email) DO NOTHING",
+  )
+    .bind(email, role, name, firm || null, country)
+    .run();
+
+  if (result.meta.changes > 0) ctx.waitUntil(notifyBriefing(env, { role, name, email, firm }, country));
+
+  return json({ ok: true });
+}
+
 // A daily-run result. The client sends only the day and its picks; the bankroll is recomputed here.
 async function handleReplay(request: Request, env: Env): Promise<Response> {
   const url = new URL(request.url);
@@ -196,6 +290,17 @@ export default {
         return request.method === "GET" ? await handleWeekly(request, env) : await handleReplay(request, env);
       } catch (error) {
         console.error("replay score failed", error);
+        return json({ ok: false, error: "Something went wrong. Please try again." }, 500);
+      }
+    }
+    if (url.pathname === "/api/briefing") {
+      if (request.method !== "POST") {
+        return json({ ok: false, error: "Method not allowed" }, 405, { Allow: "POST" });
+      }
+      try {
+        return await handleBriefing(request, env, ctx);
+      } catch (error) {
+        console.error("briefing request failed", error);
         return json({ ok: false, error: "Something went wrong. Please try again." }, 500);
       }
     }

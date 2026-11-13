@@ -47,15 +47,15 @@ export function AlphaHero() {
           >
             Read the research
           </Link>
+        </div>
+        <p className="mt-4 text-sm text-muted">
+          The product is a private beta for invited Charles Schwab customers.{" "}
           <Link
             href={betaPath}
-            className="inline-flex h-12 items-center justify-center rounded-full border border-white/20 bg-background/80 px-8 text-base font-medium transition-colors hover:bg-surface"
+            className="whitespace-nowrap font-medium text-foreground underline decoration-white/30 underline-offset-4 hover:decoration-foreground"
           >
             {betaLabel}
           </Link>
-        </div>
-        <p className="mt-3 text-sm text-muted">
-          The product is a private beta for invited Charles Schwab customers.
         </p>
 
         <ul className="mt-12 flex flex-wrap gap-2 sm:gap-3">
