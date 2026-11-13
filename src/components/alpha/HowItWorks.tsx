@@ -10,14 +10,10 @@ const RED = "#f87171";
 const MUTED = "#b3bac5";
 const INK = "#f4f4f5";
 
-const WIDE_HEIGHT = 300;
-const TALL_HEIGHT = 575;
+const VIEW_WIDTH = 400;
+const VIEW_HEIGHT = 300;
 
-type Sy = (y: number) => number;
-const flat: Sy = (y) => y;
-const stretched: Sy = (y) => Math.round((25 + y * 1.75) * 10) / 10;
-
-type SceneProps = { on: boolean; tall: boolean; sy: Sy };
+type SceneProps = { on: boolean };
 
 const delay = (seconds: number): CSSProperties => ({ transitionDelay: `${seconds}s` });
 
@@ -51,12 +47,12 @@ function Chip({ x, y, text, color = MUTED, anchor = "middle" }: { x: number; y: 
 
 const sources = ["Forums", "Social", "Video", "News", "Reviews"];
 
-function CollectScene({ on, sy }: SceneProps) {
-  const hubY = sy(150);
+function CollectScene({ on }: SceneProps) {
+  const hubY = 150;
   return (
     <Scene on={on}>
       {sources.map((name, s) => {
-        const cy = sy(46 + s * 52);
+        const cy = 46 + s * 52;
         const path = `M104,${cy} C200,${cy} 205,${hubY} 262,${hubY}`;
         return (
           <g key={name}>
@@ -94,15 +90,15 @@ const lanes = [
   { y: 240, color: RED, label: "Bad bot", count: 3, end: 330 },
 ];
 
-function FilterScene({ on, sy }: SceneProps) {
-  const mid = sy(150);
-  const gateTop = sy(108);
-  const gateBottom = sy(192);
+function FilterScene({ on }: SceneProps) {
+  const mid = 150;
+  const gateTop = 108;
+  const gateBottom = 192;
   const scan = `${gateTop + 6};${gateBottom - 6};${gateTop + 6}`;
   return (
     <Scene on={on}>
       {lanes.map((lane) => {
-        const ly = sy(lane.y);
+        const ly = lane.y;
         const path = `M8,${mid} L188,${mid} C248,${mid} 248,${ly} 308,${ly} L${lane.end},${ly}`;
         return (
           <g key={lane.label}>
@@ -120,7 +116,7 @@ function FilterScene({ on, sy }: SceneProps) {
           </g>
         );
       })}
-      <g transform={`translate(346 ${sy(240)})`} stroke={RED} strokeWidth="2.5" strokeLinecap="round">
+      <g transform="translate(346 240)" stroke={RED} strokeWidth="2.5" strokeLinecap="round">
         <line x1="-7" y1="-7" x2="7" y2="7" />
         <line x1="7" y1="-7" x2="-7" y2="7" />
       </g>
@@ -134,9 +130,9 @@ function FilterScene({ on, sy }: SceneProps) {
   );
 }
 
-function Warehouse({ sy }: { sy: Sy }) {
-  const top = sy(140);
-  const bottom = sy(250);
+function Warehouse() {
+  const top = 140;
+  const bottom = 250;
   const rowGap = (bottom - top - 30) / 5;
   return (
     <g>
@@ -172,13 +168,13 @@ const tags = [
   { x: 330, y: 46, text: "human?" },
 ];
 
-function StoreScene({ on, sy }: SceneProps) {
-  const fall = `M0,${sy(50)} L0,${sy(138)}`;
+function StoreScene({ on }: SceneProps) {
+  const fall = "M0,50 L0,138";
   return (
     <Scene on={on}>
       {tags.map((tag, i) => (
         <g key={tag.text} className="story-pop" style={delay(0.15 + i * 0.12)}>
-          <Chip x={tag.x} y={sy(tag.y)} text={tag.text} color={AMBER} />
+          <Chip x={tag.x} y={tag.y} text={tag.text} color={AMBER} />
         </g>
       ))}
       {drops.map((drop, i) => (
@@ -187,7 +183,7 @@ function StoreScene({ on, sy }: SceneProps) {
           <animate attributeName="opacity" values="0;1;1;0" keyTimes="0;0.15;0.8;1" dur="1.8s" begin={`${-i * 0.3}s`} repeatCount="indefinite" />
         </circle>
       ))}
-      <Warehouse sy={sy} />
+      <Warehouse />
     </Scene>
   );
 }
@@ -198,23 +194,23 @@ const streams = [
   { from: [340, 52], c1: [300, 80], c2: [310, 170], to: [288, 180], color: CYAN, label: "Other sources", x: 340, y: 40 },
 ];
 
-function EnrichScene({ on, sy }: SceneProps) {
+function EnrichScene({ on }: SceneProps) {
   return (
     <Scene on={on}>
       {streams.map((stream, i) => {
-        const [p0, p1, p2, p3] = [stream.from, stream.c1, stream.c2, stream.to].map(([x, y]) => `${x},${sy(y)}`);
+        const [p0, p1, p2, p3] = [stream.from, stream.c1, stream.c2, stream.to].map(([x, y]) => `${x},${y}`);
         return (
           <g key={stream.label}>
             <path d={`M${p0} C${p1} ${p2} ${p3}`} fill="none" stroke={stream.color} strokeWidth="3" strokeLinecap="round" strokeDasharray="6 9" opacity="0.9">
               <animate attributeName="stroke-dashoffset" from="30" to="0" dur="0.9s" repeatCount="indefinite" />
             </path>
             <g className="story-pop" style={delay(0.1 + i * 0.15)}>
-              <Chip x={stream.x} y={sy(stream.y)} text={stream.label} color={stream.color} />
+              <Chip x={stream.x} y={stream.y} text={stream.label} color={stream.color} />
             </g>
           </g>
         );
       })}
-      <Warehouse sy={sy} />
+      <Warehouse />
     </Scene>
   );
 }
@@ -231,23 +227,23 @@ const regressionPoints = Array.from({ length: 30 }, (_, i) => {
   return { x, y: Math.round((acted ? 50 : 246) + (noise(i + 99) - 0.5) * 18), acted };
 });
 
-function ModelScene({ on, sy }: SceneProps) {
+function ModelScene({ on }: SceneProps) {
   const curve = Array.from({ length: 68 }, (_, i) => {
     const x = 40 + i * 5;
-    return `${i === 0 ? "M" : "L"}${x},${sy(curveY(x)).toFixed(1)}`;
+    return `${i === 0 ? "M" : "L"}${x},${curveY(x).toFixed(1)}`;
   }).join(" ");
   return (
     <Scene on={on}>
-      <line x1="40" y1={sy(262)} x2="376" y2={sy(262)} stroke="rgba(255,255,255,0.25)" />
-      <line x1="40" y1={sy(30)} x2="40" y2={sy(262)} stroke="rgba(255,255,255,0.25)" />
-      <text x="34" y={sy(54)} textAnchor="end" fontSize="10" fill={AMBER}>acted</text>
-      <text x="34" y={sy(250)} textAnchor="end" fontSize="10" fill={MUTED}>didn&apos;t</text>
-      <text x="376" y={sy(262) + 18} textAnchor="end" fontSize="10" fill={MUTED}>pattern strength →</text>
+      <line x1="40" y1="262" x2="376" y2="262" stroke="rgba(255,255,255,0.25)" />
+      <line x1="40" y1="30" x2="40" y2="262" stroke="rgba(255,255,255,0.25)" />
+      <text x="34" y="54" textAnchor="end" fontSize="10" fill={AMBER}>acted</text>
+      <text x="34" y="250" textAnchor="end" fontSize="10" fill={MUTED}>didn&apos;t</text>
+      <text x="376" y="280" textAnchor="end" fontSize="10" fill={MUTED}>pattern strength →</text>
       {regressionPoints.map((p, i) => (
-        <circle key={i} cx={p.x} cy={sy(p.y)} r="4.5" fill={p.acted ? AMBER : MUTED} fillOpacity={p.acted ? 0.95 : 0.55} className="story-pop" style={delay(i * 0.03)} />
+        <circle key={i} cx={p.x} cy={p.y} r="4.5" fill={p.acted ? AMBER : MUTED} fillOpacity={p.acted ? 0.95 : 0.55} className="story-pop" style={delay(i * 0.03)} />
       ))}
       <path d={curve} pathLength={1} fill="none" stroke={CYAN} strokeWidth="3" strokeLinecap="round" className="story-draw" style={{ ...delay(0.7), transitionDuration: "1.6s" }} />
-      <text x="374" y={sy(24)} textAnchor="end" fontSize="13" fontWeight="700" fill={CYAN} fontFamily="ui-monospace, monospace" className="story-pop" style={delay(1.6)}>
+      <text x="374" y="24" textAnchor="end" fontSize="13" fontWeight="700" fill={CYAN} fontFamily="ui-monospace, monospace" className="story-pop" style={delay(1.6)}>
         P(act) = σ(β₀ + β·x)
       </text>
     </Scene>
@@ -256,13 +252,10 @@ function ModelScene({ on, sy }: SceneProps) {
 
 const ranking = [0.92, 0.86, 0.79, 0.61, 0.48, 0.33, 0.21];
 const CUTOFF = 0.75;
-const scoreLayouts = {
-  wide: { barTop: 34, barGap: 30, barScale: 160, cutoffBottom: 250, roc: { x: 236, y: 68, size: 140 } },
-  tall: { barTop: 50, barGap: 36, barScale: 260, cutoffBottom: 300, roc: { x: 100, y: 370, size: 180 } },
-};
+const scoreLayout = { barTop: 34, barGap: 30, barScale: 160, cutoffBottom: 250, roc: { x: 236, y: 68, size: 140 } };
 
-function ScoreScene({ on, tall }: SceneProps) {
-  const { barTop, barGap, barScale, cutoffBottom, roc } = tall ? scoreLayouts.tall : scoreLayouts.wide;
+function ScoreScene({ on }: SceneProps) {
+  const { barTop, barGap, barScale, cutoffBottom, roc } = scoreLayout;
   const cutoffX = 34 + CUTOFF * barScale;
   const rocPath = Array.from({ length: 41 }, (_, i) => {
     const fpr = i / 40;
@@ -320,31 +313,31 @@ const crossX = (() => {
   return 360;
 })();
 
-function ActScene({ on, sy }: SceneProps) {
-  const painY = sy(PAIN_Y);
+function ActScene({ on }: SceneProps) {
+  const painY = PAIN_Y;
   const decayPath = Array.from({ length: Math.floor((crossX - 40) / 3) + 2 }, (_, i) => {
     const x = Math.min(crossX, 40 + i * 3);
-    return `${i === 0 ? "M" : "L"}${x},${sy(decayY(x)).toFixed(1)}`;
+    return `${i === 0 ? "M" : "L"}${x},${decayY(x).toFixed(1)}`;
   }).join(" ");
   const livePath = Array.from({ length: 113 }, (_, i) => {
     const x = 40 + i * 3;
-    return `${i === 0 ? "M" : "L"}${x},${sy(118 + 12 * Math.sin(x / 22 + 1)).toFixed(1)}`;
+    return `${i === 0 ? "M" : "L"}${x},${(118 + 12 * Math.sin(x / 22 + 1)).toFixed(1)}`;
   }).join(" ");
   return (
     <Scene on={on}>
-      <line x1="40" y1={sy(262)} x2="376" y2={sy(262)} stroke="rgba(255,255,255,0.25)" />
-      <line x1="40" y1={sy(30)} x2="40" y2={sy(262)} stroke="rgba(255,255,255,0.25)" />
-      <text x="44" y={sy(30) - 6} fontSize="10" fill={MUTED}>signal strength</text>
-      <text x="376" y={sy(30) - 6} textAnchor="end" fontSize="9" fontWeight="600" fill={MUTED} letterSpacing="0.06em">
+      <line x1="40" y1="262" x2="376" y2="262" stroke="rgba(255,255,255,0.25)" />
+      <line x1="40" y1="30" x2="40" y2="262" stroke="rgba(255,255,255,0.25)" />
+      <text x="44" y="24" fontSize="10" fill={MUTED}>signal strength</text>
+      <text x="376" y="24" textAnchor="end" fontSize="9" fontWeight="600" fill={MUTED} letterSpacing="0.06em">
         ILLUSTRATIVE, NOT REAL
       </text>
-      <text x="376" y={sy(262) + 18} textAnchor="end" fontSize="10" fill={MUTED}>time →</text>
+      <text x="376" y="280" textAnchor="end" fontSize="10" fill={MUTED}>time →</text>
       <line x1="40" x2="376" y1={painY} y2={painY} stroke={RED} strokeWidth="1.5" strokeDasharray="6 5" />
       <text x="374" y={painY + 16} textAnchor="end" fontSize="11" fontWeight="700" fill={RED}>
         pain threshold
       </text>
       <path d={livePath} pathLength={1} fill="none" stroke={CYAN} strokeWidth="2.5" className="story-draw" style={{ ...delay(0.2), transitionDuration: "2s" }} />
-      <text x="374" y={sy(100)} textAnchor="end" fontSize="11" fontWeight="600" fill={CYAN} className="story-pop" style={delay(2)}>
+      <text x="374" y="100" textAnchor="end" fontSize="11" fontWeight="600" fill={CYAN} className="story-pop" style={delay(2)}>
         still live
       </text>
       <path d={decayPath} pathLength={1} fill="none" stroke={AMBER} strokeWidth="3" strokeLinecap="round" className="story-draw" style={{ ...delay(0.4), transitionDuration: "2s" }} />
@@ -362,33 +355,79 @@ function ActScene({ on, sy }: SceneProps) {
 
 const scenes = [CollectScene, FilterScene, StoreScene, EnrichScene, ModelScene, ScoreScene, ActScene];
 
+function StepCounter({ active, className = "" }: { active: number; className?: string }) {
+  return (
+    <div aria-hidden="true" className={`flex items-center justify-between ${className}`}>
+      <p className="font-mono text-sm tabular-nums text-accent">
+        {String(active + 1).padStart(2, "0")} / {String(steps.length).padStart(2, "0")}
+      </p>
+      <p className="text-sm font-semibold uppercase tracking-wider text-foreground">{steps[active].label}</p>
+    </div>
+  );
+}
+
+function StepPips({ active, onJump, className = "" }: { active: number; onJump: (i: number) => void; className?: string }) {
+  return (
+    <nav aria-label="Jump to a step" className={`grid grid-cols-7 gap-1.5 ${className}`}>
+      {steps.map((step, i) => (
+        <button
+          key={step.label}
+          type="button"
+          aria-label={`Step ${i + 1}: ${step.label}`}
+          aria-current={i === active ? "step" : undefined}
+          onClick={() => onJump(i)}
+          className="group/pip cursor-pointer py-2"
+        >
+          <span
+            className={`block h-1 rounded-full transition-colors duration-500 group-hover/pip:bg-accent/70 ${i <= active ? "bg-accent" : "bg-white/10"}`}
+          />
+        </button>
+      ))}
+    </nav>
+  );
+}
+
+const panelBackdrop: CSSProperties = {
+  backgroundImage:
+    "radial-gradient(ellipse at 50% 55%, rgba(34,211,238,0.10), transparent 65%), radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px)",
+  backgroundSize: "100% 100%, 22px 22px",
+};
+
 export function HowItWorks() {
   const [active, setActive] = useState(0);
+  // Highest step scrolled into view on small screens, where each step has its own illustration.
+  const [reached, setReached] = useState(0);
   const desktop = useSyncExternalStore(
     subscribeDesktop,
     () => window.matchMedia(DESKTOP_QUERY).matches,
     () => true,
   );
-  const tall = !desktop;
-  const sy = tall ? stretched : flat;
-  const viewHeight = tall ? TALL_HEIGHT : WIDE_HEIGHT;
   const sectionRef = useRef<HTMLElement>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
   const stepRefs = useRef<(HTMLLIElement | null)[]>([]);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
-    const targets = desktop ? stepRefs.current : cardRefs.current;
+    const stepOf = (entry: IntersectionObserverEntry) => Number((entry.target as HTMLElement).dataset.step);
     const stepObserver = new IntersectionObserver(
       (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) setActive(Number((entry.target as HTMLElement).dataset.step));
-        }
+        for (const entry of entries) if (entry.isIntersecting) setActive(stepOf(entry));
       },
-      { rootMargin: desktop ? "-55% 0px -35% 0px" : "-78% 0px -15% 0px" },
+      { rootMargin: desktop ? "-55% 0px -35% 0px" : "-45% 0px -50% 0px" },
     );
-    targets.forEach((el) => el && stepObserver.observe(el));
-    return () => stepObserver.disconnect();
+    const seenObserver = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) if (entry.isIntersecting) setReached((r) => Math.max(r, stepOf(entry)));
+      },
+      { rootMargin: "0px 0px -25% 0px" },
+    );
+    for (const el of stepRefs.current) {
+      if (!el) continue;
+      stepObserver.observe(el);
+      if (!desktop) seenObserver.observe(el);
+    }
+    return () => {
+      stepObserver.disconnect();
+      seenObserver.disconnect();
+    };
   }, [desktop]);
 
   // Lands each step where the observer above would mark it active.
@@ -396,22 +435,25 @@ export function HowItWorks() {
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     stepRefs.current[i]?.scrollIntoView({
       behavior: reduceMotion ? "auto" : "smooth",
-      block: desktop ? "center" : "end",
+      block: desktop ? "center" : "start",
     });
     setActive(i);
+    setReached((r) => Math.max(r, i));
   };
 
   useEffect(() => {
-    const svg = svgRef.current;
     const section = sectionRef.current;
-    if (!svg || !section) return;
+    if (!section) return;
+    const svgs = [...section.querySelectorAll("svg")];
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const playObserver = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting && !reduceMotion) svg.unpauseAnimations();
-      else svg.pauseAnimations();
+      for (const svg of svgs) {
+        if (entry.isIntersecting && !reduceMotion) svg.unpauseAnimations();
+        else svg.pauseAnimations();
+      }
     });
     playObserver.observe(section);
-    if (reduceMotion) svg.pauseAnimations();
+    if (reduceMotion) for (const svg of svgs) svg.pauseAnimations();
     return () => playObserver.disconnect();
   }, []);
 
@@ -451,78 +493,60 @@ export function HowItWorks() {
         </nav>
 
         <div className="relative mt-10 lg:grid lg:grid-cols-[1.5fr_1fr] lg:gap-12">
-          <div className="sticky top-16 z-0 -mx-5 h-[calc(100svh-4rem)] sm:-mx-6 lg:top-[max(6rem,calc(50vh-19rem))] lg:mx-0 lg:h-[min(calc(100vh-8rem),38rem)]">
-            <div
-              className="flex h-full flex-col border-y border-white/8 bg-surface px-3 py-4 sm:px-6 lg:rounded-3xl lg:border lg:p-6"
-              style={{
-                backgroundImage:
-                  "radial-gradient(ellipse at 50% 55%, rgba(34,211,238,0.10), transparent 65%), radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px)",
-                backgroundSize: "100% 100%, 22px 22px",
-              }}
-            >
-              <div aria-hidden="true" className="flex items-center justify-between px-2 lg:px-0">
-                <p className="font-mono text-sm text-accent">
-                  {String(active + 1).padStart(2, "0")} / {String(steps.length).padStart(2, "0")}
-                </p>
-                <p className="text-sm font-semibold uppercase tracking-wider text-foreground">
-                  {steps[active].label}
-                </p>
-              </div>
-              <nav aria-label="Jump to a step" className="mt-1 grid grid-cols-7 gap-1.5 px-2 lg:order-last lg:mt-2 lg:px-0">
-                {steps.map((step, i) => (
-                  <button
-                    key={step.label}
-                    type="button"
-                    aria-label={`Step ${i + 1}: ${step.label}`}
-                    aria-current={i === active ? "step" : undefined}
-                    onClick={() => goToStep(i)}
-                    className="group/pip cursor-pointer py-2"
-                  >
-                    <span
-                      className={`block h-1 rounded-full transition-colors duration-500 group-hover/pip:bg-accent/70 ${i <= active ? "bg-accent" : "bg-white/10"}`}
-                    />
-                  </button>
-                ))}
-              </nav>
-              <div aria-hidden="true" className="mt-1 min-h-0 flex-1 lg:mt-3">
-                <svg ref={svgRef} width="400" height={viewHeight} viewBox={`0 0 400 ${viewHeight}`} className="block h-full w-full">
+          <div className="sticky top-16 z-20 -mx-5 flex h-16 flex-col justify-center border-y border-white/8 bg-background/95 px-5 backdrop-blur-md sm:-mx-6 sm:px-6 lg:hidden">
+            <StepCounter active={active} />
+            <StepPips active={active} onJump={goToStep} className="-mb-1.5" />
+          </div>
+
+          <div className="sticky hidden lg:top-[max(6rem,calc(50vh-19rem))] lg:block lg:h-[min(calc(100vh-8rem),38rem)]">
+            <div className="flex h-full flex-col rounded-3xl border border-white/8 bg-surface p-6" style={panelBackdrop}>
+              <StepCounter active={active} />
+              <div aria-hidden="true" className="mt-3 min-h-0 flex-1">
+                <svg width={VIEW_WIDTH} height={VIEW_HEIGHT} viewBox={`0 0 ${VIEW_WIDTH} ${VIEW_HEIGHT}`} className="block h-full w-full">
                   {scenes.map((SceneComponent, i) => (
-                    <SceneComponent key={i} on={i === active} tall={tall} sy={sy} />
+                    <SceneComponent key={i} on={i === active} />
                   ))}
                 </svg>
               </div>
+              <StepPips active={active} onJump={goToStep} className="mt-2" />
             </div>
           </div>
 
-          <ol className="pointer-events-none relative z-10 -mt-[calc(100svh-4rem)] pb-[40svh] lg:mt-0 lg:pb-[35vh]">
-            {steps.map((step, i) => (
-              <li
-                key={step.label}
-                ref={(el) => {
-                  stepRefs.current[i] = el;
-                }}
-                data-step={i}
-                className="flex min-h-[105svh] items-end pb-[6svh] lg:min-h-[85vh] lg:items-center lg:pb-0"
-              >
-                <div
+          <ol className="relative pt-4 pb-20 lg:pt-0 lg:pb-[35vh]">
+            {steps.map((step, i) => {
+              const SceneComponent = scenes[i];
+              return (
+                <li
+                  key={step.label}
                   ref={(el) => {
-                    cardRefs.current[i] = el;
+                    stepRefs.current[i] = el;
                   }}
                   data-step={i}
-                  className={`pointer-events-auto rounded-3xl border p-6 shadow-[0_20px_60px_rgba(0,0,0,0.55)] transition-colors duration-500 md:p-7 lg:shadow-none ${
-                    i === active ? "border-accent/40 bg-surface/95" : "border-white/8 bg-surface/90 lg:bg-surface/60"
-                  }`}
+                  className="scroll-mt-12 py-3 lg:flex lg:min-h-[85vh] lg:scroll-mt-0 lg:items-center lg:py-0"
                 >
-                  <p className="font-mono text-sm text-accent">
-                    {String(i + 1).padStart(2, "0")} · {step.label}
-                  </p>
-                  <h3 className="mt-2 font-[family-name:var(--font-heading)] text-2xl font-bold leading-tight md:text-3xl">
-                    {step.title}
-                  </h3>
-                  <p className="mt-3 text-base leading-relaxed text-muted md:text-lg">{step.body}</p>
-                </div>
-              </li>
-            ))}
+                  <div
+                    className={`overflow-hidden rounded-3xl border transition-colors duration-500 ${
+                      i === active ? "border-accent/40 bg-surface/95" : "border-white/8 bg-surface/90 lg:bg-surface/60"
+                    }`}
+                  >
+                    <div aria-hidden="true" className="border-b border-white/8 p-3 lg:hidden" style={panelBackdrop}>
+                      <svg width={VIEW_WIDTH} height={VIEW_HEIGHT} viewBox={`0 0 ${VIEW_WIDTH} ${VIEW_HEIGHT}`} className="block h-auto w-full">
+                        <SceneComponent on={i <= reached} />
+                      </svg>
+                    </div>
+                    <div className="p-6 md:p-7">
+                      <p className="font-mono text-sm text-accent">
+                        {String(i + 1).padStart(2, "0")} · {step.label}
+                      </p>
+                      <h3 className="mt-2 font-[family-name:var(--font-heading)] text-2xl font-bold leading-tight md:text-3xl">
+                        {step.title}
+                      </h3>
+                      <p className="mt-3 text-base leading-relaxed text-muted md:text-lg">{step.body}</p>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
           </ol>
         </div>
       </div>
