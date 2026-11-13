@@ -8,7 +8,7 @@ export function AlphaHero() {
   return (
     <section
       aria-labelledby="hero-title"
-      className="relative flex min-h-[100svh] items-center overflow-hidden pt-28 pb-20"
+      className="relative min-h-[100svh] overflow-hidden pt-28 pb-16"
     >
       <Murmuration />
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
@@ -23,7 +23,7 @@ export function AlphaHero() {
 
         <h1
           id="hero-title"
-          className="mt-8 max-w-4xl text-balance font-[family-name:var(--font-heading)] text-[clamp(2.5rem,7.5vw,5rem)] font-extrabold leading-[1.1] tracking-[-0.02em] text-foreground"
+          className="mt-6 max-w-4xl text-balance font-[family-name:var(--font-heading)] text-[clamp(2.5rem,7.5vw,5rem)] font-extrabold leading-[1.1] tracking-[-0.02em] text-foreground"
         >
           A research company studying{" "}
           <span className="text-accent">crowd behavior.</span>
@@ -40,25 +40,42 @@ export function AlphaHero() {
           money, sell signals, or give advice.
         </p>
 
-        <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-          <Link
-            href="/research"
-            className="inline-flex h-12 items-center justify-center rounded-full bg-accent px-8 text-base font-semibold text-background transition-opacity hover:opacity-90"
-          >
-            Read the research
-          </Link>
+        <div className="mt-10 grid max-w-3xl gap-3 sm:grid-cols-2">
+          <article className="flex flex-col rounded-3xl border border-white/15 bg-surface/80 p-5">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-cyan">Public research</h2>
+            <p className="mt-2 flex-1 text-sm leading-relaxed text-muted md:text-base">
+              Open to everyone: the method, the results, and the forward log of calls recorded before the
+              outcome. The log lists what is still open, what has resolved, and that a ranking score is withheld.{" "}
+              <Link
+                href="/research#forward"
+                className="font-medium text-foreground underline decoration-white/30 underline-offset-4 hover:decoration-foreground"
+              >
+                Resolution tracker
+              </Link>
+            </p>
+            <Link
+              href="/research"
+              className="mt-4 inline-flex h-11 w-full items-center justify-center rounded-full bg-accent px-6 text-sm font-semibold text-background transition-opacity hover:opacity-90"
+            >
+              Read the research
+            </Link>
+          </article>
+          <article className="flex flex-col rounded-3xl border border-white/15 bg-surface/80 p-5">
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground">Schwab beta</h2>
+            <p className="mt-2 flex-1 text-sm leading-relaxed text-muted md:text-base">
+              The product is a private beta for invited Charles Schwab customers. Sign in with the Google
+              account the invite was sent to.
+            </p>
+            <Link
+              href={betaPath}
+              className="mt-4 inline-flex h-11 w-full items-center justify-center rounded-full border border-white/20 px-6 text-sm font-medium transition-colors hover:bg-white/5"
+            >
+              {betaLabel}
+            </Link>
+          </article>
         </div>
-        <p className="mt-4 text-sm text-muted">
-          The product is a private beta for invited Charles Schwab customers.{" "}
-          <Link
-            href={betaPath}
-            className="whitespace-nowrap font-medium text-foreground underline decoration-white/30 underline-offset-4 hover:decoration-foreground"
-          >
-            {betaLabel}
-          </Link>
-        </p>
 
-        <ul className="mt-12 flex flex-wrap gap-2 sm:gap-3">
+        <ul className="mt-8 flex flex-wrap gap-2 sm:gap-3">
           {notThis.map((item, i) => {
             const last = i === notThis.length - 1;
             return (
@@ -77,7 +94,7 @@ export function AlphaHero() {
         </ul>
       </div>
 
-      <p className="pointer-events-none absolute bottom-6 right-5 max-w-[16rem] text-right text-sm leading-relaxed text-muted sm:right-6 sm:max-w-xs">
+      <p className="mx-auto mt-8 w-full max-w-6xl px-5 text-sm leading-relaxed text-muted sm:px-6 xl:pointer-events-none xl:absolute xl:right-8 xl:bottom-6 xl:mt-0 xl:w-auto xl:max-w-xs xl:px-0 xl:text-right">
         <span className="font-semibold text-foreground">Live simulation.</span>{" "}
         Every bird follows its neighbors. A few{" "}
         <span className="text-accent">amber leaders</span> steer the whole

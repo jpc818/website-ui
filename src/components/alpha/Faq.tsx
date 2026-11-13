@@ -1,3 +1,4 @@
+import { forwardLog } from "@/components/alpha/forwardLog";
 import { SectionHeading } from "@/components/alpha/SectionHeading";
 
 export const faqs: { question: string; answer: string }[] = [
@@ -14,7 +15,7 @@ export const faqs: { question: string; answer: string }[] = [
   {
     question: "Is jargAI a fund?",
     answer:
-      "No. jargAI is a research company. It does not take outside money, sell signals, or give advice. Where the research leads next depends on what holds up.",
+      "No. jargAI is a research company. It does not take outside money, sell signals, or give advice. The research is public. The product is a private beta for invited Charles Schwab customers. Where the research leads next depends on what holds up.",
   },
   {
     question: "How is behavior prediction different from sentiment analysis?",
@@ -49,7 +50,7 @@ export const faqs: { question: string; answer: string }[] = [
   {
     question: "Is there a live track record?",
     answer:
-      "A forward log started on 15 October 2026. It counts only calls recorded before the outcome: 49 so far, 34 resolved, and 2 big drops. That is too few drops to publish a ranking score, so the page shows the count and not a score. Scores filled in after the fact are excluded.",
+      `A forward log started on ${forwardLog.started}. It counts only calls recorded before the outcome: ${forwardLog.recorded} so far, ${forwardLog.resolved} resolved, ${forwardLog.open} still open, and ${forwardLog.bigDrops} big drops, as of ${forwardLog.asOf}. That is too few drops to publish a ranking score, so the page shows the count and not a score. Scores filled in after the fact are excluded.`,
   },
   {
     question: "How do you know the predictions are real and not luck?",
