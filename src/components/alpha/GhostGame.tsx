@@ -734,7 +734,7 @@ export function GhostGame() {
           </div>
         </div>
 
-        <p className="mt-4 text-xs leading-relaxed text-muted">
+        <p className="mt-4 text-sm leading-relaxed text-muted">
           Before every tap the Ghost locks in a guess from your earlier taps: your favourite squares, the hops you
           tend to make, how you react after it hits or misses, and whichever habit has been working lately. Pure luck
           would call one tap in nine.

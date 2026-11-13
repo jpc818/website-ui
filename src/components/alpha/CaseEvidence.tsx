@@ -194,7 +194,7 @@ function GroupStats({ item }: { item: MoreCase }) {
       </div>
 
       <p className="mt-4 text-sm leading-relaxed text-foreground">{item.caveat}</p>
-      <p className="mt-3 text-xs leading-relaxed text-muted">
+      <p className="mt-3 text-sm leading-relaxed text-muted">
         <span className="font-semibold">How we picked it:</span> {item.rule}
       </p>
     </>

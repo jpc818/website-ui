@@ -21,7 +21,7 @@ export function CasePosters({ id, accent = "var(--color-cyan)" }: { id: CaseId; 
         ))}
       </ul>
       <p className="mt-5 text-pretty text-sm leading-relaxed text-foreground">{c.crowd}</p>
-      <p className="mt-4 text-xs leading-relaxed text-muted">
+      <p className="mt-4 text-sm leading-relaxed text-muted">
         Posters are described by profile, never by account. Engagement compares a poster&apos;s own earlier posts with the
         typical post. A call &ldquo;beat the market&rdquo; when the stock outran the S&amp;P 500 over the next three
         sessions. Champions have 8+ earlier calls with at least 60% beating the market. Fades have 40% or fewer.

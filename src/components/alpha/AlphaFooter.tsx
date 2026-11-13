@@ -36,7 +36,7 @@ export function AlphaFooter() {
             contact@jarg.ai
           </a>
         </nav>
-        <p className="mt-4 text-center text-xs leading-relaxed text-muted/80 md:text-left">
+        <p className="mt-4 text-center text-sm leading-relaxed text-muted md:text-left">
           jargAI is a research company. It does not manage money for others, sell signals, or give investment
           advice. Nothing on this site is financial, legal, tax, or other professional advice, or an offer or
           solicitation of any kind.

@@ -341,7 +341,7 @@ function TheRoom({ room }: { room: Room }) {
             );
           })}
         </ul>
-        <p className="mt-2 text-xs leading-relaxed text-stone-600">
+        <p className="mt-2 text-sm leading-relaxed text-stone-700">
           A call is an earlier post of theirs about some stock; it counts as right if that stock beat the S&amp;P 500
           over the next three trading days.
           {hasRoles &&
@@ -518,7 +518,7 @@ function ClueCards({
         })}
       </ul>
       {!session.room && (
-        <p className="mt-2 text-xs text-stone-600">
+        <p className="mt-2 text-sm text-stone-700">
           Who was posting isn&apos;t in this replay for this day, only the headcount.
         </p>
       )}
@@ -1436,7 +1436,7 @@ export function Replay() {
                           <span className="mt-1 text-[11px] leading-tight text-stone-700 sm:text-xs">beats the market</span>
                         </button>
                       </div>
-                      <p className="mt-3 text-xs leading-relaxed text-stone-600">
+                      <p className="mt-3 text-sm leading-relaxed text-stone-700">
                         <span className="hidden font-semibold text-stone-800 pointer-coarse:inline">
                           Or swipe the clue: right for a rise, left for a drop.{" "}
                         </span>
@@ -1477,14 +1477,14 @@ export function Replay() {
                   <span aria-hidden="true" className="h-0 w-5 border-t-2 border-dashed border-stone-500" /> {money(START)} start
                 </span>
               </div>
-              <p className="mt-4 text-xs leading-relaxed text-stone-600">
+              <p className="mt-4 text-sm leading-relaxed text-stone-700">
                 The model bets {Math.round(MODEL_STAKE * 100)}% of what it has every time it flags a direction and sits
                 out everything else. Its results show up as each day plays out.
               </p>
             </aside>
           </div>
 
-          <p className="mt-8 border-t-2 border-dashed border-stone-400/60 pt-4 text-xs leading-relaxed text-stone-600">
+          <p className="mt-8 border-t-2 border-dashed border-stone-400/60 pt-4 text-sm leading-relaxed text-stone-700">
             Every number comes from one scoring run on data the model never trained on. A move is the
             stock&apos;s % change minus the S&amp;P 500&apos;s over the 3 trading days after the open, so the 3-day
             windows overlap and back-to-back days are not independent calls. Posts, people and communities count public

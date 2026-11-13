@@ -77,7 +77,7 @@ export function AlphaHero() {
         </ul>
       </div>
 
-      <p className="pointer-events-none absolute bottom-6 right-5 max-w-[16rem] text-right text-xs leading-relaxed text-muted sm:right-6 sm:max-w-xs sm:text-sm">
+      <p className="pointer-events-none absolute bottom-6 right-5 max-w-[16rem] text-right text-sm leading-relaxed text-muted sm:right-6 sm:max-w-xs">
         <span className="font-semibold text-foreground">Live simulation.</span>{" "}
         Every bird follows its neighbors. A few{" "}
         <span className="text-accent">amber leaders</span> steer the whole

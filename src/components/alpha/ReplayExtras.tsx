@@ -164,7 +164,7 @@ export function HistorySays({ context, withRunUp }: { context: Context; withRunU
           {sharp ? ", with a run-up like this one," : ""} beat the S&amp;P 500 over the next 3 trading days.
         </p>
       </div>
-      <p className="mt-2 text-xs leading-relaxed text-stone-600">
+      <p className="mt-2 text-sm leading-relaxed text-stone-700">
         The typical one {typical}
         {odds.swing >= 5 ? `, but ${odds.swing}% of them moved 50% or more either way` : ""}.
         {!sharp && !withRunUp && " The run-up clue sharpens this."}
@@ -280,7 +280,7 @@ export function GuessStrip({
         </div>
       )}
       {!guess && (
-        <p className="mt-2 text-xs text-stone-600">
+        <p className="mt-2 text-sm text-stone-700">
           Each winning bet turns a letter over. Guess right now for {worth} detective points; they drop by{" "}
           {DETECTIVE_POINTS} every day you wait.
         </p>
