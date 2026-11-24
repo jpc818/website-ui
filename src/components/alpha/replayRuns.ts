@@ -258,7 +258,7 @@ export const replayRuns: ReplayRun[] = [
       href: "/case-studies/put",
       verdict: "The warning fired on the smoke, three trading days before the crowd turned. Right, and early enough to hurt.",
       moral:
-        "Of the 250 top-3% drop warnings in the held-out data, 158 were followed by a 10% drop within three trading days and 92 were not. A warning on the smoke is a warning about the crowd, not about the calendar.",
+        "Of the 250 strongest drop warnings, 158 were followed by a hard drop within three trading days and 92 were not. A warning on the smoke is a warning about the crowd, not about the calendar.",
     },
   },
   {
@@ -311,7 +311,7 @@ export const replayRuns: ReplayRun[] = [
       href: "/case-studies/call",
       verdict: "The flag landed, and the one it passed on would have paid five times better.",
       moral:
-        "This is the weakest signal we have. Of the 250 top-3% upside flags in the held-out data, 64 rose 10% or more: about one in four, against 11% by chance. 158 of the 250 still finished behind the market.",
+        "This is the weakest signal we have. Of the 250 strongest rise flags, 64 beat the market by 10% or more: about one in four, against 11% normally. 158 of the 250 still finished behind the market.",
     },
   },
   {
@@ -386,7 +386,7 @@ export const replayRuns: ReplayRun[] = [
       href: "/case-studies/exotic",
       verdict: "Three wrong-footed shorts, then a flag that refused to pick a side and was right about the size.",
       moral:
-        "Of the 53 stock-days with both scores in the top 3%, 44 moved 10% or more either way, against 28% across all stocks. We defined that flag after looking at the held-out data, and it measures the stock's move, not an options profit, so treat it as a lead rather than a result.",
+        "Of the 53 cases with both scores in the top 3%, 44 moved 10% or more up or down, against 28% normally. We came up with that rule after looking at the data, and it measures the stock's move, not whether a trade made money, so treat it as a hint rather than a result.",
     },
   },
   {
@@ -526,7 +526,7 @@ export const replayRuns: ReplayRun[] = [
       href: "/case-studies/failed",
       verdict: "Wrong three times, then right three times, and the order is what ruins you.",
       moral:
-        "Of the 250 top-3% drop warnings in the held-out data, 92 were not followed by a 10% drop, and 53 went the other way and rose 10% or more. Early and wrong look identical until the crowd turns.",
+        "Of the 250 strongest drop warnings, 92 weren't followed by a hard drop, and in 53 the stock jumped 10% or more instead. Being early looks exactly like being wrong until the crowd turns.",
     },
   },
 ];

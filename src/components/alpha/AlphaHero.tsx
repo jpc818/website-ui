@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { betaLabel, betaPath } from "@/app/site";
+import { forwardLog } from "@/components/alpha/forwardLogCounts";
 import { Murmuration } from "@/components/alpha/Murmuration";
 
-const notThis = ["Not fundamentals alone", "Not mood alone", "Behavior + context"];
+const notThis = ["Not just company finances", "Not just mood", "What people actually do"];
 
 export function AlphaHero() {
   return (
@@ -30,27 +31,29 @@ export function AlphaHero() {
         </h1>
 
         <p className="mt-7 max-w-2xl text-pretty font-[family-name:var(--font-heading)] text-xl font-semibold leading-snug text-foreground md:text-2xl">
-          We model how online crowds behave around US stocks, test it on data
-          the models never saw, and report what holds up.
+          We study how online crowds act around stocks, and whether that
+          tells you what happens next. Then we show you what worked and what
+          didn&apos;t.
         </p>
         <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-muted md:text-lg">
-          Markets come first because they&apos;re the hardest place to be
-          right, and they keep score. If crowd behavior is predictable there,
-          it&apos;s predictable almost anywhere. We don&apos;t manage outside
-          money, sell signals, or give advice.
+          We start with the stock market because it&apos;s hard to fool and it
+          keeps score every day. If you can predict a crowd there, you can
+          probably predict it anywhere. Everything here is free to read, and
+          none of it is financial advice.
         </p>
 
         <div className="mt-10 grid max-w-3xl gap-3 sm:grid-cols-2">
           <article className="flex flex-col rounded-3xl border border-white/15 bg-surface/80 p-5">
             <h2 className="text-sm font-semibold uppercase tracking-wider text-cyan">Public research</h2>
             <p className="mt-2 flex-1 text-sm leading-relaxed text-muted md:text-base">
-              Open to everyone: the method, the results, and the forward log of calls recorded before the
-              outcome. The log lists what is still open, what has resolved, and that a ranking score is withheld.{" "}
+              The results, how we got them, and a live diary of predictions written down before we knew the
+              answer. It&apos;s only a few weeks old, with {forwardLog.bigDrops} hard drops so far, so it&apos;s
+              too early to grade.{" "}
               <Link
                 href="/research#forward"
                 className="font-medium text-foreground underline decoration-white/30 underline-offset-4 hover:decoration-foreground"
               >
-                Resolution tracker
+                See the diary
               </Link>
             </p>
             <Link
@@ -61,10 +64,10 @@ export function AlphaHero() {
             </Link>
           </article>
           <article className="flex flex-col rounded-3xl border border-white/15 bg-surface/80 p-5">
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground">Schwab beta</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-wider text-foreground">A private look</h2>
             <p className="mt-2 flex-1 text-sm leading-relaxed text-muted md:text-base">
-              The product is a private beta for invited Charles Schwab customers. Sign in with the Google
-              account the invite was sent to.
+              Some Charles Schwab customers have been invited to try an early version of the same research. If
+              that&apos;s you, sign in with the Google account the invite went to.
             </p>
             <Link
               href={betaPath}
@@ -96,9 +99,9 @@ export function AlphaHero() {
 
       <p className="mx-auto mt-8 w-full max-w-6xl px-5 text-sm leading-relaxed text-muted sm:px-6 xl:pointer-events-none xl:absolute xl:right-8 xl:bottom-6 xl:mt-0 xl:w-auto xl:max-w-xs xl:px-0 xl:text-right">
         <span className="font-semibold text-foreground">Live simulation.</span>{" "}
-        Every bird follows its neighbors. A few{" "}
-        <span className="text-accent">amber leaders</span> steer the whole
-        flock. Move through it to scatter them.
+        Each bird copies the birds next to it. A few{" "}
+        <span className="text-accent">orange leaders</span> end up steering
+        the whole flock. Crowds work the same way. Move your mouse through it.
       </p>
     </section>
   );

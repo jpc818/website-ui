@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { siteUrl } from "@/app/site";
 import { AlphaFooter } from "@/components/alpha/AlphaFooter";
 import { AlphaHeader } from "@/components/alpha/AlphaHeader";
+import { MarketWeb } from "@/components/alpha/MarketWeb";
 import { Oracle } from "@/components/alpha/Oracle";
 import { Replay } from "@/components/alpha/Replay";
 import { JsonLd, pageJsonLd, pageMetadata } from "@/lib/seo";
@@ -9,7 +10,7 @@ import { JsonLd, pageJsonLd, pageMetadata } from "@/lib/seo";
 const path = "/lab";
 const title = "Lab";
 const description =
-  "Two interactive demos from jargAI: try to be unpredictable against a simple model, and replay real held-out runs session by session. Illustrations, not a track record, and not advice.";
+  "Three interactive illustrations from jargAI: try to be unpredictable against a simple model, replay real runs day by day, and read a lead-lag web of crowd posts, price shocks, and filings. Illustrations, not a track record, and not advice.";
 
 export const metadata: Metadata = pageMetadata({ title, description, path });
 
@@ -37,7 +38,20 @@ const demos = [
     browserRequirements: "Requires JavaScript",
     isAccessibleForFree: true,
     description:
-      "A daily game that replays real held-out runs session by session. Each session gives one clue from the crowd, with the mix of post types and anonymous profiles of who was posting a tap away. Bet on a rise or a drop, or sit out, and race the model's own calls; finish ahead to reveal which stock it was, and share your card. An illustration, not a track record, and not advice.",
+      "A daily game that replays real runs one trading day at a time. Each day gives one clue from the crowd, with the mix of post types and anonymous profiles of who was posting a tap away. Bet on a rise or a drop, or sit out, and race the model's own calls; finish ahead to reveal which stock it was, and share your card. An illustration, not a track record, and not advice.",
+    provider: { "@id": `${siteUrl}/#organization` },
+  },
+  {
+    "@type": "WebApplication",
+    "@id": `${siteUrl}/lab#web`,
+    name: "A lead-lag web",
+    url: `${siteUrl}/lab#web`,
+    applicationCategory: "EducationalApplication",
+    operatingSystem: "Any",
+    browserRequirements: "Requires JavaScript",
+    isAccessibleForFree: true,
+    description:
+      "An illustration of a discrete-time Hawkes fit across crowd posts, price shocks, and filings, estimated on sessions through 2024 and checked on sessions after. Select a node to see its strings and a reading of what goes in, the context, and what comes out. Not a track record, not a trading signal, and not advice.",
     provider: { "@id": `${siteUrl}/#organization` },
   },
 ];
@@ -58,10 +72,10 @@ export default function Lab() {
               id="lab-title"
               className="mt-3 max-w-3xl text-balance font-[family-name:var(--font-heading)] text-[clamp(2.25rem,6vw,4rem)] font-extrabold leading-[1.05] tracking-tight"
             >
-              Two small experiments in predictability.
+              Three small illustrations of predictability.
             </h1>
             <p className="mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-muted md:text-xl">
-              Interactive demos of ideas behind the research. They are illustrations, not a track record, and nothing
+              Three interactive illustrations of ideas behind the research. They are not a track record, and nothing
               here is advice. The evidence itself is on the{" "}
               <a
                 href="/research"
@@ -75,6 +89,7 @@ export default function Lab() {
         </section>
         <Oracle />
         <Replay />
+        <MarketWeb />
       </main>
       <AlphaFooter />
     </>

@@ -8,9 +8,9 @@
 export type ModelKey = "price_market" | "public" | "public_plus_social";
 
 export const modelLabels: Record<ModelKey, { name: string; detail: string }> = {
-  price_market: { name: "Price and market only", detail: "13 features: returns, volatility, volume, VIX, calendar" },
-  public: { name: "+ news and insider filings", detail: "35 features: the above plus news volume and tone, SEC Form 4" },
-  public_plus_social: { name: "+ crowd signals", detail: "53 features: the above plus mentions, bursts, coordination, author track records" },
+  price_market: { name: "Stock price only", detail: "Price moves, how jumpy the stock is, trading volume, market nerves, the calendar" },
+  public: { name: "+ news and insider trades", detail: "The above, plus how much news there is and its tone, and trades by company insiders" },
+  public_plus_social: { name: "+ online chatter", detail: "The above, plus posts, sudden bursts, coordinated posting, and who's been right before" },
 };
 
 export const modelOrder: ModelKey[] = ["price_market", "public", "public_plus_social"];
@@ -43,9 +43,9 @@ export type EvalTarget = {
 export const evalTargets: EvalTarget[] = [
   {
     key: "crash10_3d",
-    name: "Big drop",
+    name: "Hard drop",
     definition:
-      "The stock underperforms the S&P 500 (SPY) by 10 percentage points or more over three sessions, measured from the next open.",
+      "The stock falls at least 10% behind the S&P 500 over the next three trading days.",
     holdout: {
       n: 8330,
       positives: 1443,
@@ -78,9 +78,9 @@ export const evalTargets: EvalTarget[] = [
   },
   {
     key: "crash_voladj_3d",
-    name: "Volatility-adjusted drop",
+    name: "Drop, adjusted for how jumpy the stock is",
     definition:
-      "The stock underperforms SPY over three sessions by at least one standard deviation of its own recent (20-day) volatility.",
+      "A drop that's unusually big for that particular stock. A calm stock only has to slip a few percent. A wild one has to fall much further.",
     holdout: {
       n: 8330,
       positives: 1177,
@@ -123,10 +123,10 @@ export const signed = (n: number) => `${n < 0 ? "−" : "+"}${Math.abs(n).toFixe
 // Scores run from 0.50 (coin flip) up. Ranges are 95%, resampled by whole days. From an earlier run (not re-run
 // with five-day blocks).
 export const textMoodRows: ResultRow[] = [
-  { label: "Upside call, tested through time", est: -0.0012, lo: -0.004, hi: 0.0016, verdict: "No difference" },
-  { label: "Upside call, final held-out stretch", est: 0.0062, lo: 0.0007, hi: 0.0116, verdict: "Slightly better without it" },
-  { label: "Downside call, tested through time", est: 0.0002, lo: -0.0011, hi: 0.0015, verdict: "No difference" },
-  { label: "Downside call, final held-out stretch", est: 0.0002, lo: -0.0006, hi: 0.0009, verdict: "No difference" },
+  { label: "Predicting rises, 2021–2026", est: -0.0012, lo: -0.004, hi: 0.0016, verdict: "No difference" },
+  { label: "Predicting rises, 2025–2026 only", est: 0.0062, lo: 0.0007, hi: 0.0116, verdict: "Slightly better without it" },
+  { label: "Predicting drops, 2021–2026", est: 0.0002, lo: -0.0011, hi: 0.0015, verdict: "No difference" },
+  { label: "Predicting drops, 2025–2026 only", est: 0.0002, lo: -0.0006, hi: 0.0009, verdict: "No difference" },
 ];
 
 // Squeeze/Bullish flag (social-alpha: scripts/crowd_lens.py, output data/research/crowd_lens.json).

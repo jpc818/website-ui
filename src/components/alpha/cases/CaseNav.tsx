@@ -27,21 +27,18 @@ export function CaseNav({ current, heading = "h3" }: { current?: CaseId; heading
               }`}
             >
               <p className={`font-mono text-sm ${t.text}`}>
-                {c.n} · {c.kind} · {c.theme}
+                {c.n} · {c.kind}
               </p>
-              <Heading className="mt-2 text-balance font-[family-name:var(--font-heading)] text-xl font-bold leading-tight">{c.title}</Heading>
+              <p className="mt-3 text-sm leading-relaxed text-foreground">{c.rate}</p>
+              <Heading className="mt-3 text-balance font-[family-name:var(--font-heading)] text-xl font-bold leading-tight">{c.title}</Heading>
               <p className="mt-2 text-sm leading-relaxed text-muted">{c.tagline}</p>
               <div className="mt-4 flex-1 border-t border-white/8 pt-4">
                 <p className="text-sm font-semibold">
                   {casePosters[c.id].stock} ({casePosters[c.id].ticker}) · {casePosters[c.id].month}
                 </p>
                 <p className="mt-1 text-sm leading-relaxed text-foreground">
-                  <span
-                    className={`mr-1.5 inline-block rounded-full px-2 py-0.5 text-xs font-semibold ${
-                      c.landed ? "bg-emerald-400/15 text-emerald-300" : "bg-rose-400/15 text-rose-300"
-                    }`}
-                  >
-                    {c.landed ? "Landed" : "Missed"}
+                  <span className="mr-1.5 inline-block rounded-full bg-white/10 px-2 py-0.5 text-xs font-semibold text-foreground">
+                    {c.mark}
                   </span>
                   {c.result}
                 </p>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { AlphaFooter } from "@/components/alpha/AlphaFooter";
 import { AlphaHeader } from "@/components/alpha/AlphaHeader";
 import { Contact } from "@/components/alpha/Contact";
@@ -12,16 +13,16 @@ import { JsonLd, pageJsonLd, pageMetadata } from "@/lib/seo";
 
 const title = "Research";
 const description =
-  "jargAI's evidence in full: backtest ranking scores for three nested models, a forward log of live calls, how the numbers were made, and what they don't show.";
+  "jargAI's evidence in plain English: how often the model spots hard drops, a simple pattern in forum posts, a live diary of predictions, practice portfolios, and what we can't claim.";
 
 export const metadata: Metadata = pageMetadata({ title, description, path: "/research" });
 
 const contents = [
-  { href: "#flag", label: "Squeeze flag" },
-  { href: "#headline-result-title", label: "Results" },
-  { href: "#forward", label: "Forward log" },
-  { href: "#tool", label: "Investment tool" },
-  { href: "#rigor", label: "Rigor and limits" },
+  { href: "#headline-result-title", label: "The main result" },
+  { href: "#flag", label: "Squeeze tags" },
+  { href: "#forward", label: "Live diary" },
+  { href: "#tool", label: "Does it make money?" },
+  { href: "#rigor", label: "What we can't claim" },
   { href: "#method", label: "Method" },
 ];
 
@@ -41,8 +42,8 @@ export default function Research() {
               The evidence, in full.
             </h1>
             <p className="mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-muted md:text-xl">
-              Ranking scores on data the models never trained on, the live record so far, and what none of it shows
-              yet. Nothing here is advice or an offer.
+              First, how often the model spots a stock about to drop. Then a simple pattern in forum posts, our live
+              diary of predictions, and a test of whether any of it makes money. Nothing here is advice.
             </p>
             <nav aria-label="On this page" className="mt-8 flex flex-wrap gap-2 sm:gap-3">
               {contents.map((item) => (
@@ -57,10 +58,22 @@ export default function Research() {
             </nav>
           </div>
         </section>
-        <CrowdFlag />
         <HeadlineResult />
+        <CrowdFlag />
         <ForwardLog />
         <InvestmentTool />
+        <section aria-label="Lead-lag web" className="border-t border-white/8 py-10 md:py-12">
+          <p className="mx-auto max-w-6xl px-5 text-lg leading-relaxed text-muted sm:px-6">
+            Want to see how posts, price jumps and news can ripple into the next day? There&apos;s an interactive
+            picture of it (an illustration, not evidence) in the{" "}
+            <Link
+              href="/lab#web"
+              className="font-semibold text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
+            >
+              lab →
+            </Link>
+          </p>
+        </section>
         <Rigor />
         <MethodNote />
         <Contact />

@@ -2,22 +2,22 @@ import { SectionHeading } from "@/components/alpha/SectionHeading";
 
 const lenses = [
   {
-    name: "Fundamentals",
-    question: "What is it worth?",
-    verdict: "Slow, public, and already known by everyone who's looking.",
+    name: "Finances",
+    question: "What is the company worth?",
+    verdict: "Useful, but slow. By the time it's public, everyone already knows.",
     ours: false,
   },
   {
-    name: "Sentiment",
+    name: "Mood",
     question: "How do people feel?",
-    verdict: "Easy to misread. Feelings often never turn into actions. In our one test, text mood added nothing measurable.",
+    verdict: "Feelings often don't turn into action. When we tested the tone of posts, it didn't help at all.",
     ours: false,
   },
   {
     name: "Behavior",
     question: "What will people do next?",
     verdict:
-      "Who shows up, when, coordination, and author track records — plus price, news, and insiders. Behavior can be staged too, which is why we score coordination as a risk signal. It's our bet, not a settled result: it hasn't yet beaten a full public stack.",
+      "Who shows up, when, whether they've been right before, and whether they seem to be working together. It's our bet, not a proven result. So far it adds only a little on top of price and news.",
     ours: true,
   },
 ];
@@ -35,9 +35,9 @@ export function Approach() {
           eyebrow="Our approach"
           title="We start from a different question."
         >
-          Two people can feel exactly the same and do opposite things, so we
-          start from behavior instead of opinion. We think that&apos;s a
-          better place to look, and we&apos;re testing whether it is.
+          Two people can feel the same way and do opposite things. So we watch
+          what people do, not what they say. We think that works better, and
+          we&apos;re testing whether it does.
         </SectionHeading>
 
         <div className="mt-12 grid gap-5 md:grid-cols-3">

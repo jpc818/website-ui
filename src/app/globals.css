@@ -369,6 +369,312 @@ html[data-consent="open"] body {
   }
 }
 
+/* Lead-lag web: strings draw out from the selected node once; pulses run along them while on screen.
+   Timings and scales are powers of the golden ratio. */
+.web-draw,
+.web-pulse,
+.web-surge,
+.web-prob {
+  vector-effect: non-scaling-stroke;
+}
+
+.web-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: web-draw 0.618s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes web-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.web-pulse {
+  stroke-dasharray: 0.0902 1.236;
+  stroke-dashoffset: 0.0902;
+  animation: web-pulse 2.618s linear infinite;
+}
+
+@keyframes web-pulse {
+  0% {
+    stroke-dashoffset: 0.0902;
+  }
+  61.8%,
+  100% {
+    stroke-dashoffset: -1;
+  }
+}
+
+.web-ping {
+  animation: web-ping 2.618s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes web-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  61.8%,
+  100% {
+    transform: scale(4.236);
+    opacity: 0;
+  }
+}
+
+.web-fire {
+  animation: web-fire 1.618s ease-in-out infinite;
+}
+
+@keyframes web-fire {
+  0%,
+  100% {
+    opacity: 0.382;
+  }
+  38.2% {
+    opacity: 1;
+  }
+}
+
+/* Each honeycomb layer slides one lattice step, so the loop is seamless. */
+.web-drift {
+  animation: web-drift 34s linear infinite;
+}
+
+@keyframes web-drift {
+  to {
+    transform: translate(var(--dx), var(--dy));
+  }
+}
+
+.web-spin {
+  animation: web-spin 89s linear infinite;
+}
+
+@keyframes web-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Context engine: one forward pass per node click, In → Context → Out. */
+.web-synapse {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  stroke: var(--cyan);
+  stroke-opacity: 0.18;
+  stroke-width: 1;
+}
+
+.web-synapse-dormant {
+  stroke: #94a3b8;
+  stroke-opacity: 0.07;
+  stroke-width: 1;
+}
+
+.web-synapse-live {
+  stroke-opacity: 0.32;
+  stroke-width: 1.25;
+}
+
+/* Extra staggered surges on the same string — reads as parallel possibilities, not one path. */
+.web-prob {
+  stroke-linecap: round;
+  stroke-dasharray: 0.08 1;
+  stroke-dashoffset: 1;
+  animation: web-prob 1.05s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+
+@keyframes web-prob {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+[data-web-lit="false"] .web-layer,
+[data-web-lit="false"] .web-layer-band {
+  opacity: 0.35;
+}
+
+.web-layer-band {
+  fill: white;
+  fill-opacity: 0.02;
+}
+
+.web-layer {
+  stroke: white;
+  stroke-opacity: 0.06;
+  stroke-width: 1;
+  stroke-dasharray: 4 6;
+}
+
+.web-surge {
+  stroke-linecap: round;
+  stroke-dasharray: 0.14 1;
+  stroke-dashoffset: 1;
+  animation: web-surge 0.75s cubic-bezier(0.33, 1, 0.68, 1) forwards;
+}
+
+@keyframes web-surge {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.web-neuron {
+  display: block;
+  height: 13px;
+  width: 13px;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background: var(--cyan);
+  box-shadow: 0 0 10px 2px rgba(34, 211, 238, 0.45);
+  opacity: 0.38;
+}
+
+.web-neuron-context {
+  height: 18px;
+  width: 18px;
+  background: var(--accent);
+  box-shadow: 0 0 12px 3px rgba(245, 158, 11, 0.4);
+}
+
+.web-ignite {
+  animation: web-ignite 0.62s ease-out forwards;
+}
+
+@keyframes web-ignite {
+  0% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1.35);
+    box-shadow: 0 0 22px 6px rgba(34, 211, 238, 0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 14px 4px rgba(34, 211, 238, 0.65);
+  }
+}
+
+.web-neuron-context.web-ignite {
+  animation-name: web-ignite-context;
+}
+
+@keyframes web-ignite-context {
+  0% {
+    opacity: 0.35;
+    transform: scale(0.85);
+  }
+  45% {
+    opacity: 1;
+    transform: scale(1.35);
+    box-shadow: 0 0 26px 8px rgba(245, 158, 11, 0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 16px 5px rgba(245, 158, 11, 0.7);
+  }
+}
+
+.web-readout {
+  opacity: 0.42;
+  transition: opacity 0.2s;
+}
+
+.web-readout-glow {
+  animation: web-readout 0.62s ease-out forwards;
+}
+
+@keyframes web-readout {
+  0% {
+    opacity: 0.35;
+    color: var(--muted);
+  }
+  50% {
+    opacity: 1;
+    color: var(--foreground);
+    text-shadow: 0 0 14px rgba(34, 211, 238, 0.55);
+  }
+  100% {
+    opacity: 1;
+    color: var(--foreground);
+    text-shadow: none;
+  }
+}
+
+.web-echo {
+  animation: web-echo 0.65s ease-out forwards;
+}
+
+@keyframes web-echo {
+  0% {
+    opacity: 0.45;
+    filter: brightness(0.85);
+  }
+  40% {
+    opacity: 1;
+    filter: brightness(1.5);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+[data-live="false"] :is(.web-pulse, .web-ping, .web-fire, .web-drift, .web-spin) {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .web-draw {
+    animation: none;
+    stroke-dashoffset: 0;
+  }
+
+  .web-drift,
+  .web-spin {
+    animation: none;
+  }
+
+  .web-pulse,
+  .web-ping {
+    animation: none;
+    display: none;
+  }
+
+  .web-fire {
+    animation: none;
+    opacity: 1;
+  }
+
+  .web-surge,
+  .web-prob,
+  .web-ignite,
+  .web-readout-glow,
+  .web-echo {
+    animation: none;
+  }
+
+  .web-prob,
+  .web-surge {
+    stroke-dashoffset: 0;
+  }
+
+  .web-neuron {
+    opacity: 1;
+  }
+
+  .web-readout {
+    opacity: 1;
+    color: var(--foreground);
+  }
+}
+
 /* Replay: a colored-pencil sketch on graph paper. */
 .paper {
   color: #1c1917;

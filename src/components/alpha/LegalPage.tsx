@@ -1,16 +1,14 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { AlphaFooter } from "@/components/alpha/AlphaFooter";
-import { Logo } from "@/components/Logo";
+import { HomeLogoLink } from "@/components/alpha/HomeLogoLink";
 
 export function LegalPage({ title, updated, children }: { title: string; updated: string; children: ReactNode }) {
   return (
     <>
       <header className="border-b border-white/8">
         <div className="mx-auto flex h-16 max-w-3xl items-center justify-between px-5 sm:px-6">
-          <Link href="/" className="text-xl" aria-label="jargAI home">
-            <Logo />
-          </Link>
+          <HomeLogoLink />
           <Link href="/" className="text-sm font-medium text-muted hover:text-foreground">
             ← Back to jargAI
           </Link>

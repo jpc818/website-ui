@@ -9,7 +9,7 @@ import { JsonLd, pageMetadata } from "@/lib/seo";
 const path = "/case-studies/put";
 const title = "Case study: the campfire that became a wildfire";
 const description =
-  "Where there's smoke, there's fire. Opendoor (OPEN) in July 2025, an out-of-sample event replayed day by day: how a small conversation spread into a crowd, when jargAI's downside warning fired, and what happened when the crowd turned.";
+  "Where there's smoke, there's fire. Opendoor (OPEN) in July 2025, replayed day by day on dates the model never saw: how a small conversation turned into a crowd, when jargAI's drop warning went off, and what happened when the crowd turned.";
 
 export const metadata: Metadata = pageMetadata({ title, description, path });
 

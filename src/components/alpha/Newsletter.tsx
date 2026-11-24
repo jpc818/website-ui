@@ -48,7 +48,7 @@ export function Newsletter() {
             Get the research notes.
           </h2>
           <p className="mt-3 max-w-md text-base leading-relaxed text-muted md:text-lg">
-            New results, hits and misses alike, as we publish them. No pitch, and you can leave any time.
+            New results as we publish them, including what didn&apos;t work. No sales pitch. Unsubscribe any time.
           </p>
         </div>
 

@@ -3,7 +3,6 @@
 import { useId, useState } from "react";
 import { SectionHeading } from "@/components/alpha/SectionHeading";
 import {
-  bookLabels,
   bookOrder,
   curveLabels,
   scenarioOrder,
@@ -24,6 +23,34 @@ const colors: Record<BookKey, string> = {
   short_crash: "#a78bfa",
 };
 const SPY = "rgba(179,186,197,0.8)";
+
+const books: Record<BookKey, { name: string; detail: string }> = {
+  long_crash_filter: {
+    name: "Buy the favorites, skip the risky ones",
+    detail: "Buys the stocks the model likes most, but leaves out any it thinks might drop hard.",
+  },
+  long_q80: {
+    name: "Buy a wider group",
+    detail: "Buys more of the stocks the model likes, with no safety check. More trades, less picky.",
+  },
+  short_crash: {
+    name: "Bet against the warnings",
+    detail: "Bets that the stocks flagged for a hard drop will fall. This needs borrowed shares, which a normal account can't do.",
+  },
+};
+
+const settings: Record<ScenarioKey, { label: string; detail: string }> = {
+  tested: {
+    label: "Fair test",
+    detail:
+      "The model learned from data up to the end of 2024, then was locked. Every day it traded was new to it.",
+  },
+  peeking: {
+    label: "Cheating",
+    detail:
+      "Same code, but the model was allowed to study the very days it then traded. It's like seeing the exam answers first. This is the mistake that makes many backtests look great.",
+  },
+};
 
 // One vertical scale for both scenarios. Rescaling per scenario would hide the very thing the toggle exists
 // to show: flipping to the peeking model has to move the lines, not relabel the axis.
@@ -54,10 +81,10 @@ export function InvestmentTool() {
   return (
     <section id="tool" aria-labelledby="tool-title" className="border-t border-white/8 py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
-        <SectionHeading id="tool-title" eyebrow="Investment tool" title="The same strategy, with and without hindsight.">
-          We replayed the paper books over {scenario.tradingDays} trading days using the same entry and exit rules
-          the live books run. Flip the switch to see what the identical code reports when the model is allowed to
-          train on the days it then traded. That gap is why we don&apos;t trust backtests, including our own.
+        <SectionHeading id="tool-title" eyebrow="Practice portfolios" title="Does it make money? Here's a fair test, and a cheating one.">
+          We pretended to trade on the model&apos;s picks for {scenario.tradingDays} trading days, from January 2025
+          to October 2026. No real money. Flip the switch to see how much better the same strategy looks when the
+          model is allowed to cheat. That gap is why we don&apos;t trust impressive backtests, including our own.
         </SectionHeading>
 
         <div
@@ -66,7 +93,7 @@ export function InvestmentTool() {
           className="mt-10 inline-flex rounded-full border border-white/15 bg-surface p-1"
         >
           <span id={`${groupId}-label`} className="sr-only">
-            Choose which data the model was allowed to learn from
+            Choose a fair test or a cheating one
           </span>
           {scenarioOrder.map((key) => (
             <button
@@ -78,7 +105,7 @@ export function InvestmentTool() {
                 active === key ? "bg-cyan text-background" : "text-muted hover:text-foreground"
               }`}
             >
-              {scenarios[key].label}
+              {settings[key].label}
             </button>
           ))}
         </div>
@@ -86,9 +113,9 @@ export function InvestmentTool() {
         <div className="mt-6 rounded-3xl border border-white/8 bg-surface p-6 md:p-8">
           <p aria-live="polite" className="max-w-3xl text-base leading-relaxed text-muted">
             <span className={`font-semibold ${scenario.outOfSample ? "text-cyan" : "text-amber-400"}`}>
-              {scenario.label}.
+              {settings[active].label}.
             </span>{" "}
-            {scenario.detail}
+            {settings[active].detail}
           </p>
 
           <figure className="mt-6">
@@ -96,7 +123,7 @@ export function InvestmentTool() {
               {plotted.map((book) => (
                 <span key={book} className="inline-flex items-center gap-2">
                   <span aria-hidden="true" className="h-0.5 w-5 rounded-full" style={{ background: colors[book] }} />
-                  {bookLabels[book].name}
+                  {books[book].name}
                 </span>
               ))}
               <span className="inline-flex items-center gap-2">
@@ -105,7 +132,7 @@ export function InvestmentTool() {
                   className="h-0.5 w-5 rounded-full"
                   style={{ background: `repeating-linear-gradient(90deg, ${SPY} 0 4px, transparent 4px 8px)` }}
                 />
-                S&amp;P 500 (SPY)
+                The S&amp;P 500 (just owning the market)
               </span>
             </figcaption>
 
@@ -113,7 +140,7 @@ export function InvestmentTool() {
               viewBox={`0 0 ${W} ${H}`}
               preserveAspectRatio="none"
               role="img"
-              aria-label={`Cumulative return over ${scenario.tradingDays} trading days, ${scenario.label.toLowerCase()}. The long book with the crash filter ends at ${signedPct(scenario.books.long_crash_filter.totalReturnPct)} and the S&P 500 at ${signedPct(scenario.spyReturnPct)}.`}
+              aria-label={`Total gain over ${scenario.tradingDays} trading days, ${settings[active].label.toLowerCase()}. Buying the favorites and skipping the risky ones ends at ${signedPct(scenario.books.long_crash_filter.totalReturnPct)} and the S&P 500 at ${signedPct(scenario.spyReturnPct)}.`}
               className="mt-3 block h-64 w-full overflow-visible md:h-72"
             >
               {gridlines.map((v) => (
@@ -156,32 +183,33 @@ export function InvestmentTool() {
               ))}
             </div>
             <p className="mt-1 text-xs text-muted">
-              Cumulative return from the first close, {gridlines[0]}% to {gridlines[gridlines.length - 1]}% on a fixed
-              scale shared by both settings.
+              Total gain since the start. The chart is the same size for both settings, from {gridlines[0]}% to{" "}
+              {gridlines[gridlines.length - 1]}%, so you can compare them fairly. &ldquo;Bet against the warnings&rdquo;
+              gains so much it would squash the chart, so it&apos;s only in the table.
             </p>
           </figure>
 
           <div className="mt-8 overflow-x-auto">
             <table className="w-full min-w-[46rem] border-separate border-spacing-0 text-left">
               <caption className="sr-only">
-                Per-book results for the {scenario.label.toLowerCase()} setting, with 95% ranges on the average
-                per-trade return over the S&amp;P 500
+                Results for each practice portfolio in the {settings[active].label.toLowerCase()} setting, with the
+                likely range of the average gain over the S&amp;P 500 per trade
               </caption>
               <thead>
                 <tr className="text-sm text-muted">
-                  <th scope="col" className="pb-3 pr-4 font-semibold">Book</th>
+                  <th scope="col" className="pb-3 pr-4 font-semibold">Strategy</th>
                   <th scope="col" className="pb-3 pr-4 text-right font-semibold">Trades</th>
                   <th scope="col" className="pb-3 pr-4 text-right font-semibold">
-                    Total return
-                    <span className="block font-mono text-xs font-normal tabular-nums">SPY: {signedPct(scenario.spyReturnPct)}</span>
+                    Total gain
+                    <span className="block font-mono text-xs font-normal tabular-nums">Market: {signedPct(scenario.spyReturnPct)}</span>
                   </th>
                   <th scope="col" className="pb-3 pr-4 text-right font-semibold">
-                    Beat SPY
-                    <span className="block text-xs font-normal">per trade</span>
+                    Beat the market
+                    <span className="block text-xs font-normal">share of trades</span>
                   </th>
                   <th scope="col" className="pb-3 font-semibold">
-                    Average return over SPY, per trade
-                    <span className="block text-xs font-normal">95% range</span>
+                    Average edge over the market, per trade
+                    <span className="block text-xs font-normal">likely range</span>
                   </th>
                 </tr>
               </thead>
@@ -197,10 +225,10 @@ export function InvestmentTool() {
                             className="h-2.5 w-2.5 shrink-0 rounded-full"
                             style={{ background: colors[book] }}
                           />
-                          {bookLabels[book].name}
+                          {books[book].name}
                         </span>
                         <span className="mt-1 block max-w-xs text-sm font-normal text-muted">
-                          {bookLabels[book].detail}
+                          {books[book].detail}
                         </span>
                       </th>
                       <td className="border-t border-white/8 py-4 pr-4 text-right align-top font-mono tabular-nums">
@@ -240,10 +268,10 @@ export function InvestmentTool() {
                           </span>
                           <span className="block">
                             {s.straddlesZero
-                              ? "Range includes zero: no measurable edge"
+                              ? "Could be zero. No proven edge."
                               : s.robust === false
-                                ? `Excludes zero on only ${s.seedsExcludingZero} of ${s.seeds} resampling seeds: treat as unproven`
-                                : "Range excludes zero"}
+                                ? `Held up in only ${s.seedsExcludingZero} of ${s.seeds} rechecks. Unproven.`
+                                : "Above zero, before costs."}
                           </span>
                         </span>
                       </td>
@@ -260,28 +288,28 @@ export function InvestmentTool() {
             Read this before you read the numbers
           </p>
           <h3 className="mt-3 font-[family-name:var(--font-heading)] text-2xl font-bold md:text-3xl">
-            A simulation, not a track record, and not advice.
+            This is a practice run, not a track record, and not advice.
           </h3>
           <ul className="mt-5 grid gap-x-8 gap-y-4 md:grid-cols-2">
             <li className="text-base leading-relaxed text-muted">
-              <span className="font-semibold text-foreground">Nobody traded this.</span> No money was at risk in
-              either setting. Every figure here is what the rules would have done on past prices, and we are not
-              offering to run it for you.
+              <span className="font-semibold text-foreground">Nobody traded this.</span> No real money was used.
+              These numbers show what the rules would have done on past prices. We&apos;re not offering to run it for
+              you.
             </li>
             <li className="text-base leading-relaxed text-muted">
-              <span className="font-semibold text-foreground">Costs are not modelled.</span> Returns are gross of
-              commission, slippage, borrow cost and market impact. Short books in particular need borrow that a cash
-              account doesn&apos;t have.
+              <span className="font-semibold text-foreground">Fees aren&apos;t included.</span> Real trading costs
+              money: commissions, worse prices than you hoped for, and fees to borrow shares. Betting against a stock
+              needs borrowed shares, which a normal account can&apos;t do.
             </li>
             <li className="text-base leading-relaxed text-muted">
-              <span className="font-semibold text-foreground">Beating the index per trade isn&apos;t beating it.</span>{" "}
-              The crash-filtered long book earns more than the index on the average trade and still finishes behind it,
-              because it holds at most nine names for three days and is out of the market the rest of the time.
+              <span className="font-semibold text-foreground">A good average trade isn&apos;t a good result overall.</span>{" "}
+              &ldquo;Buy the favorites&rdquo; beats the market on the average trade and still ends up behind it. It
+              owns at most nine stocks at a time, for three days, and sits in cash the rest of the time.
             </li>
             <li className="text-base leading-relaxed text-muted">
-              <span className="font-semibold text-foreground">One stretch, one regime.</span> Twenty-two months of a
-              rising market is a single sample. The tested setting uses models frozen at the end of 2024 and never
-              updated, which is conservative in one direction and stale in the other.
+              <span className="font-semibold text-foreground">One stretch of time.</span> Twenty-two months of a
+              rising market is just one example. The fair-test model was locked at the end of 2024 and never updated.
+              That makes the test strict, but also a little out of date.
             </li>
           </ul>
         </div>

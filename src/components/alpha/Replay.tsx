@@ -407,7 +407,7 @@ function CrowdMeter({ session, context }: { session: ReplaySession; context: Con
         ))}
       </div>
       <p className="mt-2 text-sm leading-relaxed text-stone-700">
-        More chatter than <strong className="text-stone-900">{busier}</strong> of the 25,247 stock-days the research
+        More chatter than <strong className="text-stone-900">{busier}</strong> of the 25,247 cases the research
         scored. This stock usually gets {usual} a day; today it got {posts}
         {ratio >= 2 ? `, ${Math.round(ratio)}× its normal` : ratio <= 0.5 ? ", well below its normal" : ""}.
       </p>
@@ -1134,7 +1134,7 @@ export function Replay() {
     <section id="replay" aria-labelledby="replay-title" className="scroll-mt-16 border-t border-white/8 py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <SectionHeading id="replay-title" eyebrow="The replay" title="Could you have called it?">
-          Real runs from the held-out stretch the model was scored on, replayed one trading day at a time. Each day you
+          Real runs from dates the model never saw while learning, replayed one trading day at a time. Each day you
           see how many people posted about the stock and where, the price and chatter so far, and what history says
           about days like it, plus one clue free, never the ticker. Buy more clues if you think they&apos;re worth it, then bet on a rise, a drop, or sit it out, and race
           the model&apos;s own calls to the finish. Winning bets turn the ticker&apos;s letters over: name the stock early

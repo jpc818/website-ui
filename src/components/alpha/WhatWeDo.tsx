@@ -3,15 +3,15 @@ import { SectionHeading } from "@/components/alpha/SectionHeading";
 const points = [
   {
     name: "What we study",
-    body: "US-listed stocks, over short horizons of a few trading sessions. Markets are the first test, not the last: they're the hardest place to predict a crowd, and the score is public.",
+    body: "US stocks over the next few trading days. The market is our first test because it's tough to predict and the results are public.",
   },
   {
-    name: "What we model",
-    body: "How online crowds behave around a stock, alongside price, news and insider filings. Behavior can be staged, so coordinated activity counts as a reason for caution, not a signal.",
+    name: "What we look at",
+    body: "What people online are doing around a stock, plus the price, the news, and trades by company insiders. Some online buzz is fake, so we treat coordinated posting as a warning sign.",
   },
   {
-    name: "How we work",
-    body: "Models are tested only on data from after the period they learned from. A live record of calls made before the outcome has been running since October 2026.",
+    name: "How we check ourselves",
+    body: "We test the model only on dates it never saw while learning. Since October 2026 we've also kept a diary of predictions written down before the outcome. It's too new to grade yet.",
   },
 ];
 
@@ -20,8 +20,8 @@ export function WhatWeDo() {
     <section id="what" aria-labelledby="what-title" className="border-t border-white/8 py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <SectionHeading id="what-title" eyebrow="What we do" title="A small research company with one question.">
-          Does crowd behavior around a stock tell you something the price doesn&apos;t? We&apos;re working that
-          out in the open. What comes after depends on the answer.
+          Does what the crowd is doing tell you something the stock price doesn&apos;t? We&apos;re finding out in
+          public.
         </SectionHeading>
 
         <div className="mt-12 grid gap-5 md:grid-cols-3">

@@ -17,14 +17,14 @@ type PublishedResult = {
 const published: PublishedResult[] = [
   {
     eyebrow: "A miss we're publishing",
-    title: "Text mood didn't earn its place.",
+    title: "Whether posts sound happy or angry didn't help.",
     body:
-      "We expected the tone of posts and headlines to help. So we took every text-mood input out and re-ran the same tests on about 25,000 examples spanning five years. The score didn't drop. On three of four checks it didn't move at all, and on one it went up slightly. Whatever is doing the work, it isn't how people sound.",
+      "We expected the tone of posts and headlines to matter. So we removed it completely and re-ran the same tests on about 25,000 cases over five years. The model didn't get worse. Three times it didn't change at all, and once it got slightly better. What matters is what people do, not how they sound.",
     rows: textMoodRows,
     scale: SCALE,
-    rowLabel: "Change in score when text mood is removed",
+    rowLabel: "Change in score when tone is removed",
     footnote:
-      "Each row is the change in score after removing text mood. Zero means no difference; the line marks it. Scores run from 0.50 (a coin flip) upward, so a change of 0.001 is invisible. Ranges are 95%, resampled by whole days (an earlier run). It's one test on one model, so it doesn't prove mood never matters. It does mean we can't claim it does.",
+      "Each row shows how the score changed when we removed tone. The middle line is zero, meaning no change. The bar shows how much the result could wobble by chance. A change of 0.001 is too small to notice. This is one test on one model, so it doesn't prove tone never matters. It does mean we can't say it does.",
   },
 ];
 
@@ -74,58 +74,58 @@ function PublishedCard({ result }: { result: PublishedResult }) {
 const checks = [
   {
     name: "Test on the future",
-    body: "Models learn from the past and get tested on a later stretch they've never seen, over and over.",
+    body: "The model learns from the past, then gets tested on later dates it has never seen. We repeat this several times.",
   },
   {
     name: "A locked vault",
-    body: "Everything after a fixed date stays out of training. It's only used to check whether a result holds up.",
+    body: "Everything after a set date is kept away from the model while it learns. We only open it at the end, to check the result.",
   },
   {
-    name: "No peeking",
-    body: "A signal only counts if it existed before the moment of the prediction. Anything recorded later gets thrown out.",
+    name: "No hindsight",
+    body: "The model can only use information that existed before the prediction. Anything recorded later gets thrown out.",
   },
   {
     name: "Beat the obvious",
-    body: "Every data source has to beat a baseline on new data. Crowd signals clear the price-only baseline, but not yet price plus news and insider filings.",
+    body: "Every new source of information has to beat a simpler model. Online chatter beats the price-only model, but barely adds anything once news and insider trades are in.",
   },
   {
     name: "Honest error bars",
-    body: "Crowd-signal ranges resample blocks of five consecutive days, longer than the three-session horizon, so overlapping outcomes stay together. Resampling single days gave slightly narrower ranges and the same conclusions. The text-mood ranges, from an earlier run, still resample single days.",
+    body: "Every result comes with a range showing how much it could wobble by chance. We work these out in a way that doesn't make them look tighter than they are.",
   },
   {
     name: "Publish the misses",
-    body: "Most patterns that look real turn out to be noise or something obvious. When that happens, we say so.",
+    body: "Most patterns that look real turn out to be luck or something obvious. When that happens, we say so.",
   },
 ];
 
 const limits = [
   {
-    name: "Ranking, not returns",
-    body: "AUC says how well we rank outcomes. It isn't a return. The investment tool above simulates the returns instead, and on unseen data the two long books show no edge over the index that we can tell apart from zero. Costs, capacity and drawdowns aren't modelled anywhere.",
+    name: "Being right isn't the same as making money",
+    body: "The 80% score is about spotting drops, not about profit. The practice portfolios above test profit, and buying the model's favorites didn't clearly beat owning the market. Trading costs aren't included anywhere.",
   },
   {
-    name: "Mostly price and volatility",
-    body: "A model with only price and market data scores 0.793 on the holdout, against 0.800 with everything. These stocks are unusually volatile (about 18% fall 10 points or more behind the market in three sessions), and sized against each stock's own volatility every model drops to about 0.65–0.67. Knowing which stocks swing hard explains much of the headline score.",
+    name: "Most of it is the stock price",
+    body: "The stock price alone scores 0.79. Everything together scores 0.80. These are jumpy stocks: about 1 in 6 drops hard in any three-day stretch. Once we account for how jumpy each stock is, every version scores about 0.65–0.67. A lot of the headline score is just knowing which stocks swing wildly.",
   },
   {
-    name: "Only stocks the crowd noticed",
-    body: "A stock enters the data only on days the crowd we track talked about it. Results may not carry over to stocks nobody is discussing, or to other crowds.",
+    name: "Only stocks people were talking about",
+    body: "A stock only shows up in our data on days the online crowd we follow talked about it. The results may not apply to stocks nobody is discussing, or to other groups of people.",
   },
   {
-    name: "One final holdout",
-    body: "The holdout is a single 22-month stretch, so effectively one market regime. The last two walk-forward folds cover the same period, so the two tests aren't independent. Several results are checked against that same stretch, and repeated looks at one stretch can produce small lifts by chance.",
+    name: "One stretch of time",
+    body: "The final test covers 22 months, so it's really one kind of market. Our other tests overlap with the same period, so they aren't fully separate checks. Looking at the same stretch many times can turn up small wins by luck.",
   },
   {
-    name: "One model, one target",
-    body: "Each result is one model family on one big-drop call (and its volatility-adjusted version). None of it says crowd signals help on other targets, horizons or periods.",
+    name: "One question",
+    body: "Everything here is about one question: will the stock drop hard over the next three trading days? It says nothing about other questions or longer periods.",
   },
   {
-    name: "Flags, not a better score",
-    body: "The squeeze flag marks higher drop risk, but most of what crowd signals know, price and news already show. Adding them to the full model barely moves its ranking score.",
+    name: "Tags help, but not the main score",
+    body: "The Squeeze tag points to higher drop risk. But most of what online chatter knows, the price and news already show. Adding chatter to the full model barely changes its score.",
   },
   {
     name: "Not a track record",
-    body: "These are back-tests on past data, including the simulated books in the investment tool, where no money was ever at risk. The forward log of calls made in advance started in October 2026 and is far too young to count as a track record.",
+    body: "All of this looks back at past data, including the practice portfolios, where no real money was used. Our live diary started in October 2026. With only two hard drops so far, it's too new to count as a track record.",
   },
 ];
 
@@ -139,12 +139,12 @@ export function Rigor() {
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <SectionHeading
           id="rigor-title"
-          eyebrow="Rigor"
+          eyebrow="How we test"
           title="We try to break it before you do."
         >
-          Every prediction is scored by how well it ranks what really happened,
-          on data it never trained on. A score of 0.50 is a coin flip. A number
-          only matters if it survives these six rules.
+          Every prediction is checked against what really happened, on dates
+          the model never saw. A score of 0.50 is a coin flip. A result only
+          counts if it passes these six rules.
         </SectionHeading>
 
         <ol className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">

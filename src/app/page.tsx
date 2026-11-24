@@ -10,6 +10,7 @@ import { Faq, faqs } from "@/components/alpha/Faq";
 import { HowItWorks } from "@/components/alpha/HowItWorks";
 import { howSteps } from "@/components/alpha/howSteps";
 import { LabTeaser } from "@/components/alpha/LabTeaser";
+import { LeadFinding } from "@/components/alpha/LeadFinding";
 import { MovedAnchors } from "@/components/alpha/MovedAnchors";
 import { Newsletter } from "@/components/alpha/Newsletter";
 import { ResearchProcess } from "@/components/alpha/ResearchProcess";
@@ -110,7 +111,7 @@ const jsonLd = {
       name: "How jargAI models crowd behavior",
       url: `${siteUrl}/#how`,
       description:
-        "Seven steps from public, user-generated content to a scored, flagged call: collect, filter bots, store, enrich, model, score, and flag.",
+        "Seven steps from a public forum post to a prediction we can check: collect, spot fakes, label, add context, learn, score, and log.",
       step: howSteps.map((step, i) => ({
         "@type": "HowToStep",
         position: i + 1,
@@ -157,6 +158,7 @@ export default function Home() {
       <AlphaHeader />
       <main id="main">
         <AlphaHero />
+        <LeadFinding />
         <CrowdFlag linkToResearch />
         <WhatWeDo />
         <Approach />

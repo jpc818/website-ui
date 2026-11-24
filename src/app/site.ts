@@ -40,4 +40,4 @@ export const founder: {
 export const siteTitle = "jargAI — A research company studying crowd behavior";
 
 export const siteDescription =
-  "jargAI is a research company that models how online crowds behave around US stocks and tests what holds up on data the models never saw. It does not manage outside money, sell signals, or give advice.";
+  "jargAI models how online crowds behave around US stocks and publishes what holds up on data the models never saw. The research is public. Nothing on this site is investment advice.";

@@ -9,7 +9,7 @@ import { JsonLd, pageMetadata } from "@/lib/seo";
 const path = "/case-studies";
 const title = "Case studies";
 const description =
-  "Four real events, named by stock and month, from data jargAI's model never trained on: a put, a call, a two-sided exotic, and one that failed. Each told as a story, then shown beside how that kind of flag does overall.";
+  "Four real stories from dates the model never saw while learning. Each one starts with how often that kind of prediction works overall, because one story can't prove anything.";
 
 export const metadata: Metadata = pageMetadata({ title, description, path });
 
@@ -26,18 +26,18 @@ export default function CaseStudies() {
               id="cases-title"
               className="mt-3 max-w-3xl text-balance font-[family-name:var(--font-heading)] text-[clamp(2.25rem,6vw,4rem)] font-extrabold leading-[1.05] tracking-tight"
             >
-              Four stories. One of them is a failure.
+              Four stories. The rate is on the card.
             </h1>
             <p className="mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-muted md:text-xl">
-              A wildfire, a gold rush, a storm front and a wolf. Each is a real event from January 2025 to October
-              2026, a stretch the model never saw in training, replayed session by session. The metaphor is there to
-              make it stick. The numbers underneath are the point.
+              A wildfire, a gold rush, a storm and a wolf. Each is a real stock from 2025, a period the model never
+              saw while it was learning. We picked them because they show how it works, including one where it was
+              wrong first.
             </p>
             <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-foreground md:text-lg">
-              Read them as illustrations, not evidence. Each names the stock and the month: Opendoor in July 2025,
-              BigBear.ai in February 2025, Nuburu and Beyond Meat in October 2025. Posters are described by profile,
-              never by account. Nothing here is a trade we made, and the chart below is the honest summary: every
-              warning, not just the four we chose to tell.
+              Four hand-picked stories can&apos;t prove anything, so each card starts with how often that kind of
+              prediction works overall. The chart below the cards covers every prediction, not just these four. The
+              stocks are Opendoor, BigBear.ai, Nuburu and Beyond Meat. We describe the people posting, but never name
+              them. These aren&apos;t trades we made.
             </p>
             <div className="mt-10">
               <CaseNav heading="h2" />

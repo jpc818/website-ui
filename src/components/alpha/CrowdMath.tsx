@@ -209,20 +209,20 @@ const panels: {
 }[] = [
   {
     title: "Who moves first",
-    body: "One person acts, a few copy, then the crowd piles in. Today we score mention bursts and share-of-attention; full cascade mapping is in research.",
-    math: "spread rate · depth · time to tip",
+    body: "One person posts, a few copy, then the crowd piles in. Today we measure sudden bursts of attention. Mapping the whole chain reaction is still in progress.",
+    math: "how fast it spreads · how far · when it tips",
     graphic: <Cascade />,
   },
   {
     title: "Who copies whom",
-    body: "When one account's actions keep showing up in everyone else's a little later, that account is a leader. Author track records capture who was early today; account-level lead-lag is in research.",
-    math: "cross-correlation at lag Δt",
+    body: "If what one person does keeps showing up in everyone else a little later, that person is a leader. Today we track who has been early and right before. Tracking leaders account by account is still in progress.",
+    math: "who acted first, and who followed",
     graphic: <LeadLag />,
   },
   {
     title: "When they act",
-    body: "Behavior runs on routines: same days, same months, same triggers. Weekday and month seasonality are in the live models today.",
-    math: "hour × weekday seasonality",
+    body: "People run on routines: the same days, the same months, the same triggers. The model already uses day-of-week and month patterns.",
+    math: "time of day × day of week",
     graphic: <Habits />,
   },
 ];
@@ -238,10 +238,10 @@ export function CrowdMath() {
         <SectionHeading
           id="math-title"
           eyebrow="The math"
-          title="A crowd is a system. Systems can be modeled."
+          title="Crowds follow patterns. Patterns can be measured."
         >
           People are more predictable than they think. They show up at the same
-          times, react to the same triggers, and copy the same people. We turn
+          times, react to the same things, and copy the same people. We turn
           those habits into numbers.
         </SectionHeading>
 
@@ -269,13 +269,11 @@ export function CrowdMath() {
 
         <div className="mt-5 flex flex-col gap-4 rounded-3xl border border-accent/30 bg-accent/5 p-6 md:flex-row md:items-center md:justify-between md:p-8">
           <p className="max-w-2xl text-lg leading-relaxed">
-            <span className="font-semibold text-accent">The output is a probability, never an opinion.</span>{" "}
-            How likely is this group to act, and how soon? Then we check it
+            <span className="font-semibold text-accent">The answer is a percentage, not an opinion.</span>{" "}
+            How likely is this crowd to act, and how soon? Then we check it
             against what actually happened.
           </p>
-          <p className="shrink-0 font-mono text-base text-foreground">
-            P(act&nbsp;|&nbsp;history) ∈ [0,&nbsp;1]
-          </p>
+          <p className="shrink-0 font-mono text-base text-foreground">0% to 100%</p>
         </div>
       </div>
     </section>

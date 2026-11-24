@@ -6,6 +6,7 @@ import {
   type SingleCase,
   type StreakCase,
 } from "@/components/alpha/moreCaseData";
+import { caseIndex } from "@/components/alpha/cases/stories";
 
 const SCALE = 40; // the move bar runs from -40 to +40 points
 
@@ -16,8 +17,8 @@ function StreakChart({ item }: { item: StreakCase }) {
   const n = item.streak.length;
   const barW = (W - gap * (n - 1)) / n;
   const max = Math.max(...item.streak.map((s) => s.people));
-  const label = `Six sessions in a row. People talking, drop-warning rank and the move over the next three sessions: ${item.streak
-    .map((s) => `${s.people} people, ${s.rank}, ${s.moveLabel} points`)
+  const label = `Six days in a row. People talking, how high the drop warning ranked, and how the stock did against the market over the next three days: ${item.streak
+    .map((s) => `${s.people} people, ${s.rank}, ${s.moveLabel}%`)
     .join("; ")}.`;
   return (
     <svg viewBox={`0 0 ${W} ${H + 64}`} role="img" aria-label={label} className="mt-4 block h-auto w-full">
@@ -47,7 +48,7 @@ function StreakChart({ item }: { item: StreakCase }) {
         );
       })}
       <text x="0" y={H + 60} fontSize="10" fill="#b3bac5">
-        people · warning rank · next 3 sessions
+        people · warning rank · next 3 days (%)
       </text>
     </svg>
   );
@@ -60,7 +61,7 @@ function CrowdBars({ item }: { item: SingleCase }) {
   const H = 96;
   const gap = 8;
   const barW = (W - gap * (item.people.length - 1)) / item.people.length;
-  const label = `People talking about the stock in each of the last ${item.people.length} sessions: ${item.people.join(", ")}. The ${item.flag.toLowerCase()} came on the last session, with ${item.people[last]} people in ${item.communities} communities.`;
+  const label = `People talking about the stock on each of the last ${item.people.length} trading days: ${item.people.join(", ")}. The ${item.flag.toLowerCase()} came on the last day, with ${item.people[last]} people in ${item.communities} forums.`;
   return (
     <svg viewBox={`0 0 ${W} ${H + 22}`} role="img" aria-label={label} className="mt-4 block h-auto w-full">
       <line x1="0" x2={W} y1={H} y2={H} stroke="rgba(255,255,255,0.15)" />
@@ -90,7 +91,7 @@ function CrowdBars({ item }: { item: SingleCase }) {
         flagged
       </text>
       <text x="0" y={H + 16} fontSize="10" fill="#b3bac5">
-        people per session
+        people per day
       </text>
     </svg>
   );
@@ -105,19 +106,19 @@ function MoveBar({ item }: { item: SingleCase }) {
   return (
     <div className="mt-5">
       <div className="flex items-baseline justify-between gap-3">
-        <p className="text-xs font-semibold uppercase tracking-wider text-muted">3 sessions later, vs the S&amp;P 500</p>
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted">3 days later, vs the S&amp;P 500</p>
         <span
           className={`shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold ${
             landed ? "bg-cyan/15 text-cyan" : "bg-red-500/15 text-red-400"
           }`}
         >
-          {landed ? "Landed" : "Missed"}
+          {caseIndex.find((c) => c.id === item.id)?.mark ?? item.verdict}
         </span>
       </div>
       <p className="mt-1 font-mono text-3xl font-bold leading-tight tabular-nums">{item.moveLabel}</p>
       <div
         role="img"
-        aria-label={`${item.moveLabel} against the S&P 500 over three sessions, drawn on a scale of minus 40 to plus 40 points${off ? "; this one is off the scale" : ""}.`}
+        aria-label={`${item.moveLabel} against the S&P 500 over three days, drawn on a scale of minus 40% to plus 40%${off ? "; this one is off the scale" : ""}.`}
         className="relative mt-3 h-3 rounded-full bg-white/8"
       >
         <div className="absolute inset-y-0 left-1/2 w-px bg-white/40" />
@@ -163,7 +164,9 @@ function EventChart({ item }: { item: MoreCase }) {
           <StreakChart item={item} />
           <div className="mt-4 flex items-baseline justify-between gap-3">
             <p className="font-[family-name:var(--font-heading)] text-xl font-bold leading-tight">{item.verdict}</p>
-            <span className="shrink-0 rounded-full bg-red-500/15 px-2.5 py-0.5 text-xs font-semibold text-red-400">Missed first</span>
+            <span className="shrink-0 rounded-full bg-white/10 px-2.5 py-0.5 text-xs font-semibold text-foreground">
+              Wrong three times
+            </span>
           </div>
         </>
       ) : (
@@ -197,6 +200,16 @@ function GroupStats({ item }: { item: MoreCase }) {
       <p className="mt-3 text-sm leading-relaxed text-muted">
         <span className="font-semibold">How we picked it:</span> {item.rule}
       </p>
+      <p className="mt-3 text-sm leading-relaxed text-muted">
+        Does any of this make money? We tested that with practice portfolios over the same period. Buying the
+        model&apos;s favorites didn&apos;t clearly beat owning the market, even before trading costs.{" "}
+        <a
+          href="/research#tool"
+          className="font-semibold text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
+        >
+          See the practice portfolios
+        </a>
+      </p>
     </>
   );
 }
@@ -216,20 +229,20 @@ export function DropDeciles() {
   const bottom = dropDeciles[0];
   return (
     <div className="mt-12 rounded-3xl border border-white/8 bg-surface p-6 md:p-9">
-      <p className="text-sm font-semibold uppercase tracking-wider text-cyan">Every warning, not just four</p>
+      <p className="text-sm font-semibold uppercase tracking-wider text-cyan">Every warning, not just these four</p>
       <h3 className="mt-3 max-w-3xl text-balance font-[family-name:var(--font-heading)] text-2xl font-bold leading-tight md:text-3xl">
-        Highest-scored tenth: half dropped. Lowest-scored tenth: one in a hundred.
+        When the model was most worried, half the stocks dropped hard. When it was least worried, about one in a hundred did.
       </h3>
       <p className="mt-3 max-w-3xl text-base leading-relaxed text-muted">
-        All <span className="font-mono tabular-nums">8,333</span> stock-days from the held-out stretch, ranked by the drop warning and cut into ten equal groups. Of
-        the <span className="font-mono tabular-nums">{top.n}</span> highest-scored, <span className="font-mono tabular-nums">{top.drops}</span> were followed by a drop of 10 points or more. Of the <span className="font-mono tabular-nums">{bottom.n}</span>{" "}
-        lowest-scored, <span className="font-mono tabular-nums">{bottom.drops}</span> were.
+        We took all <span className="font-mono tabular-nums">8,333</span> cases from 2025–2026, lined them up from least to most worrying, and split them into ten equal groups. In the most worrying group of{" "}
+        <span className="font-mono tabular-nums">{top.n}</span>, <span className="font-mono tabular-nums">{top.drops}</span> dropped hard. In the least worrying group of <span className="font-mono tabular-nums">{bottom.n}</span>,{" "}
+        only <span className="font-mono tabular-nums">{bottom.drops}</span> did.
       </p>
 
       <svg
         viewBox={`0 0 ${W} ${H}`}
         role="img"
-        aria-label={`Share of stock-days followed by a 10-point drop, by tenth of the drop-warning score, lowest first: ${rates
+        aria-label={`Share of cases followed by a hard drop, in ten groups from least to most worrying: ${rates
           .map((r) => `${Math.round(r * 100)}%`)
           .join(", ")}. The average across everything is ${Math.round(dropBaseRate * 100)}%.`}
         className="mt-6 block h-auto w-full"
@@ -286,12 +299,12 @@ export function DropDeciles() {
       </svg>
 
       <p className="mt-4 max-w-3xl text-sm leading-relaxed text-muted">
-        Most of this ranking comes from price and volatility, not the crowd: a model on price and market data alone
-        ranks nearly as well, and crowd signals add a small, measured lift on top.{" "}
+        Most of this comes from the stock price, not the crowd. A model that only looks at price does nearly as
+        well. Online chatter adds a small extra boost.{" "}
         <a href="/research" className="font-semibold text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
           See how much
         </a>
-        . The model was trained only on data through 2024, and these are replays, not trades.
+        . The model only learned from data up to the end of 2024. These are replays, not real trades.
       </p>
     </div>
   );

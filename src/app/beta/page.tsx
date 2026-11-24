@@ -7,7 +7,7 @@ import { JsonLd, pageJsonLd, pageMetadata } from "@/lib/seo";
 
 const title = "Private beta";
 const description =
-  "The jargAI product is a private beta for invited Charles Schwab customers. Everyone else can read the research or get in touch.";
+  "Invited Charles Schwab customers can open a private view of the same research. Everyone else can read it here.";
 
 export const metadata: Metadata = pageMetadata({ title, description, path: "/beta" });
 
@@ -24,11 +24,11 @@ export default function Beta() {
               id="beta-title"
               className="mt-3 max-w-3xl text-balance font-[family-name:var(--font-heading)] text-[clamp(2.25rem,6vw,3.5rem)] font-extrabold leading-[1.1] tracking-tight"
             >
-              The product is invite-only for now.
+              A private view of the same research.
             </h1>
             <p className="mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-muted md:text-xl">
-              It&apos;s open to invited Charles Schwab customers. If that isn&apos;t you, Google sign-in will
-              end on a &ldquo;private beta&rdquo; page, so start with the research instead.
+              It&apos;s open to invited Charles Schwab customers. If that isn&apos;t you, Google sign-in ends on a
+              private-beta page. The research on this site is the public part.
             </p>
 
             <div className="mt-10 grid gap-5 md:grid-cols-2">

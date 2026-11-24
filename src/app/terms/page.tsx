@@ -10,8 +10,8 @@ export const metadata: Metadata = pageMetadata({ title, description, path: "/ter
 export default function Terms() {
   return (
     <>
-    <JsonLd data={pageJsonLd({ path: "/terms", name: title, description, dateModified: "2026-11-02" })} />
-    <LegalPage title={title} updated="November 3, 2026">
+    <JsonLd data={pageJsonLd({ path: "/terms", name: title, description, dateModified: "2026-11-24" })} />
+    <LegalPage title={title} updated="November 24, 2026">
       <p>By using jarg.ai you agree to these terms. If you do not agree, please do not use the site.</p>
 
       <h2>Who operates this site</h2>
@@ -23,10 +23,10 @@ export default function Terms() {
 
       <h2>Not advice</h2>
       <p>
-        jargAI is a research company. It does not manage money for others, sell signals, or offer investment advice.
-        Nothing on this site is financial, legal, tax, or other professional advice, and nothing here is an offer or a
-        solicitation of any kind, including an offer to invest in jargAI. We are not your adviser, and we have no duty
-        to you in that role.
+        jargAI publishes research about how crowds behave around US stocks. We don&apos;t manage money for other
+        people. Nothing on this site, and nothing in the private beta, is investment advice or an offer to buy or sell
+        a security, including an offer to invest in jargAI. We are not your adviser, and we have no duty to you in
+        that role.
       </p>
 
       <h2>No guarantees, and examples are illustrative</h2>

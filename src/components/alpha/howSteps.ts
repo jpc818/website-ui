@@ -1,37 +1,37 @@
 export const howSteps = [
   {
     label: "Collect",
-    title: "Scheduled pulls from public sources.",
-    body: "Crowd posts, news volume and tone, insider filings, and market context, collected on a schedule from public archives and APIs.",
+    title: "Gather public posts.",
+    body: "Every day we pull in public posts from investing forums, along with news coverage, insider trading reports, and market prices.",
   },
   {
     label: "Filter",
-    title: "Coordination is a signal.",
-    body: "We measure bot-like and coordinated posting: duplicate titles, bot-style names, author concentration. We don't delete bots; bursts and farms are inputs to the model. We haven't published how accurate this labelling is.",
+    title: "Spot the fakes.",
+    body: "Some posts come from bots or groups working together to hype a stock. We don't throw them out. We flag them, because fake hype is itself a clue. We haven't yet measured how accurate this flagging is.",
   },
   {
     label: "Store",
-    title: "Everything gets marked up.",
-    body: "Each item is tagged with author, time, source, and subject, then loaded into our warehouse.",
+    title: "Label everything.",
+    body: "Each post gets tagged with who wrote it, when, where, and which stock it's about.",
   },
   {
     label: "Enrich",
-    title: "Then we add the rest of the picture.",
-    body: "Prices, VIX, calendar (weekday, month, options-expiration week), news and insider features — all before the 9:30 ET open, so nothing after the open leaks in.",
+    title: "Add the rest of the picture.",
+    body: "We add the stock price, how nervous the market is, the day of the week, the news, and insider trades. We only use what was known before the market opened, so the model can't cheat by seeing the future.",
   },
   {
     label: "Model",
-    title: "Regression finds what comes before action.",
-    body: "Gradient-boosted trees and logistic regression on past subject-days. Walk-forward training with a purge gap; a locked holdout stretch is never used for training.",
+    title: "Learn from the past.",
+    body: "The model studies years of past days to learn what tends to come before a stock drops or jumps. We always test it on later dates it never studied.",
   },
   {
     label: "Score",
-    title: "Probability ranks the candidates.",
-    body: "Every candidate gets a probability of beating the baseline in three sessions, and a separate downside score. AUC measures ranking quality on future data. Only the top tier (with a downside filter) is flagged for study.",
+    title: "Rate every stock.",
+    body: "Each stock gets a score: how likely it is to drop hard, or rise, over the next three trading days. Only the highest scores are kept.",
   },
   {
-    label: "Flag",
-    title: "A fixed horizon for every call.",
-    body: "Each flagged call has a fixed three-session horizon, and downside and upside paths are tested in parallel. Nothing here is advice. Re-scoring a call early if the crowd signal flips is on the roadmap.",
+    label: "Log",
+    title: "Write it down, then wait.",
+    body: "We record the prediction before we know the answer. Three trading days later, we check whether it was right.",
   },
 ];

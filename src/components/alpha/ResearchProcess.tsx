@@ -9,14 +9,14 @@ export function ResearchProcess() {
           id="process-title"
           className="mt-3 max-w-3xl text-balance font-[family-name:var(--font-heading)] text-[clamp(1.5rem,3.5vw,2.25rem)] font-bold leading-[1.2] tracking-tight"
         >
-          Models are tested only on data after their training period. Null results are published.
+          We only test on dates the model never saw. And we publish what didn&apos;t work, too.
         </h2>
         <p className="mt-5 flex flex-wrap gap-x-6 gap-y-2 text-base">
           <Link
             href="/research#rigor"
             className="font-semibold text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent"
           >
-            Rigor and limits →
+            How we test, and what we can&apos;t claim →
           </Link>
           <Link
             href="/about"

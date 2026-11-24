@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-export const moves = ["Follow", "Ignore", "Discount"] as const;
+export const moves = ["Follow", "Ignore", "Distrust"] as const;
 export type Move = (typeof moves)[number];
 
 export type Player = {
@@ -31,7 +31,7 @@ export function PayoffGrid({ players }: { players: Player[] }) {
     <>
       <table className="w-full table-fixed border-separate border-spacing-1.5 text-center sm:border-spacing-2">
         <caption className="mb-3 text-left text-sm font-semibold uppercase tracking-wider text-muted">
-          Stylized payoffs: an illustration, not measured results
+          What each choice gets you (an example, not measured results)
         </caption>
         <thead>
           <tr>

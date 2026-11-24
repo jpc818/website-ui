@@ -124,8 +124,8 @@ export function BriefingRequest({ className, children }: { className: string; ch
 
               {waitlist && (
                 <p className="rounded-2xl border border-white/10 bg-white/[0.04] px-4 py-3 text-base leading-relaxed text-foreground">
-                  The platform is a private beta for invited Charles Schwab clients. Join the waitlist and we&apos;ll tell
-                  you when eligibility opens.
+                  The private view is for invited Charles Schwab customers. Join the waitlist and we&apos;ll tell you when
+                  it opens to anyone else.
                 </p>
               )}
 

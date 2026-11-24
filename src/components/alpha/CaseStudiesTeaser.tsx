@@ -6,9 +6,10 @@ export function CaseStudiesTeaser() {
   return (
     <section id="case" aria-labelledby="case-title" className="border-t border-white/8 py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
-        <SectionHeading id="case-title" eyebrow="Case studies" title="A wildfire, a gold rush, a storm and a wolf.">
-          Four real events from data the model never trained on: a put, a call, a two-sided exotic, and one that
-          failed. Each one gets its own story, and each sits beside how often that kind of flag is right.
+        <SectionHeading id="case-title" eyebrow="Case studies" title="Four real stories, told simply.">
+          A wildfire, a gold rush, a storm and a wolf. We picked these because they show how it works, so
+          they&apos;re not a fair sample. Three went the way the model expected. One was wrong three times first.
+          The line at the top of each card shows how often that kind of prediction is right overall.
         </SectionHeading>
         <div className="mt-10">
           <CaseNav />

@@ -78,6 +78,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${dmSans.variable} ${manrope.variable} ${caveat.variable} ${plexMono.variable} h-full antialiased`}
       suppressHydrationWarning
     >

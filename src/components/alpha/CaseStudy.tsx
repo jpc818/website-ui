@@ -322,12 +322,12 @@ export function CaseStudy({ standalone = false }: { standalone?: boolean }) {
               Case studies
             </a>
             <span aria-hidden="true"> / </span>
-            <span>Put</span>
+            <span>Drop warning</span>
           </nav>
         )}
         <div className="relative overflow-hidden rounded-3xl border border-white/8 bg-surface p-7 pb-44 md:p-12 md:pr-64">
           <MiniCampfire />
-          <p className="relative text-sm font-semibold uppercase tracking-wider text-cyan">The downside strategy</p>
+          <p className="relative text-sm font-semibold uppercase tracking-wider text-cyan">The drop warning</p>
           <Title
             id="smoke-title"
             className="relative mt-3 max-w-3xl text-balance font-[family-name:var(--font-heading)] text-[clamp(2rem,6vw,3.75rem)] font-bold leading-[1.1] tracking-tight"
@@ -336,29 +336,32 @@ export function CaseStudy({ standalone = false }: { standalone?: boolean }) {
             <span className="bg-gradient-to-t from-orange-600 via-orange-500 to-amber-300 bg-clip-text text-transparent">there&apos;s fire.</span>
           </Title>
           <p className="relative mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-muted md:text-xl">
-            Everyone watches the fire. We watch the smoke. When a crowd&apos;s excitement starts outrunning everything
-            underneath it, the rush for the exits can follow. Our downside warning is an attempt to see that moment coming.
+            Everyone watches the fire. We watch the smoke. When a crowd gets more excited than the facts can support,
+            a rush for the exits can follow. Our drop warning tries to spot that moment early.
           </p>
         </div>
 
         <p className="mt-16 text-sm font-semibold uppercase tracking-wider text-cyan md:mt-20">
-          Case study 1 of 4 · Put · Wildfire
+          Case study 1 of 4 · Drop warning · Wildfire
         </p>
         <h3 className="mt-3 max-w-3xl text-balance font-[family-name:var(--font-heading)] text-[clamp(1.875rem,5vw,3.25rem)] font-bold leading-[1.1] tracking-tight">
           The campfire that became a wildfire.
         </h3>
         <p className="mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-muted md:text-xl">
-          A real event from our research, replayed day by day: Opendoor (OPEN) in July 2025. The model was trained only
-          on earlier years and had never seen this period. Posters are described by profile, never by account.
+          A real story, replayed day by day: Opendoor (OPEN) in July 2025. The model learned only from earlier years
+          and had never seen this period. We describe the people posting by type, never by account name.
         </p>
         <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-foreground md:text-lg">
-          Read it as an illustration, not evidence. It&apos;s one hand-picked event, told with hindsight. It shows what
-          the signal looked like, not how often it&apos;s right. How often: of the top-3% drop warnings on a held-out
-          stretch, <span className="font-mono tabular-nums">63%</span> were followed by a 10-point drop, <span className="font-mono tabular-nums">37%</span> were not, and <span className="font-mono tabular-nums">21%</span> were followed by a rise of 10 points or
-          more. <a href="/case-studies/failed" className="font-semibold text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
-            See one that failed
+          We picked this one, and we&apos;re telling it with hindsight. So here&apos;s the bigger picture. We looked
+          at the 250 times the model was most worried. In{" "}
+          <span className="font-mono tabular-nums">158</span> of them the stock dropped hard. In{" "}
+          <span className="font-mono tabular-nums">92</span> it didn&apos;t, and in{" "}
+          <span className="font-mono tabular-nums">53</span> of those it actually jumped.{" "}
+          <a href="/case-studies/failed" className="font-semibold text-accent underline decoration-accent/40 underline-offset-4 hover:decoration-accent">
+            See one where the model was early
           </a>
-          . Not a trade we made: live trading began in October 2026.
+          . And spotting drops isn&apos;t the same as making money: our practice portfolios didn&apos;t clearly beat
+          the market over this period. We didn&apos;t trade on this. Our live diary only started in October 2026.
         </p>
         <CasePosters id="put" />
 

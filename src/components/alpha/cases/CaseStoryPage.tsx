@@ -57,11 +57,13 @@ export function CaseStoryPage({ id }: { id: keyof typeof stories }) {
             >
               {meta.title}
             </h1>
-            <p className="mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-muted md:text-xl">{story.intro}</p>
+            <p className="mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-foreground md:text-xl">{meta.rate}</p>
+            <p className="mt-4 max-w-2xl text-pretty text-lg leading-relaxed text-muted md:text-xl">{story.intro}</p>
             <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-foreground">
-              A real event from the held-out stretch (January 2025 to October 2026), which the model never saw in
-              training. We name the stock and the month. Posters are described by profile, never by account. It&apos;s
-              an illustration, not a recommendation, and not a trade we made: live trading began in October 2026.
+              This really happened, during dates the model never saw while learning. We name the stock and the month.
+              We describe the people posting by type, never by account name. One story can&apos;t prove anything, so the
+              line above tells you how often this kind of prediction works overall. We didn&apos;t trade on this. Our
+              live diary only started in October 2026.
             </p>
             <CasePosters id={id} accent={theme.accent} />
 
@@ -87,7 +89,7 @@ export function CaseStoryPage({ id }: { id: keyof typeof stories }) {
               id="numbers-title"
               className="mt-3 max-w-3xl text-balance font-[family-name:var(--font-heading)] text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-[1.1] tracking-tight"
             >
-              The same event, without the metaphor.
+              The same story, told with the actual numbers.
             </h2>
             <div className="mt-8">
               <CaseEvidence id={id} />

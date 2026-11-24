@@ -294,7 +294,7 @@ function ScoreScene({ on }: SceneProps) {
       <text x={roc.x + roc.size * 0.67} y={roc.y + roc.size * 0.87} textAnchor="middle" fontSize="15" fontWeight="800" fill={CYAN} className="story-pop" style={delay(1.6)}>
         AUC
       </text>
-      <text x={roc.x + roc.size / 2} y={roc.y - 12} textAnchor="middle" fontSize="10" fill={MUTED}>ranking quality</text>
+      <text x={roc.x + roc.size / 2} y={roc.y - 12} textAnchor="middle" fontSize="10" fill={MUTED}>how often it&apos;s right</text>
       {(() => {
         const lx = roc.x + roc.size * 0.81;
         const ly = roc.y + roc.size * 0.39;
@@ -347,7 +347,7 @@ function ActScene({ on }: SceneProps) {
           <animate attributeName="stroke-opacity" values="1;0" dur="1.2s" repeatCount="indefinite" />
         </circle>
         <circle cx={crossX} cy={painY} r="6" fill={RED} />
-        <Chip x={crossX - 12} y={painY + 40} text="early exit flagged" color={RED} anchor="end" />
+        <Chip x={crossX - 12} y={painY + 40} text="time to check" color={RED} anchor="end" />
       </g>
     </Scene>
   );
@@ -470,10 +470,10 @@ export function HowItWorks() {
           id="how-title"
           className="mt-3 max-w-3xl text-balance font-[family-name:var(--font-heading)] text-[clamp(1.875rem,5vw,3.25rem)] font-bold leading-[1.1] tracking-tight"
         >
-          From a stray post to a scored, flagged call.
+          From one forum post to a prediction we can check.
         </h2>
         <p className="mt-5 max-w-2xl text-pretty text-lg leading-relaxed text-muted md:text-xl">
-          Seven steps, start to finish. Scroll through them.
+          Seven steps, start to finish. Keep scrolling.
         </p>
         <nav aria-label="More on how it works" className="mt-5 flex flex-wrap items-center gap-2 text-sm">
           <span className="text-muted">Then:</span>

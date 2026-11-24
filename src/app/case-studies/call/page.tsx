@@ -6,7 +6,7 @@ import { JsonLd, pageMetadata } from "@/lib/seo";
 const path = "/case-studies/call";
 const title = "Case study: color in the pan";
 const description =
-  "A gold-rush story told over BigBear.ai (BBAI) in February 2025, out-of-sample data: one post, then four people on the same stock, an upside flag in the top 0.5%, and an honest count of how often that flag turns out to be fool's gold.";
+  "A gold-rush story about BigBear.ai (BBAI) in February 2025: one post, then four people talking about the same stock, a rise flag, and an honest count of how often that flag turns out to be fool's gold.";
 
 export const metadata: Metadata = pageMetadata({ title, description, path });
 

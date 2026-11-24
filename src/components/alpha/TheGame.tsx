@@ -8,38 +8,38 @@ const players: (Player & {
 })[] = [
   {
     name: "The early",
-    tell: "Acts before it's obvious, and keeps doing it on data they've never seen.",
+    tell: "Gets there before it's obvious, and keeps doing it.",
     move: "Follow",
     tone: "text-cyan border-cyan/40 bg-cyan/10",
-    payoffs: { Follow: 1, Ignore: 0, Discount: -1 },
+    payoffs: { Follow: 1, Ignore: 0, Distrust: -1 },
     why: {
-      Follow: "They move before it's obvious, so moving with them tends to pay. It lasts until they get copied.",
-      Ignore: "You miss the move, but you take no risk either. Nothing gained, nothing lost.",
-      Discount: "Marking down a real early mover as if they were noise means throwing away the best evidence there is.",
+      Follow: "They move before everyone else, so moving with them tends to pay. Until others start copying them.",
+      Ignore: "You miss the move, but you don't risk anything either.",
+      Distrust: "Treating a real early mover like noise means throwing away your best clue.",
     },
   },
   {
     name: "The echo",
-    tell: "Shows up after the crowd. Loud, sincere, and late.",
+    tell: "Shows up after everyone else. Loud, sincere, and late.",
     move: "Ignore",
     tone: "text-muted border-white/15 bg-white/5",
-    payoffs: { Follow: -1, Ignore: 0, Discount: 0 },
+    payoffs: { Follow: -1, Ignore: 0, Distrust: 0 },
     why: {
-      Follow: "The echo arrives after the move is mostly done. Following it means joining at the loud, late end.",
-      Ignore: "There was never much in it, so skipping it costs nothing.",
-      Discount: "Marking it down changes little. There was no edge in it to lose.",
+      Follow: "By the time the echo arrives, the move is mostly over. Following means buying in late.",
+      Ignore: "There was never much there, so skipping it costs nothing.",
+      Distrust: "Doesn't change much. There was nothing to gain from it anyway.",
     },
   },
   {
     name: "The ring",
-    tell: "Accounts that keep acting together, on the same thing, at the same time. Their enthusiasm is a reason for caution, not a signal.",
-    move: "Discount",
+    tell: "A group of accounts that keep posting about the same thing at the same time. Their hype is a warning, not a tip.",
+    move: "Distrust",
     tone: "text-accent border-accent/40 bg-accent/10",
-    payoffs: { Follow: -1, Ignore: 0, Discount: 1 },
+    payoffs: { Follow: -1, Ignore: 0, Distrust: 1 },
     why: {
-      Follow: "A ring's enthusiasm is coordinated, not independent. Following it means following a staged signal.",
-      Ignore: "Safe, but you learn nothing from it. Recognizing the pattern is where the value is.",
-      Discount: "Spotting coordination and giving it less weight is the one move that helps here.",
+      Follow: "The excitement is staged. Following it means falling for it.",
+      Ignore: "Safe, but you miss the lesson. Spotting the setup is the valuable part.",
+      Distrust: "Noticing the group is working together, and trusting it less, is the one move that helps.",
     },
   },
 ];
@@ -55,12 +55,12 @@ export function TheGame() {
         <SectionHeading
           id="game-title"
           eyebrow="The game"
-          title="Three kinds of players. Three different moves."
+          title="Three kinds of people. Three different moves."
         >
-          A crowd works like a beauty contest. Winning isn&apos;t about being
-          right, it&apos;s about knowing what everyone else is about to do. So
-          the question is never just &ldquo;what are they doing?&rdquo; but
-          &ldquo;who is doing it?&rdquo;
+          In a crowd, winning isn&apos;t about being right. It&apos;s about
+          guessing what everyone else will do next. So the question isn&apos;t
+          just &ldquo;what are they doing?&rdquo; It&apos;s &ldquo;who is
+          doing it?&rdquo;
         </SectionHeading>
 
         <div className="mt-12 grid gap-5 lg:grid-cols-2">
@@ -90,20 +90,17 @@ export function TheGame() {
           <div className="rounded-3xl border border-white/8 bg-surface p-5 sm:p-6">
             <PayoffGrid players={players} />
             <p className="mt-5 text-base leading-relaxed text-foreground">
-              We don&apos;t take part in, or encourage, manipulating a crowd. We
-              study coordinated activity so it can be recognized, not copied.
+              We don&apos;t take part in, or encourage, hyping stocks. We study
+              fake hype so people can spot it.
             </p>
             <p className="mt-3 text-sm leading-relaxed text-muted">
-              <span className="font-semibold text-foreground">Discount</span> means
-              treating a coordinated group&apos;s activity as weaker evidence
-              than it looks. The boxes show the idea in the abstract. We
-              haven&apos;t published measured results for it.
+              Tap a box to see why. This grid shows the idea. We haven&apos;t
+              published measured results for it.
             </p>
             <p className="mt-3 text-base leading-relaxed text-muted">
               <span className="font-semibold text-foreground">The catch:</span>{" "}
-              every edge fades once it&apos;s crowded. When the early get copied,
-              they become the echo, so the model keeps re-learning who is still
-              ahead.
+              once everyone copies the early people, they stop being early. So
+              the model has to keep re-learning who&apos;s still ahead.
             </p>
           </div>
         </div>

@@ -3,34 +3,34 @@ import { forwardLog } from "@/components/alpha/forwardLogCounts";
 
 const rows = [
   {
-    status: "Recorded before the outcome",
+    status: "Predictions written down",
     value: String(forwardLog.recorded),
-    detail: `${forwardLog.stocks} stocks across ${forwardLog.sessions} sessions`,
+    detail: `${forwardLog.stocks} stocks over ${forwardLog.sessions} trading days`,
   },
   {
-    status: "Still open",
+    status: "Still waiting",
     value: String(forwardLog.open),
-    detail: "Inside the three-session window",
+    detail: "The three trading days aren't up yet",
   },
   {
-    status: "Resolved",
+    status: "Finished",
     value: String(forwardLog.resolved),
-    detail: "Three sessions have closed",
+    detail: "We know how these turned out",
   },
   {
-    status: "Big drops among resolved calls",
+    status: "Hard drops so far",
     value: String(forwardLog.bigDrops),
-    detail: "Underperformance of 10 percentage points or more versus the S&P 500",
+    detail: "Fell at least 10% behind the S&P 500",
   },
   {
-    status: "Ranking score",
-    value: "Withheld",
-    detail: "A score on two drops would look precise and mean nothing. One will be published here once enough drops have resolved, with a range around it.",
+    status: "Grade",
+    value: "Not yet",
+    detail: "Grading on two drops would be like judging a basketball player on two shots. We'll post a grade once there's enough to go on.",
   },
   {
-    status: "Filled in after the fact",
+    status: "Added too late",
     value: String(forwardLog.excludedAfterFact),
-    detail: "Excluded. The log counts only calls recorded before the outcome.",
+    detail: "Written down after we already knew the answer, so they don't count.",
   },
 ];
 
@@ -47,34 +47,35 @@ export function ForwardLog() {
       <div className="mx-auto max-w-6xl px-5 sm:px-6">
         <SectionHeading
           id="forward-title"
-          eyebrow="Forward log"
-          title="The clock started on 15 October. There isn't a score yet."
+          eyebrow="Live diary"
+          title="We started writing predictions down on 15 October. It's too early to grade."
         >
-          These calls were recorded before the outcome. A ranking score on two
-          drops would look precise and mean nothing, so none is shown.
+          Everything above looks backward. This doesn&apos;t. Each prediction
+          is recorded before we know the answer, then checked three trading
+          days later. That&apos;s the honest test, and it takes time.
         </SectionHeading>
 
         <div className="mt-12 rounded-3xl border border-white/8 bg-surface p-6 md:p-8">
           <p className="text-sm font-semibold text-muted">
-            Resolution tracker, published counts as of {forwardLog.asOf}. The log runs from {forwardLog.started}.
+            As of {forwardLog.asOf}. The diary started {forwardLog.started}.
           </p>
           <div
             className="mt-5 flex h-3 overflow-hidden rounded-full bg-white/10"
             role="img"
-            aria-label={`${forwardLog.resolved} of ${forwardLog.recorded} calls resolved, ${forwardLog.open} still open`}
+            aria-label={`${forwardLog.resolved} of ${forwardLog.recorded} predictions finished, ${forwardLog.open} still waiting`}
           >
             <div className="h-full bg-accent" style={{ width: `${resolvedShare}%` }} />
             <div className="h-full bg-cyan" style={{ width: `${openShare}%` }} />
           </div>
           <p className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted">
-            <span className="font-semibold text-foreground">Status of the {forwardLog.recorded} recorded calls.</span>
+            <span className="font-semibold text-foreground">{forwardLog.recorded} predictions.</span>
             <span className="inline-flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-accent" aria-hidden="true" />
-              <span className="font-mono tabular-nums">{forwardLog.resolved}</span> resolved
+              <span className="font-mono tabular-nums">{forwardLog.resolved}</span> finished
             </span>
             <span className="inline-flex items-center gap-2">
               <span className="h-2 w-2 rounded-full bg-cyan" aria-hidden="true" />
-              <span className="font-mono tabular-nums">{forwardLog.open}</span> still open
+              <span className="font-mono tabular-nums">{forwardLog.open}</span> still waiting
             </span>
           </p>
 
@@ -93,11 +94,6 @@ export function ForwardLog() {
             ))}
           </ul>
         </div>
-
-        <p className="mt-8 max-w-3xl text-base leading-relaxed text-muted">
-          A call is the stock&apos;s return minus the S&amp;P 500 from that day&apos;s open to the close three
-          sessions later. A big drop is an underperformance of 10 percentage points or more.
-        </p>
       </div>
     </section>
   );

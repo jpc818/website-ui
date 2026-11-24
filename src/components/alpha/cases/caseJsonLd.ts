@@ -11,7 +11,7 @@ const indexPath = "/case-studies";
 const putIntro =
   "Everyone watches the fire. We watch the smoke. When a crowd's excitement starts outrunning everything underneath it, the rush for the exits can follow.";
 const putMoral =
-  "One case isn't proof. Of the top-3% drop warnings in the held-out data, 63% (158 of 250) were followed by a 10-point drop against the S&P 500 within three sessions, against 17% across all stocks. 37% were not, and 21% rose 10 points or more instead.";
+  "One story isn't proof. Of the 250 strongest drop warnings, 63% (158) were followed by the stock falling at least 10% behind the S&P 500 within three trading days. Normally that happens 17% of the time. 37% weren't, and 21% jumped 10% or more instead.";
 
 const keywords: Record<CaseId, string[]> = {
   put: ["put option", "downside risk", "stock drop warning", "crowd behavior", "social media stocks"],
@@ -41,7 +41,7 @@ function body(id: CaseId) {
 function summary(id: CaseId) {
   const meta = caseIndex.find((c) => c.id === id)!;
   const p = casePosters[id];
-  return `${p.stock} (${p.ticker}), ${p.month}. ${meta.landed ? "Landed" : "Missed"}: ${meta.result}`;
+  return `${p.stock} (${p.ticker}), ${p.month}. ${meta.mark}. ${meta.rate} ${meta.result}`;
 }
 
 function posterText(id: CaseId) {

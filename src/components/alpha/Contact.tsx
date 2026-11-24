@@ -15,8 +15,7 @@ export function Contact() {
               Talk to us.
             </h2>
             <p className="mt-4 text-lg leading-relaxed text-muted">
-              We&apos;re open to conversations with funds and trading firms, data providers, and people who want to
-              work on this. Fuller results and methods are shared privately.
+              We&apos;re happy to talk with investment firms, data providers, and anyone who wants to work on this.
             </p>
             <ContactMailLink className="mt-8 inline-flex h-12 items-center justify-center rounded-full bg-accent px-8 text-base font-semibold text-background transition-opacity hover:opacity-90" />
           </div>

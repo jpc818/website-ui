@@ -51,7 +51,7 @@ export function StoryScroller({ id, theme }: { id: keyof typeof stories; theme: 
               ))}
               {step.next && (
                 <p className="rounded-full bg-black/70 px-3 py-1 text-[11px] font-semibold text-white sm:text-xs">
-                  Next 3 sessions: <span style={{ color: theme.accent }}>{step.next}</span>
+                  Next 3 days vs the market: <span style={{ color: theme.accent }}>{step.next}</span>
                 </p>
               )}
             </div>
