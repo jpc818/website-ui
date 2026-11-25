@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ResearchArticle } from "@/components/alpha/ResearchArticle";
 import { researchNotes } from "@/components/alpha/researchNoteList";
 import { JsonLd, pageJsonLd, pageMetadata } from "@/lib/seo";
@@ -7,7 +8,7 @@ const note = researchNotes[0];
 const path = note.path;
 const title = "Pre-registration: does publishing a drop call change the outcome?";
 const description =
-  "A randomized test, fixed in advance, of whether publishing a jargAI drop call changes what the stock does. Half of eligible calls go public the same morning, half after the outcome. It starts when the public scoreboard goes live.";
+  "A randomized test, fixed in advance, of whether publishing a jargAI drop call changes what the stock does. Half of eligible calls go public the same morning, half after the outcome. It starts on the first trading day after the public scoreboard launches.";
 
 const documentPath = "/preregistration-publication-test.md";
 const documentSha256 = "5a95eb02f8ce3256d11fe9b699c8df44023a2ba9aa359e0aee8c2b1128ace704";
@@ -51,8 +52,9 @@ export default function PublicationTest() {
         <div className="rounded-3xl border border-amber-400/30 bg-amber-400/[0.04] p-6 md:p-7">
           <p className="font-mono text-sm font-semibold uppercase tracking-wider text-amber-400">Not started yet</p>
           <p className="mt-2 text-base leading-relaxed text-foreground">
-            The test begins when the public scoreboard goes live. Until then, no calls are being assigned and there are no
-            results.
+            The test starts on the first trading day after the launch of the{" "}
+            <Link href="/scoreboard">public scoreboard</Link>, where its calls will appear. Until then, no calls are
+            being assigned and there are no results.
           </p>
         </div>
 
@@ -78,8 +80,8 @@ export default function PublicationTest() {
           </li>
           <li>
             <strong>Two groups.</strong> Each call goes into one of two groups. In the <em>publish</em> group, it appears
-            on the public scoreboard the same morning, about ten minutes after the market opens. In the <em>hold</em>{" "}
-            group, it appears only after its three trading days have closed.
+            on the <Link href="/scoreboard">public scoreboard</Link> the same morning, about ten minutes after the market
+            opens. In the <em>hold</em> group, it appears only after its three trading days have closed.
           </li>
           <li>
             <strong>A fair coin nobody can steer.</strong> The group is picked by a fair coin flip for each call,

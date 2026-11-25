@@ -15,6 +15,7 @@ export function AlphaFooter() {
         <nav aria-label="Site" className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm md:justify-start">
           {[
             { href: "/research", label: "Research" },
+            { href: "/scoreboard", label: "Scoreboard" },
             { href: "/case-studies", label: "Case studies" },
             { href: "/about", label: "About" },
             { href: "/lab", label: "Lab" },

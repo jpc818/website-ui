@@ -5,6 +5,7 @@ interface __BaseEnv_Env {
 	DB: D1Database;
 	NOTIFY: SendEmail;
 	ASSETS: Fetcher;
+	PUBLICATION_POST_TOKEN: string;
 }
 declare namespace Cloudflare {
 	interface GlobalProps {

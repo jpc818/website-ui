@@ -9,7 +9,19 @@ export function ResearchNotes() {
         <SectionHeading id="notes-title" eyebrow="Research notes" title="What we tried, and what we'll test next.">
           Longer write-ups, each on its own page: ideas that didn&apos;t work, and tests we fixed in advance.
         </SectionHeading>
-        <ul className="mt-12 grid gap-5 md:grid-cols-2">
+        <Link
+          href="/scoreboard"
+          className="group mt-12 flex flex-col gap-2 rounded-3xl border border-accent/40 bg-surface p-6 transition-colors hover:border-accent/70 sm:flex-row sm:items-center sm:justify-between md:p-7"
+        >
+          <span>
+            <span className="block font-mono text-sm font-semibold uppercase tracking-wider text-accent">Scoreboard</span>
+            <span className="mt-2 block text-base leading-relaxed text-muted">
+              Every drop call from the publication test, updated each trading morning.
+            </span>
+          </span>
+          <span className="shrink-0 text-sm font-semibold text-accent group-hover:underline">See the calls →</span>
+        </Link>
+        <ul className="mt-5 grid gap-5 md:grid-cols-2">
           {researchNotes.map((note) => (
             <li key={note.path}>
               <Link
