@@ -7,6 +7,9 @@
 /llms-full.txt
   Content-Type: text/plain; charset=utf-8
 
+/preregistration-publication-test.md
+  Content-Type: text/plain; charset=utf-8
+
 /*
   Strict-Transport-Security: max-age=31536000
   X-Content-Type-Options: nosniff

@@ -8,6 +8,7 @@ import { ForwardLog } from "@/components/alpha/ForwardLog";
 import { HeadlineResult } from "@/components/alpha/HeadlineResult";
 import { InvestmentTool } from "@/components/alpha/InvestmentTool";
 import { MethodNote } from "@/components/alpha/MethodNote";
+import { ResearchNotes } from "@/components/alpha/ResearchNotes";
 import { Rigor } from "@/components/alpha/Rigor";
 import { JsonLd, pageJsonLd, pageMetadata } from "@/lib/seo";
 
@@ -23,6 +24,7 @@ const contents = [
   { href: "#forward", label: "Live diary" },
   { href: "#tool", label: "Does it make money?" },
   { href: "#rigor", label: "What we can't claim" },
+  { href: "#notes", label: "Research notes" },
   { href: "#method", label: "Method" },
 ];
 
@@ -75,6 +77,7 @@ export default function Research() {
           </p>
         </section>
         <Rigor />
+        <ResearchNotes />
         <MethodNote />
         <Contact />
       </main>

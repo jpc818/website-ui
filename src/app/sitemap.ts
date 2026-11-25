@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { siteUrl } from "@/app/site";
+import { researchNotes } from "@/components/alpha/researchNoteList";
 
 export const dynamic = "force-static";
 
@@ -10,6 +11,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: siteUrl, changeFrequency: "weekly", priority: 1 },
     { url: `${siteUrl}/research`, changeFrequency: "weekly", priority: 0.8 },
+    ...researchNotes.map((note) => ({
+      url: `${siteUrl}${note.path}`,
+      lastModified: note.isoDate,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
     { url: `${siteUrl}/case-studies`, changeFrequency: "monthly", priority: 0.7 },
     ...["put", "call", "exotic", "failed"].map((id) => ({
       url: `${siteUrl}/case-studies/${id}`,
